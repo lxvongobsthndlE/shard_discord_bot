@@ -1,0 +1,14 @@
+{
+  "name": "flg_bot",
+  "version": "1.0.0",
+  "description": "A discord bot for FunLovingGames Server",
+  "main": "flgbot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "lxvongobsthndl",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^12.3.1"
+  }
+}
