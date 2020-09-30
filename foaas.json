@@ -1,0 +1,42 @@
+[
+    {
+        "endpoint": "anyway",
+        "name": true,
+        "from": true
+    },
+    {
+        "endpoint": "back",
+        "name": true,
+        "from": true
+    },
+    {
+        "endpoint": "give",
+        "name": false,
+        "from": true
+    },
+    {
+        "endpoint": "fewer",
+        "name": true,
+        "from": true
+    },
+    {
+        "endpoint": "maybe",
+        "name": false,
+        "from": true
+    },
+    {
+        "endpoint": "no",
+        "name": false,
+        "from": true
+    },
+    {
+        "endpoint": "off",
+        "name": true,
+        "from": true
+    },
+    {
+        "endpoint": "zero",
+        "name": false,
+        "from": true
+    }
+]
