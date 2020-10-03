@@ -1,29 +1,35 @@
 #!/usr/bin/env node
 const Discord = require('discord.js');
+//const Twitch = require('twitch');
+//const TwitchAuth = require('twitch-auth');
 const fetch = require('node-fetch');
-const client = new Discord.Client();
-const {token} = require('./secret.json');
+const secret = require('./secret.json');
 const config = require('./config.json');
 const foaas = require('./foaas.json');
 const emo = require('./emoji.js');
+
 const prefix = config.prefix;
+const discordClient = new Discord.Client();
+//const twitchAuthProvider = new TwitchAuth.StaticAuthProvider(secret.twitchClientID, secret.twitchToken);
+//const twitchClient = new Twitch.ApiClient({authProvider: twitchAuthProvider});
 
-
-client.once('ready', () => {
+discordClient.once('ready', () => {
     console.log('Client ready!');
 });
 
-client.login(token);
+discordClient.login(secret.discordToken);
 
-client.on('guildMemberAdd', member => {
+discordClient.on('guildMemberAdd', member => {
     // Send the message to a designated channel on a server:
     const channel = member.guild.channels.cache.find(ch => ch.name === 'welcome');
+    const channelDE = member.guild.channels.cache.find(ch => ch.name === 'willkommen');
     if (!channel) return;
+    else channel.send(`Welcome to the server, ${member}!`);
+    if (!channelDE) return;
+    else channelDE.send(`Willkommen auf dem Server, ${member}!`);
+});
 
-    channel.send(`Welcome to the server, ${member}`);
-  });
-
-client.on('message', async message => {
+discordClient.on('message', async message => {
     //Ignore not prefixed and bot messages
     if (!message.content.startsWith(prefix) || message.author.bot) return;
     
@@ -79,7 +85,6 @@ function roll(user, args) {
     return embed;
 }
 
-
 function args_err(user) {
     return new Discord.MessageEmbed()
     .setColor('#cc0000')
@@ -111,4 +116,3 @@ function huge_letters(user, args) {
 function getRndInteger(minimum, maximum) {
     return Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
 }
-
