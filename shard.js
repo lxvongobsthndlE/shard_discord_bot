@@ -1,29 +1,35 @@
 #!/usr/bin/env node
 const Discord = require('discord.js');
+//const Twitch = require('twitch');
+//const TwitchAuth = require('twitch-auth');
 const fetch = require('node-fetch');
-const client = new Discord.Client();
-const {token} = require('./secret.json');
+const secret = require('./secret.json');
 const config = require('./config.json');
 const foaas = require('./foaas.json');
 const emo = require('./emoji.js');
+
 const prefix = config.prefix;
+const discordClient = new Discord.Client();
+//const twitchAuthProvider = new TwitchAuth.StaticAuthProvider(secret.twitchClientID, secret.twitchToken);
+//const twitchClient = new Twitch.ApiClient({authProvider: twitchAuthProvider});
 
-
-client.once('ready', () => {
+discordClient.once('ready', () => {
     console.log('Client ready!');
 });
 
-client.login(token);
+discordClient.login(secret.discordToken);
 
-client.on('guildMemberAdd', member => {
+discordClient.on('guildMemberAdd', member => {
     // Send the message to a designated channel on a server:
     const channel = member.guild.channels.cache.find(ch => ch.name === 'welcome');
+    const channelDE = member.guild.channels.cache.find(ch => ch.name === 'willkommen');
     if (!channel) return;
+    else channel.send(`Welcome to the server, ${member}!`);
+    if (!channelDE) return;
+    else channelDE.send(`Willkommen auf dem Server, ${member}!`);
+});
 
-    channel.send(`Welcome to the server, ${member}`);
-  });
-
-client.on('message', async message => {
+discordClient.on('message', async message => {
     //Ignore not prefixed and bot messages
     if (!message.content.startsWith(prefix) || message.author.bot) return;
     
@@ -43,11 +49,12 @@ client.on('message', async message => {
             break;
         case 'roll':
             console.log(message.author.username + ' called "roll" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
-            (args.length > 0) ? message.channel.send(roll(message.author, args)) : message.channel.send(args_err(message.author));
+            (args.length > 0 && args[0] > 0) ? message.channel.send(roll(message.author, args)) : message.channel.send(args_err(message.author));
             break;
         case 'huge-letters':
-            console.log(message.author.username + ' called "rip" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
-            (args.length > 0) ? message.channel.send(huge_letters(args)) : message.channel.send(args_err(message.author));
+            console.log(message.author.username + ' called "huge-letters" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
+            (args.length > 0) ? message.channel.send(huge_letters(message.author, args)) : message.channel.send(args_err(message.author));
+            (message.deletable) ? message.delete().catch(console.error) : {};
             break;
     }
 });
@@ -78,7 +85,6 @@ function roll(user, args) {
     return embed;
 }
 
-
 function args_err(user) {
     return new Discord.MessageEmbed()
     .setColor('#cc0000')
@@ -88,16 +94,20 @@ function args_err(user) {
     .setTimestamp();
 }
 
-function huge_letters(args) {
+function huge_letters(user, args) {
     var result = '';
     args.forEach(w => {
         w.split('').forEach(l => {
-            e = emoji_helper(l);
-            if(!(e === '')) result += e + ' ';
+            e = emo[l.toLowerCase()]
+            if(e) result += e + ' ';
         });
         result += '\n';
     });
-    return result;
+    return new Discord.MessageEmbed()
+    .setColor('#0099ff')
+    .setAuthor(user.tag, user.displayAvatarURL())
+    .setTimestamp()
+    .setDescription(result);
 }
 
 //---------------------------------------
@@ -105,89 +115,4 @@ function huge_letters(args) {
 
 function getRndInteger(minimum, maximum) {
     return Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
-}
-
-function emoji_helper(letter) {
-    switch (letter) {
-        case 'a':
-        case 'A':
-            return emo.a;
-        case 'b':
-        case 'B':
-            return emo.b;
-        case 'c':
-        case 'C':
-            return emo.c;
-        case 'd':
-        case 'D':
-            return emo.d;
-        case 'e':
-        case 'E':
-            return emo.e;
-        case 'f':
-        case 'F':
-            return emo.f;
-        case 'g':
-        case 'G':
-            return emo.g;
-        case 'h':
-        case 'H':
-            return emo.h;
-        case 'i':
-        case 'I':
-            return emo.i;
-        case 'j':
-        case 'J':
-            return emo.j;
-        case 'k':
-        case 'K':
-            return emo.k;
-        case 'l':
-        case 'L':
-            return emo.l;
-        case 'm':
-        case 'M':
-            return emo.m;
-        case 'n':
-        case 'N':
-            return emo.n;
-        case 'o':
-        case 'O':
-            return emo.o;
-        case 'p':
-        case 'P':
-            return emo.p;
-        case 'q':
-        case 'Q':
-            return emo.q;
-        case 'r':
-        case 'R':
-            return emo.r;
-        case 's':
-        case 'S':
-            return emo.s;
-        case 't':
-        case 'T':
-            return emo.t;
-        case 'u':
-        case 'U':
-            return emo.u;
-        case 'v':
-        case 'V':
-            return emo.v;
-        case 'w':
-        case 'W':
-            return emo.w;
-        case 'x':
-        case 'X':
-            return emo.x;
-        case 'y':
-        case 'Y':
-            return emo.y;
-        case 'z':
-        case 'Z':
-            return emo.z;
-        default:
-            return '';
-    }
 }
