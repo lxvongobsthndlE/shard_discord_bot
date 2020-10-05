@@ -7,6 +7,7 @@ const secret = require('./secret.json');
 const config = require('./config.json');
 const foaas = require('./foaas.json');
 const emo = require('./emoji.js');
+const emojiList = require('./data-ordered-emoji.js');
 
 const prefix = config.prefix;
 const discordClient = new Discord.Client();
@@ -23,10 +24,20 @@ discordClient.on('guildMemberAdd', member => {
     // Send the message to a designated channel on a server:
     const channel = member.guild.channels.cache.find(ch => ch.name === 'welcome');
     const channelDE = member.guild.channels.cache.find(ch => ch.name === 'willkommen');
-    if (!channel) return;
-    else channel.send(`Welcome to the server, ${member}!`);
-    if (!channelDE) return;
-    else channelDE.send(`Willkommen auf dem Server, ${member}!`);
+    if (!channel) {
+        return;
+    }
+    else {
+        console.log(member.displayName + ' joined ' + member.guild.name + '.');
+        channel.send(`Welcome to the server, ${member}!`);
+    }
+    if (!channelDE) {
+        return;
+    }
+    else {
+        console.log(member.displayName + ' joined ' + member.guild.name + '.');
+        channelDE.send(`Willkommen auf dem Server, ${member}!`);
+    }
 });
 
 discordClient.on('message', async message => {
@@ -55,6 +66,12 @@ discordClient.on('message', async message => {
             console.log(message.author.username + ' called "huge-letters" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
             (args.length > 0) ? message.channel.send(huge_letters(message.author, args)) : message.channel.send(args_err(message.author));
             (message.deletable) ? message.delete().catch(console.error) : {};
+            break;
+        case 'react':
+            console.log(message.author.username + ' called "react" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
+            message.channel.send('Your reaction:').then(m => {
+                m.react(emojiList[123]);
+            });
             break;
     }
 });
