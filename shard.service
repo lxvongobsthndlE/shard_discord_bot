@@ -2,7 +2,7 @@
 Description=Shard Discord Bot
 
 [Service]
-ExecStart=/etc/local/bin/shard/shard.js
+ExecStart=/usr/local/bin/shard/shard.js
 Restart=always
 User=nobody
 # Note Debian/Ubuntu uses 'nogroup', RHEL/Fedora uses 'nobody'
