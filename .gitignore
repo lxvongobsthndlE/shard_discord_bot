@@ -2,3 +2,4 @@ secret.json
 /node_modules
 shard.service
 info.txt
+/.vscode
