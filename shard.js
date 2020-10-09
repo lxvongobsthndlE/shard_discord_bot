@@ -20,17 +20,28 @@ discordClient.once('ready', () => {
 
 discordClient.login(secret.discordToken);
 
+discordClient.on('guildMemberRemove', member => {
+    console.log(member.tag + ' has left the server: ' + member.guild.name);
+});
+
 discordClient.on('guildMemberAdd', member => {
+    console.log(member.tag + ' joined the server: ' + member.guild.name);
+    var channel;
+    var welcomeMsg;
+    if(member.guild.id === "723198194414125126") { //LX Server
+        guildConfig = require('./guildData/723198194414125126.json');
+        channel = member.guild.channels.cache.get(guildConfig.welcomeChannelId);
+        welcomeMsg = new Discord.MessageEmbed(guildConfig.welcomeMessage);
+    }
+    else if(member.guild.id === "743221608113766453") { //FLG Server
+        guildConfig = require('./guildData/743221608113766453.json');
+        channel = member.guild.channels.cache.get(guildConfig.welcomeChannelId);
+        welcomeMsg = new Discord.MessageEmbed(guildConfig.welcomeMessage);
+    }
     // Send the message to a designated channel on a server:
-    const channel = member.guild.channels.cache.find(ch => ch.name === 'welcome');
-    const channelDE = member.guild.channels.cache.find(ch => ch.name === 'willkommen');
     if (channel) {
         console.log(member.displayName + ' joined ' + member.guild.name + '.');
-        channel.send(`Welcome to the server, ${member}!`);
-    }
-    if (channelDE) {
-        console.log(member.displayName + ' joined ' + member.guild.name + '.');
-        channelDE.send(`Willkommen auf dem Server, ${member}!`);
+        channel.send(fill_welcome_msg(member, welcomeMsg));
     }
 });
 
@@ -38,6 +49,20 @@ discordClient.on('message', async message => {
     //FLG: 743221608113766453
     //LX:  723198194414125126 
     //console.log(message.guild.id + ' ' + message.guild.name);
+
+    var prefix = '!';
+    var admin_ids;
+
+    if(message.guild.id === 723198194414125126) { //LX Server
+        guildConfig = require('./guildData/723198194414125126.json');
+        prefix = guildConfig.prefix;
+        admin_ids = guildConfig.ADMIN_IDS;
+    }
+    else if(message.guild.id === 743221608113766453) { //FLG Server
+        guildConfig = require('./guildData/743221608113766453.json');
+        prefix = guildConfig.prefix;
+        admin_ids = guildConfig.ADMIN_IDS;
+    }
 
     //Ignore not prefixed and bot messages
     if (!message.content.startsWith(prefix) || message.author.bot) return;
@@ -78,12 +103,13 @@ discordClient.on('message', async message => {
 });
 
 function show_help(user) {
-    var localprefix = prefix;
+    var localprefix = config.prefix;
     return new Discord.MessageEmbed()
     .setColor('#0099ff')
     .setTitle('Shard help')
     .setThumbnail(discordClient.user.displayAvatarURL())
     .addFields(
+        //{ name: '\u200B', value: '\u200B' },
         { name: localprefix + 'help', value: 'Show this message.', inline: false},
         { name: localprefix + 'server-info', value: 'Shows information about the server.', inline: false},
         { name: localprefix + 'hack', value: 'Try to hack the bot.', inline: false},
@@ -140,15 +166,6 @@ function roll(user, args) {
     return embed;
 }
 
-function args_err(user) {
-    return new Discord.MessageEmbed()
-    .setColor('#cc0000')
-    .setTitle('Invalid arguments Error')
-    .setDescription('The arguments you provided could not be processed.')
-    .setAuthor(user.tag, user.displayAvatarURL())
-    .setTimestamp();
-}
-
 function huge_letters(user, args) {
     var result = '';
     args.forEach(w => {
@@ -163,6 +180,24 @@ function huge_letters(user, args) {
     .setAuthor(user.tag, user.displayAvatarURL())
     .setTimestamp()
     .setDescription(result);
+}
+
+function fill_welcome_msg(member, welcomeMsg) {
+    return welcomeMsg
+    .setTimestamp()
+    .setFooter(member.user.tag + ' | ' + member.guild.memberCount + ' total users on the server.', member.user.displayAvatarURL())
+}
+
+//---------------------------------------
+// ERRORS
+
+function args_err(user) {
+    return new Discord.MessageEmbed()
+    .setColor('#cc0000')
+    .setTitle('Invalid arguments Error')
+    .setDescription('The arguments you provided could not be processed.')
+    .setAuthor(user.tag, user.displayAvatarURL())
+    .setTimestamp();
 }
 
 //---------------------------------------
