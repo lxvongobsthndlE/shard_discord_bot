@@ -1,18 +1,15 @@
 {
     "prefix": "!",
-    "welcomeChannelName": "welcome",
     "welcomeChannelId": "760970452163362866",
     "welcomeMessage": {
         "color": "0x33CC33",
-        "title": "Welcome!",
-        "author": {},
-        "description": "",
+        "title": "Welcome to lxvongobsthndl's Discord server!",
+        "description": "Have a nice stay.",
         "fields": [
 
-        ],
-        "timestamp": "",
-        "footer": {
-        }
+        ]
     },
-    "ADMIN_ID": "313742410180198431"
+    "ADMIN_IDS": [
+        "313742410180198431"
+    ]
 }
