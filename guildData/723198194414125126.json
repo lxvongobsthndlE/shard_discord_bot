@@ -1,5 +1,6 @@
 {
     "prefix": "!",
+    "explictFilter": false,
     "welcomeChannelId": "760970452163362866",
     "welcomeMessage": {
         "color": "0x33CC33",
