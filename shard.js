@@ -1,29 +1,42 @@
 #!/usr/bin/env node
 const Discord = require('discord.js');
-//const Twitch = require('twitch');
-//const TwitchAuth = require('twitch-auth');
+const Twitch = require('twitch');
+const TwitchAuth = require('twitch-auth');
 const fetch = require('node-fetch');
 const secret = require('./secret.json');
-const config = require('./config.json');
-const foaas = require('./foaas.json');
-const emo = require('./emoji.js');
-const emojiList = require('./data-ordered-emoji.js');
+const config = require('./configuration/config.json');
+const foaas = require('./configuration/foaas.json');
+const emo = require('./configuration/emoji.js');
+const emojiList = require('./configuration/data-ordered-emoji.js');
+const shardHelp = require('./configuration/shard-help.json');
 
-const prefix = config.prefix;
+//INIT discord.js
 const discordClient = new Discord.Client();
-//const twitchAuthProvider = new TwitchAuth.StaticAuthProvider(secret.twitchClientID, secret.twitchToken);
-//const twitchClient = new Twitch.ApiClient({authProvider: twitchAuthProvider});
 
-discordClient.once('ready', () => {
+//INIT twitch.js
+const twitchClientId = secret.twitchClientId;
+const twitchClientSecret = secret.twitchClientSecret;
+const twitchAuthProvider = new TwitchAuth.ClientCredentialsAuthProvider(twitchClientId, twitchClientSecret);
+const twitchClient = new Twitch.ApiClient({ authProvider: twitchAuthProvider });
+
+//INIT globals
+const defaultPrefix = config.prefix;
+
+//Start client and set bot's status
+discordClient.once('ready', async () => {
     console.log('Client ready!');
+    discordClient.user.setActivity('Under development...');
 });
 
+//Login client
 discordClient.login(secret.discordToken);
 
+//EVENT on removal/leaving of a member
 discordClient.on('guildMemberRemove', member => {
-    console.log(member.tag + ' has left the server: ' + member.guild.name);
+    console.log(member.displayName + ' has left the server: ' + member.guild.name);
 });
 
+//EVENT on joining of a member
 discordClient.on('guildMemberAdd', member => {
     var channel;
     var welcomeMsg;
@@ -44,38 +57,50 @@ discordClient.on('guildMemberAdd', member => {
     }
 });
 
+//EVENT on any message on any server
 discordClient.on('message', async message => {
-    //FLG: 743221608113766453
-    //LX:  723198194414125126 
-    //console.log(message.guild.id + ' ' + message.guild.name);
+    //Allmighty Logger. Don't use this. Seriously, don't.
+    //console.log('[' + message.guild.name + '] ' + message.author.tag + ': ' + message.content);
 
-    var prefix = '!';
+    var prefix = defaultPrefix;
     var admin_ids;
+    var explictFilter = false;
 
     if(message.guild.id === "723198194414125126") { //LX Server
         guildConfig = require('./guildData/723198194414125126.json');
         prefix = guildConfig.prefix;
         admin_ids = guildConfig.ADMIN_IDS;
+        explictFilter = guildConfig.explictFilter;
     }
     else if(message.guild.id === "743221608113766453") { //FLG Server
         guildConfig = require('./guildData/743221608113766453.json');
         prefix = guildConfig.prefix;
         admin_ids = guildConfig.ADMIN_IDS;
+        explictFilter = guildConfig.explictFilter;
     }
 
     //Ignore not prefixed and bot messages
     if (!message.content.startsWith(prefix) || message.author.bot) return;
     
-    //Syntax: !<command> <args[0]> <args[1]> ...
+    //Syntax: <prefix><command> <args[0]> <args[1]> ...
     const args = message.content.slice(prefix.length).trim().split(' ');
     const command = args.shift().toLowerCase();
 
     switch(command) {
+        case 'shard-test':
+            if(message.author.id !== "313742410180198431") break;
+            console.log('[DEV] ' + message.author.username + ' called "shard-test" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
+            break;
+        case 'help':
+            console.log(message.author.username + ' called "help" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
+            message.channel.send(show_help(prefix, message.author));
+            break;
         case 'server-info':
             console.log(message.author.username + ' called "server-info" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
             message.channel.send(server_info(message.guild));
             break;
         case 'hack':
+            if(explictFilter) break; //Should throw error or exclude from help!
             console.log(message.author.username + ' called "hack" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
             const backOff = await hack(message.author);
             message.channel.send(backOff);
@@ -93,35 +118,25 @@ discordClient.on('message', async message => {
             console.log(message.author.username + ' called "react" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
             message.react(emojiList[getRndInteger(0, emojiList.length)]);
             break;
-        case 'help':
-            console.log(message.author.username + ' called "help" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
-            message.channel.send(show_help(message.author));
-            break;
-        case 'shard-test':
-            if(message.author.id !== "313742410180198431") break;
-            console.log('[DEV]' + message.author.username + ' called "shard-test" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
+        case 'twitch-status':
+            console.log(message.author.username + ' called "twitch-status" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
+            message.channel.send(await twitch_status(message.author, args));
             break;
     }
 
 });
 
-function show_help(user) {
-    var localprefix = config.prefix;
-    return new Discord.MessageEmbed()
+function show_help(localprefix, user) {
+    var response = new Discord.MessageEmbed()
     .setColor('#0099ff')
     .setTitle('Shard help')
     .setThumbnail(discordClient.user.displayAvatarURL())
-    .addFields(
-        //{ name: '\u200B', value: '\u200B' },
-        { name: localprefix + 'help', value: 'Show this message.', inline: false},
-        { name: localprefix + 'server-info', value: 'Shows information about the server.', inline: false},
-        { name: localprefix + 'hack', value: 'Try to hack the bot.', inline: false},
-        { name: localprefix + 'react', value: 'Answers with a random reaction.', inline: false},
-        { name: localprefix + 'roll <sides of dice> [<number of dices>]', value: 'Rolls a (or multiple) dice(s) and shows the result. If multiple dices are rolled, a total of all rolls is appended', inline: false},
-        { name: localprefix + 'huge-letters <text>', value: 'Converts given text into "emoji" letters', inline: false}
-    )
     .setFooter('Shard by @lxvongobsthndl#7893')
     .setTimestamp();
+    for(i = 0; i < shardHelp.length; i++) {
+        response.addField(localprefix + shardHelp[i].command, shardHelp[i].description);
+    }
+    return response;
 }
 
 function server_info(guild){
@@ -185,10 +200,18 @@ function huge_letters(user, args) {
     .setDescription(result);
 }
 
+async function twitch_status(user, args) {
+    return new Discord.MessageEmbed()
+    .setColor((args.length > 0) ? '#0099ff' : '#cc0000')
+    .setAuthor(user.tag, user.displayAvatarURL())
+    .addField((args.length > 0) ? args[0] + ' is currently' : 'No channel provided', (args.length > 0) ? (await isTwitchStreamLive(args[0])) ? 'LIVE!' : 'OFFLINE' : 'Use Shard\'s help command to learn about command syntax')
+    .setTimestamp();
+}
+
 function fill_welcome_msg(member, welcomeMsg) {
     return welcomeMsg
     .setTimestamp()
-    .setFooter(member.guild.memberCount + ' total users on the server.', member.user.displayAvatarURL())
+    .setFooter(member.guild.memberCount + ' total users on the server.', member.guild.iconURL())
     .setAuthor(member.user.tag, member.user.displayAvatarURL());
 }
 
@@ -212,9 +235,16 @@ function getRndInteger(minimum, maximum) {
 }
 
 function is_Admin(userId, adminIds) {
-    var test = ["hallo", "hi"];
-    for(id in test) {
+    for(id in adminIds) {
         if(userId === id) return true;
     }
     return false;
+}
+
+async function isTwitchStreamLive(channelName) {
+    const user = await twitchClient.helix.users.getUserByName(channelName);
+	if (!user) {
+		return false;
+	}
+	return await twitchClient.helix.streams.getStreamByUserId(user.id) !== null;
 }
