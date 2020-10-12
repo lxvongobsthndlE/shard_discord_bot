@@ -25,7 +25,6 @@ discordClient.on('guildMemberRemove', member => {
 });
 
 discordClient.on('guildMemberAdd', member => {
-    console.log(member.tag + ' joined the server: ' + member.guild.name);
     var channel;
     var welcomeMsg;
     if(member.guild.id === "723198194414125126") { //LX Server
@@ -53,12 +52,12 @@ discordClient.on('message', async message => {
     var prefix = '!';
     var admin_ids;
 
-    if(message.guild.id === 723198194414125126) { //LX Server
+    if(message.guild.id === "723198194414125126") { //LX Server
         guildConfig = require('./guildData/723198194414125126.json');
         prefix = guildConfig.prefix;
         admin_ids = guildConfig.ADMIN_IDS;
     }
-    else if(message.guild.id === 743221608113766453) { //FLG Server
+    else if(message.guild.id === "743221608113766453") { //FLG Server
         guildConfig = require('./guildData/743221608113766453.json');
         prefix = guildConfig.prefix;
         admin_ids = guildConfig.ADMIN_IDS;
@@ -97,6 +96,10 @@ discordClient.on('message', async message => {
         case 'help':
             console.log(message.author.username + ' called "help" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
             message.channel.send(show_help(message.author));
+            break;
+        case 'shard-test':
+            if(message.author.id !== "313742410180198431") break;
+            console.log('[DEV]' + message.author.username + ' called "shard-test" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
             break;
     }
 
@@ -185,7 +188,8 @@ function huge_letters(user, args) {
 function fill_welcome_msg(member, welcomeMsg) {
     return welcomeMsg
     .setTimestamp()
-    .setFooter(member.user.tag + ' | ' + member.guild.memberCount + ' total users on the server.', member.user.displayAvatarURL())
+    .setFooter(member.guild.memberCount + ' total users on the server.', member.user.displayAvatarURL())
+    .setAuthor(member.user.tag, member.user.displayAvatarURL());
 }
 
 //---------------------------------------
@@ -205,4 +209,12 @@ function args_err(user) {
 
 function getRndInteger(minimum, maximum) {
     return Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
+}
+
+function is_Admin(userId, adminIds) {
+    var test = ["hallo", "hi"];
+    for(id in test) {
+        if(userId === id) return true;
+    }
+    return false;
 }
