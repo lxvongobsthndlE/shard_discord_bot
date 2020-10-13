@@ -1,0 +1,18 @@
+{
+    "guildId": "default",
+    "prefix": "!",
+    "explictFilter": false,
+    "welcomeChannelId": "",
+    "welcomeMessage": {
+        "color": "0x33CC33",
+        "title": "Welcome to the server!",
+        "description": "Have a nice stay.",
+        "fields": [
+
+        ]
+    },
+    "memberLogChannelId": "",
+    "ADMIN_IDS": [
+        
+    ]
+}

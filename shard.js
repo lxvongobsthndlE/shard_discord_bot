@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 const Discord = require('discord.js');
-const Twitch = require('twitch');
-const TwitchAuth = require('twitch-auth');
 const fetch = require('node-fetch');
 const secret = require('./secret.json');
 const config = require('./configuration/config.json');
@@ -9,23 +7,30 @@ const foaas = require('./configuration/foaas.json');
 const emo = require('./configuration/emoji.js');
 const emojiList = require('./configuration/data-ordered-emoji.js');
 const shardHelp = require('./configuration/shard-help.json');
+const twitchTrackedChannels = require('./configuration/twitchTrackedChannels.json');
+const ShardTwitch = require('./shardTwitch');
+const ShardGuildManager = require('./shardGuildManager');
 
 //INIT discord.js
 const discordClient = new Discord.Client();
 
-//INIT twitch.js
-const twitchClientId = secret.twitchClientId;
-const twitchClientSecret = secret.twitchClientSecret;
-const twitchAuthProvider = new TwitchAuth.ClientCredentialsAuthProvider(twitchClientId, twitchClientSecret);
-const twitchClient = new Twitch.ApiClient({ authProvider: twitchAuthProvider });
+//INIT shardTwitch.js
+const twitchClient = new ShardTwitch();
+
+//INIT shardGuildManager.js
+const shardGuildManager = new ShardGuildManager();
 
 //INIT globals
 const defaultPrefix = config.prefix;
+
 
 //Start client and set bot's status
 discordClient.once('ready', async () => {
     console.log('Client ready!');
     discordClient.user.setActivity('Under development...');
+    for(var i = 0; i < twitchTrackedChannels.length; i++) {
+        twitchClient.startTrackingByName(twitchTrackedChannels[i]);
+    }
 });
 
 //Login client
@@ -33,27 +38,29 @@ discordClient.login(secret.discordToken);
 
 //EVENT on removal/leaving of a member
 discordClient.on('guildMemberRemove', member => {
+    const guildConfig = shardGuildManager.getGuildConfigById(member.guild.id);
+    const memberLog = member.guild.channels.cache.get(guildConfig.memberLogChannelId);
+
     console.log(member.displayName + ' has left the server: ' + member.guild.name);
+    if(memberLog) {
+        memberLog.send(member_left(member));
+    }
 });
 
 //EVENT on joining of a member
 discordClient.on('guildMemberAdd', member => {
-    var channel;
-    var welcomeMsg;
-    if(member.guild.id === "723198194414125126") { //LX Server
-        guildConfig = require('./guildData/723198194414125126.json');
-        channel = member.guild.channels.cache.get(guildConfig.welcomeChannelId);
-        welcomeMsg = new Discord.MessageEmbed(guildConfig.welcomeMessage);
-    }
-    else if(member.guild.id === "743221608113766453") { //FLG Server
-        guildConfig = require('./guildData/743221608113766453.json');
-        channel = member.guild.channels.cache.get(guildConfig.welcomeChannelId);
-        welcomeMsg = new Discord.MessageEmbed(guildConfig.welcomeMessage);
-    }
+    const guildConfig = shardGuildManager.getGuildConfigById(member.guild.id);
+    const welcomeChannel = member.guild.channels.cache.get(guildConfig.welcomeChannelId);
+    const memberLog = member.guild.channels.cache.get(guildConfig.memberLogChannelId);
+    guildConfig.welcomeMessage = fill_welcome_msg(member, new Discord.MessageEmbed(guildConfig.welcomeMessage));
+
     // Send the message to a designated channel on a server:
-    if (channel) {
-        console.log(member.displayName + ' joined ' + member.guild.name + '.');
-        channel.send(fill_welcome_msg(member, welcomeMsg));
+    console.log(member.displayName + ' joined ' + member.guild.name + '.');
+    if(welcomeChannel) {
+        welcomeChannel.send(guildConfig.welcomeMessage);
+    }
+    if(memberLog) {
+        memberLog.send(member_joined(member));
     }
 });
 
@@ -62,45 +69,76 @@ discordClient.on('message', async message => {
     //Allmighty Logger. Don't use this. Seriously, don't.
     //console.log('[' + message.guild.name + '] ' + message.author.tag + ': ' + message.content);
 
-    var prefix = defaultPrefix;
-    var admin_ids;
-    var explictFilter = false;
-
-    if(message.guild.id === "723198194414125126") { //LX Server
-        guildConfig = require('./guildData/723198194414125126.json');
-        prefix = guildConfig.prefix;
-        admin_ids = guildConfig.ADMIN_IDS;
-        explictFilter = guildConfig.explictFilter;
-    }
-    else if(message.guild.id === "743221608113766453") { //FLG Server
-        guildConfig = require('./guildData/743221608113766453.json');
-        prefix = guildConfig.prefix;
-        admin_ids = guildConfig.ADMIN_IDS;
-        explictFilter = guildConfig.explictFilter;
+    var guildConfig = shardGuildManager.getGuildConfigById(message.guild.id);
+    if(guildConfig === null) {
+        guildConfig = shardGuildManager.getGuildConfigById('default');
     }
 
     //Ignore not prefixed and bot messages
-    if (!message.content.startsWith(prefix) || message.author.bot) return;
+    if (!message.content.startsWith(guildConfig.prefix) || message.author.bot) return;
     
     //Syntax: <prefix><command> <args[0]> <args[1]> ...
-    const args = message.content.slice(prefix.length).trim().split(' ');
+    const args = message.content.slice(guildConfig.prefix.length).trim().split(' ');
     const command = args.shift().toLowerCase();
 
     switch(command) {
         case 'shard-test':
             if(message.author.id !== "313742410180198431") break;
             console.log('[DEV] ' + message.author.username + ' called "shard-test" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
+            message.channel.send(shard_test(message, args));
             break;
         case 'help':
             console.log(message.author.username + ' called "help" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
-            message.channel.send(show_help(prefix, message.author));
+            message.channel.send(show_help(guildConfig.prefix, message.author));
+            break;
+        case 'config':
+            console.log(message.author.username + ' called "config" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
+            if(args.length < 1) break;;
+            if(!is_Admin(message.author.id, guildConfig.ADMIN_IDS)) break;; //Should throw error or open config help!
+            switch(args.shift().toLowerCase()) {
+                case 'prefix':
+                    console.log(message.author.username + ' called "config/prefix" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
+                    if(args.length < 1) break; //Should throw error or open config help!
+                    shardGuildManager.updateGuildConfigById(guildConfig.guildId, 'prefix', args[0]);
+                    message.channel.send(new Discord.MessageEmbed()
+                                                    .setAuthor(message.author.tag, message.author.displayAvatarURL())
+                                                    .setColor('#33cc33')
+                                                    .setTimestamp()
+                                                    .setTitle('Updated prefix')
+                                                    .setDescription('The new prefix for this server is: ' + args[0]));
+                    break;
+                case 'welcome-channel':
+                    console.log(message.author.username + ' called "config/welcome-channel" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
+                    if(args.length < 1) break; //Should throw error or open config help!
+                    if(!message.guild.channels.cache.has(args[0])) break; //Should throw error or open config help!
+                    shardGuildManager.updateGuildConfigById(guildConfig.guildId, 'welcomeChannelId', args[0]);
+                    message.channel.send(new Discord.MessageEmbed()
+                                                    .setAuthor(message.author.tag, message.author.displayAvatarURL())
+                                                    .setColor('#33cc33')
+                                                    .setTimestamp()
+                                                    .setTitle('Updated welcome channel')
+                                                    .setDescription('The new welcome channel for this server is: #' + message.guild.channels.cache.get(args[0]).name));
+                    break;
+                case 'memberlog-channel':
+                    console.log(message.author.username + ' called "config/memberlog-channel" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
+                    if(args.length < 1) break; //Should throw error or open config help!
+                    if(!message.guild.channels.cache.has(args[0])) break; //Should throw error or open config help!
+                    shardGuildManager.updateGuildConfigById(guildConfig.guildId, 'memberLogChannelId', args[0]);
+                    message.channel.send(new Discord.MessageEmbed()
+                                                    .setAuthor(message.author.tag, message.author.displayAvatarURL())
+                                                    .setColor('#33cc33')
+                                                    .setTimestamp()
+                                                    .setTitle('Updated member log channel')
+                                                    .setDescription('The new member log channel for this server is: #' + message.guild.channels.cache.get(args[0]).name));
+                    break;
+            }
             break;
         case 'server-info':
             console.log(message.author.username + ' called "server-info" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
             message.channel.send(server_info(message.guild));
             break;
         case 'hack':
-            if(explictFilter) break; //Should throw error or exclude from help!
+            if(guildConfig.explictFilter) break; //Should throw error or exclude from help!
             console.log(message.author.username + ' called "hack" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
             const backOff = await hack(message.author);
             message.channel.send(backOff);
@@ -204,16 +242,34 @@ async function twitch_status(user, args) {
     return new Discord.MessageEmbed()
     .setColor((args.length > 0) ? '#0099ff' : '#cc0000')
     .setAuthor(user.tag, user.displayAvatarURL())
-    .addField((args.length > 0) ? args[0] + ' is currently' : 'No channel provided', (args.length > 0) ? (await isTwitchStreamLive(args[0])) ? 'LIVE!' : 'OFFLINE' : 'Use Shard\'s help command to learn about command syntax')
+    .addField((args.length > 0) ? args[0] + ' is currently' : 'No channel provided', (args.length > 0) ? (await twitchClient.isTwitchStreamLive(args[0])) ? ':video_game: LIVE!' : ':x: OFFLINE' : 'Use Shard\'s help command to learn about command syntax')
     .setTimestamp();
 }
 
-function fill_welcome_msg(member, welcomeMsg) {
+function fill_welcome_msg(gMember, welcomeMsg) {
     return welcomeMsg
     .setTimestamp()
-    .setFooter(member.guild.memberCount + ' total users on the server.', member.guild.iconURL())
-    .setAuthor(member.user.tag, member.user.displayAvatarURL());
+    .setFooter(gMember.guild.memberCount + ' total users on the server.', gMember.guild.iconURL())
+    .setAuthor(gMember.user.tag, member.user.displayAvatarURL());
 }
+
+function member_joined(gMember) {
+    return new Discord.MessageEmbed()
+    .setColor('#99ff99')
+    .setAuthor(gMember.user.tag, gMember.user.displayAvatarURL())
+    .setDescription(gMember.user.username + ' joined the server.')
+    .setFooter(gMember.guild.memberCount + ' total users on the server.')
+    .setTimestamp();
+} 
+
+function member_left(gMember) {
+    return new Discord.MessageEmbed()
+    .setColor('#800000')
+    .setAuthor(gMember.user.tag, gMember.user.displayAvatarURL())
+    .setDescription(gMember.user.username + ' left the server.')
+    .setFooter(gMember.guild.memberCount + ' total users on the server.')
+    .setTimestamp();
+} 
 
 //---------------------------------------
 // ERRORS
@@ -235,16 +291,14 @@ function getRndInteger(minimum, maximum) {
 }
 
 function is_Admin(userId, adminIds) {
-    for(id in adminIds) {
-        if(userId === id) return true;
+    for(var i = 0; i < adminIds.length; i++) {
+        if(userId === adminIds[i]) return true;
     }
     return false;
 }
 
-async function isTwitchStreamLive(channelName) {
-    const user = await twitchClient.helix.users.getUserByName(channelName);
-	if (!user) {
-		return false;
-	}
-	return await twitchClient.helix.streams.getStreamByUserId(user.id) !== null;
+//TEST
+
+function shard_test(msg, args) {
+    return (twitchClient.isTracked(args[0])) ? 'yes' : 'no';
 }
