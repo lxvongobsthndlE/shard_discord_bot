@@ -105,7 +105,7 @@ discordClient.on('message', async message => {
                                                     .setColor('#33cc33')
                                                     .setTimestamp()
                                                     .setTitle('Updated prefix')
-                                                    .setDescription('The new prefix for this server is: ' + args[0]));
+                                                    .setDescription('The new prefix for this server is: **' + args[0] + '**'));
                     break;
                 case 'welcome-channel':
                     console.log(message.author.username + ' called "config/welcome-channel" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
@@ -250,7 +250,7 @@ function fill_welcome_msg(gMember, welcomeMsg) {
     return welcomeMsg
     .setTimestamp()
     .setFooter(gMember.guild.memberCount + ' total users on the server.', gMember.guild.iconURL())
-    .setAuthor(gMember.user.tag, member.user.displayAvatarURL());
+    .setAuthor(gMember.user.tag, gMember.user.displayAvatarURL());
 }
 
 function member_joined(gMember) {
