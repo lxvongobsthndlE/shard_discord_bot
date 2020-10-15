@@ -46,6 +46,7 @@ module.exports = class ShardGuildManager {
         var defaultConfig = fs.readFileSync(this.guildDataPath + '/default.json');
         defaultConfig = JSON.parse(defaultConfig);
         defaultConfig.guildId = guildId;
+        this.guildConfigs.push(defaultConfig);
         fs.writeFileSync(filePath, JSON.stringify(defaultConfig, null, 2));
         return defaultConfig;
     }
