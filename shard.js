@@ -70,9 +70,6 @@ discordClient.on('message', async message => {
     //console.log('[' + message.guild.name + '] ' + message.author.tag + ': ' + message.content);
 
     var guildConfig = shardGuildManager.getGuildConfigById(message.guild.id);
-    if(guildConfig === null) {
-        guildConfig = shardGuildManager.getGuildConfigById('default');
-    }
 
     //Ignore not prefixed and bot messages
     if (!message.content.startsWith(guildConfig.prefix) || message.author.bot) return;

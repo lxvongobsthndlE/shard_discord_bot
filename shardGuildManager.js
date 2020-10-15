@@ -8,9 +8,11 @@ module.exports = class ShardGuildManager {
         this.guildDataPath = guildDataPath;
         var files = fs.readdirSync(guildDataPath);
         files.forEach(file => {
-            var guildConfig = fs.readFileSync(guildDataPath + '/' + file);
-            guildConfig = JSON.parse(guildConfig);
-            this.guildConfigs.push(guildConfig);
+            if(file !== 'default.json') {
+                var guildConfig = fs.readFileSync(guildDataPath + '/' + file);
+                guildConfig = JSON.parse(guildConfig);
+                this.guildConfigs.push(guildConfig);
+            }
         });
     }
 
@@ -21,14 +23,13 @@ module.exports = class ShardGuildManager {
                 guildIndex = i;
             }
         } 
-        return (guildIndex >= 0) ? this.guildConfigs[guildIndex] : null;
+        return (guildIndex >= 0) ? this.guildConfigs[guildIndex] : this.newGuildConfig(guildId);
     }
 
     async updateGuildConfigById(guildId, key, value) {
         var filePath = this.guildDataPath + '/' + guildId + '.json';
         for(var i = 0; i < this.guildConfigs.length; i++) {
             if(this.guildConfigs[i].guildId === guildId) {
-                console.log('TEST');
                 this.guildConfigs[i][key] = value;
                 if(fs.access(filePath, err => err ? true : false)) return; //Should throw error
                 await fs.writeFile(filePath, JSON.stringify(this.guildConfigs[i], null, 2), (err) => {
@@ -38,5 +39,14 @@ module.exports = class ShardGuildManager {
                 return;
             }
         }
+    }
+
+    newGuildConfig(guildId) {
+        var filePath = this.guildDataPath + '/' + guildId + '.json';
+        defaultConfig = fs.readFileSync(this.guildDataPath + '/default.json');
+        defaultConfig = JSON.parse(defaultConfig);
+        defaultConfig.guildId = guildId;
+        fs.writeFileSync(filePath, JSON.stringify(defaultConfig, null, 2));
+        return defaultConfig;
     }
 }
