@@ -143,6 +143,7 @@ discordClient.on('message', async message => {
                         shardGuildManager.updateGuildConfigById(guildConfig.guildId, 'explictFilter', false);
                     }
                     else {
+                        explictContent = false;
                         shardGuildManager.updateGuildConfigById(guildConfig.guildId, 'explictFilter', true);
                     }
                     message.channel.send(new Discord.MessageEmbed()
