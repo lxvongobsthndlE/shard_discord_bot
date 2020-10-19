@@ -90,9 +90,15 @@ discordClient.on('message', async message => {
             break;
         case 'config':
             console.log(message.author.username + ' called "config" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
-            if(args.length < 1) break;;
             if(!is_Admin(message.author.id, guildConfig.ADMIN_IDS)) break;; //Should throw error or open config help!
+            if(args.length < 1) {
+                args[0] = 'help';
+            }
             switch(args.shift().toLowerCase()) {
+                case 'help':
+                    console.log(message.author.username + ' called "config/help" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
+                    message.channel.send(show_config_help());
+                    break;
                 case 'prefix':
                     console.log(message.author.username + ' called "config/prefix" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
                     if(args.length < 1) break; //Should throw error or open config help!
@@ -127,6 +133,24 @@ discordClient.on('message', async message => {
                                                     .setTimestamp()
                                                     .setTitle('Updated member log channel')
                                                     .setDescription('The new member log channel for this server is: #' + message.guild.channels.cache.get(args[0]).name));
+                    break;
+                case 'explict-content':
+                    console.log(message.author.username + ' called "config/explict-content" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
+                    if(args.length < 1) break; //Should throw error or open config help!
+                    explictContent = args[0].toLowerCase();
+                    if(explictContent === 'yes' || explictContent === 'true' || explictContent === 'ja') {
+                        explictContent = true;
+                        shardGuildManager.updateGuildConfigById(guildConfig.guildId, 'explictFilter', false);
+                    }
+                    else {
+                        shardGuildManager.updateGuildConfigById(guildConfig.guildId, 'explictFilter', true);
+                    }
+                    message.channel.send(new Discord.MessageEmbed()
+                                                    .setAuthor(message.author.tag, message.author.displayAvatarURL())
+                                                    .setColor('#33cc33')
+                                                    .setTimestamp()
+                                                    .setTitle('Updated explict content settings')
+                                                    .setDescription('Explict content is ' + (explictContent ? '**enabled**' : '**disabled**') + ' for this server.'));
                     break;
             }
             break;
@@ -172,6 +196,11 @@ function show_help(localprefix, user) {
         response.addField(localprefix + shardHelp[i].command, shardHelp[i].description);
     }
     return response;
+}
+
+function show_config_help() {
+    //TODO
+    return 'Test response';
 }
 
 function server_info(guild){
