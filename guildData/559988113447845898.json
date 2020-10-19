@@ -1,0 +1,16 @@
+{
+  "guildId": "559988113447845898",
+  "prefix": "s!",
+  "explictFilter": false,
+  "welcomeChannelId": "766437259222188083",
+  "welcomeMessage": {
+    "color": "0x33CC33",
+    "title": "Welcome to the server!",
+    "description": "Have a nice stay.",
+    "fields": []
+  },
+  "memberLogChannelId": "766445101433618462",
+  "ADMIN_IDS": [
+    "313742410180198431"
+  ]
+}

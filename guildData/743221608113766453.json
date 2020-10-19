@@ -1,21 +1,19 @@
 {
-    "guildId": "743221608113766453",
-    "prefix": "!",
-    "explictFilter": true,
-    "welcomeChannelId": "743428303565750312",
-    "welcomeMessage": {
-        "color": "0x33CC33",
-        "title": "Willkommen auf dem Discord Server von FunLovingGames!",
-        "description": "Sei freundlich zum Rest der Community und hab ein Funny Game!",
-        "fields": [
-            
-        ]
-    },
-    "memberLogChannelId": "",
-    "ADMIN_IDS": [
-        "675030108381380628",
-        "559503160138268682",
-        "232852617745793024",
-        "313742410180198431"
-    ]
+  "guildId": "743221608113766453",
+  "prefix": "!",
+  "explictFilter": true,
+  "welcomeChannelId": "743428303565750312",
+  "welcomeMessage": {
+    "color": "0x33CC33",
+    "title": "Willkommen auf dem Discord Server von FunLovingGames!",
+    "description": "Sei freundlich zum Rest der Community und hab ein Funny Game!",
+    "fields": []
+  },
+  "memberLogChannelId": "765586311767523348",
+  "ADMIN_IDS": [
+    "675030108381380628",
+    "559503160138268682",
+    "232852617745793024",
+    "313742410180198431"
+  ]
 }
