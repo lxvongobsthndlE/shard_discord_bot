@@ -9,6 +9,7 @@
   "author": "lxvongobsthndl",
   "license": "ISC",
   "dependencies": {
+    "discord-reaction-role": "^2.1.0",
     "discord.js": "^12.3.1",
     "emoji-json-list": "^1.0.0",
     "node-fetch": "^2.6.1",

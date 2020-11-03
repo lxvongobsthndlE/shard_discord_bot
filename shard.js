@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const Discord = require('discord.js');
+const ReactionRoleManager = require("discord-reaction-role");
 const fetch = require('node-fetch');
 const secret = require('./secret.json');
 const config = require('./configuration/config.json');
@@ -20,6 +21,11 @@ const twitchClient = new ShardTwitch();
 //INIT shardGuildManager.js
 const shardGuildManager = new ShardGuildManager();
 
+//INIT reactionRoleManager
+const roleManager = new ReactionRoleManager(discordClient, {
+    storage: "./configuration/reaction-roles.json"
+});
+
 //INIT globals
 const defaultPrefix = config.prefix;
 
@@ -27,7 +33,7 @@ const defaultPrefix = config.prefix;
 //Start client and set bot's status
 discordClient.once('ready', async () => {
     console.log('Client ready!');
-    discordClient.user.setActivity('Under development...');
+    discordClient.user.setActivity('Now a meme bot!');
     for(var i = 0; i < twitchTrackedChannels.length; i++) {
         twitchClient.startTrackingByName(twitchTrackedChannels[i]);
     }
@@ -118,6 +124,30 @@ discordClient.on('message', async message => {
                                                     .setTimestamp()
                                                     .setTitle('Updated prefix')
                                                     .setDescription('The new prefix for this server is: **' + args[0] + '**'));
+                    break;
+                case 'reactionrole':
+                    console.log(message.author.username + ' called "config/reactionrole" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
+                    if(args.length < 1) break; //Should throw error or open config help!
+                    var role = message.guild.roles.cache.get(args[0]);
+                    var reaction = (args[1]) ? args[1] : emojiList[getRndInteger(0, emojiList.length)];
+                    if(role) {
+                        message.channel.send(new Discord.MessageEmbed()
+                                                        .setAuthor('Request a role')
+                                                        .setColor('#33cc33')
+                                                        .setTitle(role.name)
+                                                        .setDescription('To get the **' + role.name + '** role react with ' + reaction))
+                                        .then(msg => {
+                                            if(reaction.startsWith('<')) {
+                                                reaction = reaction.split(':')[reaction.split(':').length - 1].substring(0, reaction.split(':')[reaction.split(':').length - 1].length - 1);
+                                            }
+                                            roleManager.create({
+                                                messageID: msg.id,
+                                                channel: message.channel,
+                                                reaction: reaction,
+                                                role: role
+                                            });
+                                        });
+                    } //Should throw error
                     break;
                 case 'welcome-channel':
                     console.log(message.author.username + ' called "config/welcome-channel" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
@@ -248,6 +278,7 @@ async function hack(user) {
 }
 
 async function meme() {
+    //https://github.com/D3vd/Meme_Api
     const randomMeme = await fetch('https://meme-api.herokuapp.com/gimme').then(res => res.json());
     return randomMeme;
 }
@@ -353,9 +384,10 @@ function is_Admin(userId, adminIds) {
 //TEST
 
 function shard_test(msg, args) {
+    //!config reactionrole <roleID> [<reaction>]
     var guildRoles = msg.guild.roles.cache;
-    guildRoles.forEach(r => console.log(r.name));
-    console.log("-------------");
+    //guildRoles.forEach(r => console.log(r.name));
+    //console.log("-------------");
     var userRoles = msg.guild.members.cache.get(msg.author.id).roles.cache;
     userRoles.forEach(r => console.log(r.name));
     console.log("-------------");
@@ -364,6 +396,7 @@ function shard_test(msg, args) {
     roleManager.add(xboxRole);
     return "check console.";
 }
+
 
 function add_role(msg, args) {
     var roleManager = new Discord.GuildMemberRoleManager(msg.guild.members.cache.get(msg.author.id));
