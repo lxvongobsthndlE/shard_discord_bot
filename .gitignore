@@ -3,4 +3,6 @@ secret.json
 shard.service
 info.txt
 /.vscode
-/guildData/*
+/guildData
+/configuration/reaction-roles.json
+/configuration/twitchTrackedChannels.json
