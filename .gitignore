@@ -4,3 +4,5 @@ shard.service
 info.txt
 /.vscode
 /guildData
+/configuration/reaction-roles.json
+/configuration/twitchTrackedChannels.json
