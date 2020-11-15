@@ -33,7 +33,7 @@ const defaultPrefix = config.prefix;
 //Start client and set bot's status
 discordClient.once('ready', async () => {
     console.log('Client ready!');
-    discordClient.user.setActivity('Now a meme bot!');
+    discordClient.user.setActivity('with the memes!', {type: "PLAYING"});
     for(var i = 0; i < twitchTrackedChannels.length; i++) {
         twitchClient.startTrackingByName(twitchTrackedChannels[i]);
     }
@@ -102,6 +102,11 @@ discordClient.on('message', async message => {
             console.log(message.author.username + ' called "meme" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
             const randomMeme = await meme();
             message.channel.send(randomMeme.title + '\nPosted by u/' + randomMeme.author + ' in r/' + randomMeme.subreddit, new Discord.MessageAttachment(randomMeme.url));
+            break;
+        case 'dog':
+            console.log(message.author.username + ' called "dog" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
+            const randomDog = await dog();
+            message.channel.send(new Discord.MessageAttachment(randomDog.message));
             break;
         case 'config':
             console.log(message.author.username + ' called "config" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
@@ -281,6 +286,12 @@ async function meme() {
     //https://github.com/D3vd/Meme_Api
     const randomMeme = await fetch('https://meme-api.herokuapp.com/gimme').then(res => res.json());
     return randomMeme;
+}
+
+async function dog() {
+    //https://dog.ceo/dog-api/
+    const randomDog = await fetch('https://dog.ceo/api/breeds/image/random').then(res => res.json());
+    return randomDog;
 }
 
 function roll(user, args) {

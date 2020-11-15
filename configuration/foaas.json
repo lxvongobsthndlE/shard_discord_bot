@@ -38,5 +38,70 @@
         "endpoint": "zero",
         "name": false,
         "from": true
+    },
+    {
+        "endpoint": "bag",
+        "name": false,
+        "from": true
+    },
+    {
+        "endpoint": "because",
+        "name": false,
+        "from": true
+    },
+    {
+        "endpoint": "blackadder",
+        "name": true,
+        "from": true
+    },
+    {
+        "endpoint": "bye",
+        "name": false,
+        "from": true
+    },
+    {
+        "endpoint": "cool",
+        "name": false,
+        "from": true
+    },
+    {
+        "endpoint": "cup",
+        "name": false,
+        "from": true
+    },
+    {
+        "endpoint": "fts",
+        "name": true,
+        "from": true
+    },
+    {
+        "endpoint": "linus",
+        "name": true,
+        "from": true
+    },
+    {
+        "endpoint": "problem",
+        "name": true,
+        "from": true
+    },
+    {
+        "endpoint": "shutup",
+        "name": true,
+        "from": true
+    },
+    {
+        "endpoint": "single",
+        "name": false,
+        "from": true
+    },
+    {
+        "endpoint": "xmas",
+        "name": true,
+        "from": true
+    },
+    {
+        "endpoint": "zayn",
+        "name": false,
+        "from": true
     }
 ]
