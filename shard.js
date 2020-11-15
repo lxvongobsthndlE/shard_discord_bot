@@ -43,14 +43,65 @@ discordClient.once('ready', async () => {
 discordClient.login(secret.discordToken);
 
 //EVENT on removal/leaving of a member
-discordClient.on('guildMemberRemove', member => {
+discordClient.on('guildMemberRemove', async member => {
     const guildConfig = shardGuildManager.getGuildConfigById(member.guild.id);
     const memberLog = member.guild.channels.cache.get(guildConfig.memberLogChannelId);
 
-    console.log(member.displayName + ' has left the server: ' + member.guild.name);
-    if(memberLog) {
-        memberLog.send(member_left(member));
+    const fetchedLogs = await member.guild.fetchAuditLogs({
+        limit: 1,
+        type: 'MEMBER_KICK'
+    });
+    const kickLog = fetchedLogs.entries.first();
+
+    //Member left
+    if (!kickLog) {
+        console.log(member.user.tag + ' has left the server: ' + member.guild.name);
+        if(memberLog) {
+            memberLog.send(member_left(member));
+        }
+        return;
     }
+
+    //Member kicked
+    const { executor, target } = kickLog;
+    if (target.id === member.id) {
+        console.log(member.user.tag + ' was kicked from server ' + member.guild.name + ' by ' + executor.tag);
+        if(memberLog) {
+            memberLog.send(member_kicked(member, executor, kickLog.reason));
+        }
+	} else {
+		console.log(member.user.tag + ' seems to have been kicked from server ' + member.guild.name + ' but the audit log fetch was inconclusive.');
+	}
+});
+
+//EVENT on ban of a member
+discordClient.on('guildBanAdd', async (guild, user) => {
+    const guildConfig = shardGuildManager.getGuildConfigById(guild.id);
+    const memberLog = guild.channels.cache.get(guildConfig.memberLogChannelId);
+
+    const fetchedLogs = await guild.fetchAuditLogs({
+		limit: 1,
+		type: 'MEMBER_BAN_ADD',
+	});
+	const banLog = fetchedLogs.entries.first();
+
+	if (!banLog) {
+        console.log(user.tag + ' was banned from server ' + guild.name + ' but no audit log could be found.');
+        if(memberLog) {
+            memberLog.send(member_banned(user, guild, null, null));
+        }
+        return;
+    } 
+
+	const { executor, target } = banLog;
+	if (target.id === user.id) {
+        console.log(user.tag + ' got hit by the ban hammer on server ' + guild.name + ', wielded by the mighty ' + executor.tag + '.');
+        if(memberLog) {
+            memberLog.send(member_banned(user, guild, executor, banLog.reason));
+        }
+	} else {
+		console.log(user.tag + ' got hit by the ban hammer on server ' + guild.name + ', audit log fetch was inconclusive.');
+	}
 });
 
 //EVENT on joining of a member
@@ -348,6 +399,7 @@ function fill_welcome_msg(gMember, welcomeMsg) {
     .setAuthor(gMember.user.tag, gMember.user.displayAvatarURL());
 }
 
+//JOIN, LEAVE, KICK, BAN
 function member_joined(gMember) {
     return new Discord.MessageEmbed()
     .setColor('#99ff99')
@@ -364,7 +416,27 @@ function member_left(gMember) {
     .setDescription(gMember.user.username + ' left the server.')
     .setFooter(gMember.guild.memberCount + ' total users on the server.')
     .setTimestamp();
-} 
+}
+
+function member_kicked(gMember, kickedBy, reason) {
+    return new Discord.MessageEmbed()
+    .setColor('#ffff00')
+    .setAuthor(gMember.user.tag, gMember.user.displayAvatarURL())
+    .setDescription((kickedBy) ? gMember.user.username + ' was kicked from the server by ' + kickedBy.tag + '.' : gMember.user.username + ' was kicked from the server.')
+    .addField('Reason', (reason) ? reason : 'No reason provided.')
+    .setFooter(gMember.guild.memberCount + ' total users on the server.')
+    .setTimestamp();
+}
+
+function member_banned(user, guild, bannedBy, reason) {
+    return new Discord.MessageEmbed()
+    .setColor('#ff6600')
+    .setAuthor(user.tag, user.displayAvatarURL())
+    .setDescription((bannedBy) ? user.username + ' was banned from the server by ' + bannedBy.tag + '.' : user.username + ' was banned from the server.')
+    .addField('Reason', (reason) ? reason : 'No reason provided.')
+    .setFooter(guild.memberCount + ' total users on the server.')
+    .setTimestamp();
+}
 
 //---------------------------------------
 // ERRORS
