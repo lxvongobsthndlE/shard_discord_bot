@@ -8,7 +8,7 @@ const foaas = require('./configuration/foaas.json');
 const emo = require('./configuration/emoji.js');
 const emojiList = require('./configuration/data-ordered-emoji.js');
 const shardHelp = require('./configuration/shard-help.json');
-const twitchTrackedChannels = require('./configuration/twitchTrackedChannels.json');
+//const twitchTrackedChannels = require('./configuration/twitchTrackedChannels.json');
 const ShardTwitch = require('./shardTwitch');
 const ShardGuildManager = require('./shardGuildManager');
 
@@ -34,9 +34,9 @@ const defaultPrefix = config.prefix;
 discordClient.once('ready', async () => {
     console.log('Client ready!');
     discordClient.user.setActivity('with the memes!', {type: "PLAYING"});
-    for(var i = 0; i < twitchTrackedChannels.length; i++) {
-        twitchClient.startTrackingByName(twitchTrackedChannels[i]);
-    }
+    //for(var i = 0; i < twitchTrackedChannels.length; i++) {
+    //    twitchClient.startTrackingByName(twitchTrackedChannels[i]);
+    //}
 });
 
 //Login client
