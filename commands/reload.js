@@ -8,11 +8,12 @@ module.exports = {
 	name: 'reload',
     description: 'Reloads a command',
     args: true,
-    adminOnly: true,
+    secret: true,
     aliases: [],
     explict: false,
     usage: '<command name>',
     execute(message, args, guildConfig) {
+        if(message.author.id !== "313742410180198431") return;
         const commandName = args[0].toLowerCase();
         const command = message.client.commands.get(commandName)
             || message.client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
