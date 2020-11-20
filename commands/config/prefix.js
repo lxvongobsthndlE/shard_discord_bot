@@ -1,7 +1,7 @@
 const DiscordMessageEmbed = require('discord.js').MessageEmbed;
 
 /** Command: prefix
- *  Shange the prefix for a server.
+ *  Change the prefix for a server.
  */
 module.exports = {
     name: 'prefix',
