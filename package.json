@@ -9,9 +9,12 @@
   "author": "lxvongobsthndl",
   "license": "ISC",
   "dependencies": {
+    "discord-giveaways": "^4.2.1",
     "discord-reaction-role": "^2.1.0",
     "discord.js": "^12.3.1",
     "emoji-json-list": "^1.0.0",
+    "moment": "^2.29.1",
+    "ms": "^2.1.2",
     "node-fetch": "^2.6.1",
     "sequelize": "^6.3.5",
     "sqlite3": "^5.0.0",

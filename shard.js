@@ -4,14 +4,18 @@ const fs = require('fs');
 const secret = require('./secret.json');
 const config = require('./configuration/config.json');
 const ReactionRolesManager = require('discord-reaction-role');
+const { GiveawaysManager } = require("discord-giveaways");
 const ShardGuildManager = require('./shardGuildManager');
 const ArgumentError = require('./errors/ArgumentError');
 const ExecutionError = require('./errors/ExecutionError');
 const CommandDoesNotExistError = require('./errors/CommandDoesNotExistError');
 
+//SETUP CLIENT --------------------------------------------------------------------------------------------
 //INIT discord.js
 const discordClient = new Discord.Client();
+//INIT Guild Configuration Manager
 discordClient.guildManager = new ShardGuildManager();
+//Load all commands
 discordClient.commands = new Discord.Collection();
 discordClient.configCommands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
@@ -24,16 +28,29 @@ for (const file of configCommandFiles) {
     const command = require('./commands/config/' + file);
     discordClient.configCommands.set(command.name, command);
 }
-
 //INIT reactionRoleManager
 const rroleManager = new ReactionRolesManager(discordClient, {
     storage: "./configuration/reaction-roles.json"
 });
 discordClient.roleManager = rroleManager;
+//INIT giveawaysManager
+const gaManager = new GiveawaysManager(discordClient, {
+    storage: "./configuration/giveaways.json",
+    updateCountdownEvery: 10000,
+    default: {
+        botsCanWin: false,
+        //exemptPermissions: [ "MANAGE_MESSAGES", "ADMINISTRATOR" ],
+        embedColor: "#FF9900",
+        embedColorEnd: "#808080",
+        reaction: "🎮"
+    }
+});
+discordClient.giveawaysManager = gaManager;
 
-//INIT globals
+//SETUP GLOBAL ARGS ---------------------------------------------------------------------------------------
 const defaultPrefix = config.prefix;
 
+//BOT LOGIC -----------------------------------------------------------------------------------------------
 //Start client and set bot's status
 discordClient.once('ready', async () => {
     console.log('Client ready!');
@@ -165,6 +182,7 @@ discordClient.on('message', async message => {
     }
 });
 
+//Completes welcome message, appending the footer
 function fill_welcome_msg(gMember, welcomeMsg) {
     return welcomeMsg
     .setTimestamp()
