@@ -8,7 +8,7 @@ module.exports = {
     name: 'language',
     description: 'Change the (prefered) language Shard Bot answers in for this server.',
     args: true,
-    usage: '<ISO 639-1 country code>',
+    usage: '<ISO 639-1 language code>',
     aliases: ['i18n'],
     availableArgs: ['en', 'de'],
     execute(message, args, guildConfig) {
