@@ -87,7 +87,7 @@ module.exports = {
                     .setTimestamp();
                 onServer.forEach(ga => {
                     if(!ga.ended){
-                        responseEmbed.addField(ga.prize, 'Winners: ' + ga.winnerCount + '\nEnds ' + moment(ga.endAt).fromNow() + '\nHosted by: ' + ga.hostedBy);
+                        responseEmbed.addField(ga.prize, 'Winners: ' + ga.winnerCount + '\nEnds ' + moment(ga.endAt).fromNow() + '\nHosted by: ' + ga.hostedBy + '\nmsgID: ' + ga.messageID);
                     }
                 });
                 message.channel.send(responseEmbed);

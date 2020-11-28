@@ -22,7 +22,6 @@ module.exports = class ArgumentError {
             .addField('Command', this.command, true)
             .setAuthor(this.author.tag, this.author.displayAvatarURL())
             .setTimestamp();
-            console.log(this.args);
         if(this.args.length && this.args != null) embed.addField('Arguments', this.args.toString(), true);
         if(this.usage != null) embed.addField('Usage', this.usage);
         return embed;
