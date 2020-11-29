@@ -1,10 +1,10 @@
+#node
+node_modules/
+
+#IDE specific
+/.vscode
+
+#Confidential or not required files
 secret.json
-/node_modules
 shard.service
 info.txt
-/.vscode
-/guildData/*
-/configuration/reaction-roles.json
-/configuration/giveaways.json
-/configuration/twitchTrackedChannels.json
-guildData/743221608113766453.json

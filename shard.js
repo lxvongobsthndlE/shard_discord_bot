@@ -30,12 +30,12 @@ for (const file of configCommandFiles) {
 }
 //INIT reactionRoleManager
 const rroleManager = new ReactionRolesManager(discordClient, {
-    storage: "./configuration/reaction-roles.json"
+    storage: "./botData/reaction-roles.json"
 });
 discordClient.roleManager = rroleManager;
 //INIT giveawaysManager
 const gaManager = new GiveawaysManager(discordClient, {
-    storage: "./configuration/giveaways.json",
+    storage: "./botData/giveaways.json",
     updateCountdownEvery: 10000,
     default: {
         botsCanWin: false,
