@@ -1,6 +1,6 @@
 {
   "guildId": "723198194414125126",
-  "prefix": "$",
+  "prefix": "!",
   "explictFilter": false,
   "welcomeChannelId": "760970452163362866",
   "welcomeMessage": {
