@@ -8,10 +8,3 @@ node_modules/
 secret.json
 shard.service
 info.txt
-
-#storage files
-guildData/*.json
-!guildData/default.json
-configuration/reaction-roles.json
-configuration/giveaways.json
-configuration/twitchTrackedChannels.json
