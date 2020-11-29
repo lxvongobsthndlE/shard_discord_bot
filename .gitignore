@@ -10,7 +10,8 @@ shard.service
 info.txt
 
 #storage files
-guildData/
+guildData/*.json
+!guildData/default.json
 configuration/reaction-roles.json
 configuration/giveaways.json
 configuration/twitchTrackedChannels.json
