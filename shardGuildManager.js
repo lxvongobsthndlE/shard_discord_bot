@@ -6,7 +6,7 @@ module.exports = class ShardGuildManager {
     constructor(guildDataPath = './guildData') {
         this.guildConfigs = [];
         this.guildDataPath = guildDataPath;
-        var files = fs.readdirSync(guildDataPath);
+        var files = fs.readdirSync(guildDataPath).filter(file => file.endsWith('.json'));
         files.forEach(file => {
             if(file !== 'default.json') {
                 var guildConfig = fs.readFileSync(guildDataPath + '/' + file);
