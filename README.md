@@ -4,8 +4,8 @@ A Discord bot written in Node.js using [discord.js](https://github.com/discordjs
 ## TODO's
 
 * Add localizations
-* Add command manager **DONE**
-* Add dynamic help message generation **DONE**
+* Add command manager
+* Add dynamic help message generation
 * Fix Twitch integration
 * Finish YouTube integration
 * remove clutter
