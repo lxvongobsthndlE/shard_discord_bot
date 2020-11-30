@@ -3,6 +3,7 @@ const Discord = require('discord.js');
 const fs = require('fs');
 const secret = require('./secret.json');
 const config = require('./configuration/config.json');
+const presence = require('./botData/presence.json');
 const ReactionRolesManager = require('discord-reaction-role');
 const { GiveawaysManager } = require("discord-giveaways");
 const ShardGuildManager = require('./shardGuildManager');
@@ -54,7 +55,7 @@ const defaultPrefix = config.prefix;
 //Start client and set bot's status
 discordClient.once('ready', async () => {
     console.log('Client ready!');
-    discordClient.user.setActivity('with the memes!', {type: "PLAYING"});
+    discordClient.user.setPresence({ activity: { name: presence.activity, type: presence.activityType }, status: presence.status });
     //for(var i = 0; i < twitchTrackedChannels.length; i++) {
     //    twitchClient.startTrackingByName(twitchTrackedChannels[i]);
     //}

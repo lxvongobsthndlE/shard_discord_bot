@@ -1,4 +1,5 @@
 const ArgumentError = require("../errors/ArgumentError");
+const fs = require('fs');
 
 /** Command: shard-activity <activity> [type]
  *  Reloads a specified command, so you won't need to restart the bot if changes were made.
@@ -25,6 +26,11 @@ module.exports = {
         }
 
         if(!activity == '') {
+            var presenceData = fs.readFileSync('../botData/presence.json');
+            presenceData = JSON.parse(presenceData);
+            presenceData.activity = activity;
+            presenceData.activityType = activityType;
+            fs.writeFileSync('../botData/presence.json', JSON.stringify(presenceData, null, 2));
             return message.client.user.setActivity(activity, {type: activityType});
         }
 

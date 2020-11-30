@@ -1,4 +1,5 @@
 const ArgumentError = require("../errors/ArgumentError");
+const fs = require('fs');
 
 /** Command: shard-status <status>
  *  Changes the status of the bot.
@@ -22,6 +23,10 @@ module.exports = {
             return message.channel.send(new ArgumentError(message.author, this.name, args, 'Provided argument is not a valid status!').getEmbed());
         }
 
+        var presenceData = fs.readFileSync('../botData/presence.json');
+        presenceData = JSON.parse(presenceData);
+        presenceData.status = status;
+        fs.writeFileSync('../botData/presence.json', JSON.stringify(presenceData, null, 2));
         return message.client.user.setStatus(status);        
     }
 };
