@@ -32,5 +32,5 @@ module.exports = {
             console.error(error);
             message.channel.send(new ExecutionError(message.author, this.name, args, 'There was an error reloading the command you specified. Check Bot logs.').getEmbed());
         }
-    },
+    }
 };
