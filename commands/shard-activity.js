@@ -26,11 +26,11 @@ module.exports = {
         }
 
         if(!activity == '') {
-            var presenceData = fs.readFileSync('../botData/presence.json');
+            var presenceData = fs.readFileSync('./botData/presence.json');
             presenceData = JSON.parse(presenceData);
             presenceData.activity = activity;
             presenceData.activityType = activityType;
-            fs.writeFileSync('../botData/presence.json', JSON.stringify(presenceData, null, 2));
+            fs.writeFileSync('./botData/presence.json', JSON.stringify(presenceData, null, 2));
             return message.client.user.setActivity(activity, {type: activityType});
         }
 
