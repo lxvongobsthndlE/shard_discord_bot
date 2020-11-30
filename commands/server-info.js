@@ -15,7 +15,7 @@ module.exports = {
         message.channel.send(new DiscordMessageEmbed()
             .setColor('#0099ff')
             .setAuthor(guild.name, guild.iconURL())
-            .addField('Owner', guild.owner.username, false)
+            .addField('Owner', guild.owner.displayName, false)
             .addField('Region', guild.region, true)
             .addField('Members', guild.memberCount, true)
             .addField('Explict content', (guildConfig.explictFilter) ? "Disabled" : 'Enabled', true)
