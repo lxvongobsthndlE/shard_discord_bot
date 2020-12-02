@@ -75,24 +75,17 @@ discordClient.on('guildMemberRemove', async member => {
     });
     const kickLog = fetchedLogs.entries.first();
 
-    //Member left
-    if (!kickLog) {
-        console.log(member.user.tag + ' has left the server: ' + member.guild.name);
-        if(memberLog) {
-            memberLog.send(member_left(member));
-        }
-        return;
-    }
-
-    //Member kicked
     const { executor, target } = kickLog;
-    if (target.id === member.id) {
+    if (target.id === member.id) { //Member kicked
         console.log(member.user.tag + ' was kicked from server ' + member.guild.name + ' by ' + executor.tag);
         if(memberLog) {
             memberLog.send(member_kicked(member, executor, kickLog.reason));
         }
-	} else {
-		console.log(member.user.tag + ' seems to have been kicked from server ' + member.guild.name + ' but the audit log fetch was inconclusive.');
+	} else { //Member left
+		console.log(member.user.tag + ' has left the server: ' + member.guild.name);
+        if(memberLog) {
+            memberLog.send(member_left(member));
+        }
 	}
 });
 

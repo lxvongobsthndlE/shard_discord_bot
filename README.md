@@ -3,8 +3,13 @@ A Discord bot written in Node.js using [discord.js](https://github.com/discordjs
 
 ## TODO's
 
+### Urgent!
+
+* Fix memberlog
+
 ### Must have
 
+* survey function
 * config option to add and remove bot admins
 * ranking system on a per month basis (give special rank)
 * Fix Twitch integration
