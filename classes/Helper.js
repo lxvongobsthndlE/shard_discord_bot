@@ -10,4 +10,8 @@ module.exports = class Helper {
     isAdmin(userId, adminIds) {
         return adminIds.includes(userId);
     }
+
+    makeUserAt(user) {
+        return '<@' + user.id + '>';
+    }
 }

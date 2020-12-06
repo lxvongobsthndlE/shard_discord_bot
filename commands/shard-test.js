@@ -1,4 +1,5 @@
 const DiscordMessageEmbed = require('discord.js').MessageEmbed;
+const Helper = require('../classes/Helper');
 
 /** Command: shard-test
  *  Command for testing various stuffs.
@@ -13,11 +14,20 @@ module.exports = {
     execute(message, args, guildConfig) {
         if(message.author.id !== "313742410180198431") return;
         console.log('[DEV] ' + message.author.username + ' called "shard-test" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
-            
+        const helper = new Helper();
+
         if (args[0] == 'flgrules') {
             flg_rules(message.guild).forEach(rule => {
                 message.channel.send(rule);
             });
+            return;
+        }
+        if (args[0] == 'at') {
+            console.log(message.author);
+            message.channel.send(new DiscordMessageEmbed()
+                .setAuthor(message.author.tag)
+                .setDescription('User: ' + helper.makeUserAt(message.author))
+            );
             return;
         }
 
