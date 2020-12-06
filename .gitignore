@@ -6,5 +6,3 @@ node_modules/
 
 #Confidential or not required files
 secret.json
-shard.service
-info.txt

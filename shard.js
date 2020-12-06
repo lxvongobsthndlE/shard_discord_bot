@@ -52,9 +52,9 @@ discordClient.giveawaysManager = gaManager;
 const defaultPrefix = config.prefix;
 
 //BOT LOGIC -----------------------------------------------------------------------------------------------
-//Start client and set bot's status
+//Start client and set bot presense data
 discordClient.once('ready', async () => {
-    console.log('Client ready!');
+    console.log('Shard-Client ready!');
     discordClient.user.setPresence({ activity: { name: presence.activity, type: presence.activityType }, status: presence.status });
     //for(var i = 0; i < twitchTrackedChannels.length; i++) {
     //    twitchClient.startTrackingByName(twitchTrackedChannels[i]);
@@ -189,7 +189,7 @@ function member_joined(gMember) {
     return new Discord.MessageEmbed()
     .setColor('#99ff99')
     .setAuthor(gMember.user.tag, gMember.user.displayAvatarURL())
-    .setDescription(gMember.user.username + ' joined the server.')
+    .setDescription(gMember.user + ' joined the server.')
     .setFooter(gMember.guild.memberCount + ' total users on the server.')
     .setTimestamp();
 } 
@@ -198,7 +198,7 @@ function member_left(gMember) {
     return new Discord.MessageEmbed()
     .setColor('#800000')
     .setAuthor(gMember.user.tag, gMember.user.displayAvatarURL())
-    .setDescription(gMember.user.username + ' left the server.')
+    .setDescription(gMember.user + ' left the server.')
     .setFooter(gMember.guild.memberCount + ' total users on the server.')
     .setTimestamp();
 }
@@ -207,7 +207,7 @@ function member_kicked(gMember, kickedBy, reason) {
     return new Discord.MessageEmbed()
     .setColor('#ffff00')
     .setAuthor(gMember.user.tag, gMember.user.displayAvatarURL())
-    .setDescription((kickedBy) ? gMember.user.username + ' was kicked from the server by ' + kickedBy.tag + '.' : gMember.user.username + ' was kicked from the server.')
+    .setDescription((kickedBy) ? gMember.user + ' was kicked from the server by ' + kickedBy + '.' : gMember.user + ' was kicked from the server.')
     .addField('Reason', (reason) ? reason : 'No reason provided.')
     .setFooter(gMember.guild.memberCount + ' total users on the server.')
     .setTimestamp();
@@ -217,7 +217,7 @@ function member_banned(user, guild, bannedBy, reason) {
     return new Discord.MessageEmbed()
     .setColor('#ff6600')
     .setAuthor(user.tag, user.displayAvatarURL())
-    .setDescription((bannedBy) ? user.username + ' was banned from the server by ' + bannedBy.tag + '.' : user.username + ' was banned from the server.')
+    .setDescription((bannedBy) ? user + ' was banned from the server by ' + bannedBy + '.' : user + ' was banned from the server.')
     .addField('Reason', (reason) ? reason : 'No reason provided.')
     .setFooter(guild.memberCount + ' total users on the server.')
     .setTimestamp();

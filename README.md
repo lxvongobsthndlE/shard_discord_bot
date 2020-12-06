@@ -3,10 +3,6 @@ A Discord bot written in Node.js using [discord.js](https://github.com/discordjs
 
 ## TODO's
 
-### Urgent!
-
-* Fix memberlog
-
 ### Must have
 
 * survey function
@@ -21,6 +17,7 @@ A Discord bot written in Node.js using [discord.js](https://github.com/discordjs
 
 ### DONE
 
+* Fix memberlog
 * bot owner option to change bot status/activity
 * Add command manager
 * Add dynamic help message generation
