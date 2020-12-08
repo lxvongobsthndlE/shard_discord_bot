@@ -5,7 +5,7 @@ const secret = require('./secret.json');
 const config = require('./configuration/config.json');
 const presence = require('./botData/presence.json');
 const ReactionRolesManager = require('discord-reaction-role');
-const { GiveawaysManager } = require("discord-giveaways");
+const { GiveawaysManager } = require('discord-giveaways');
 const ShardGuildManager = require('./shardGuildManager');
 const ArgumentError = require('./errors/ArgumentError');
 const ExecutionError = require('./errors/ExecutionError');
@@ -32,19 +32,19 @@ for (const file of configCommandFiles) {
 }
 //INIT reactionRoleManager
 const rroleManager = new ReactionRolesManager(discordClient, {
-    storage: "./botData/reaction-roles.json"
+    storage: './botData/reaction-roles.json'
 });
 discordClient.roleManager = rroleManager;
 //INIT giveawaysManager
 const gaManager = new GiveawaysManager(discordClient, {
-    storage: "./botData/giveaways.json",
+    storage: './botData/giveaways.json',
     updateCountdownEvery: 10000,
     default: {
         botsCanWin: false,
         //exemptPermissions: [ "MANAGE_MESSAGES", "ADMINISTRATOR" ],
-        embedColor: "#FF9900",
-        embedColorEnd: "#808080",
-        reaction: "🎮"
+        embedColor: '#FF9900',
+        embedColorEnd: '#808080',
+        reaction: '🎮'
     }
 });
 discordClient.giveawaysManager = gaManager;
