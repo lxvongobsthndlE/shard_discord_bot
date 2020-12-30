@@ -1,4 +1,5 @@
 const DiscordMessageEmbed = require('discord.js').MessageEmbed;
+const DiscordCollection = require('discord.js').Collection;
 const Helper = require('../classes/Helper');
 
 /** Command: shard-test
@@ -11,7 +12,7 @@ module.exports = {
     usage: '',
     aliases: ['stest'],
     secret: true,
-    execute(message, args, guildConfig) {
+    async execute(message, args, guildConfig) {
         if(message.author.id !== "313742410180198431") return;
         console.log('[DEV] ' + message.author.username + ' called "shard-test" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
         const helper = new Helper();
@@ -30,8 +31,25 @@ module.exports = {
             );
             return;
         }
-
-        message.channel.send("Du Ollum!");
+        if (args[0] == 'warn-all') {
+            var result = [];
+            var comm = args.shift();
+            let reminder = args.join(' ');
+            console.log(reminder);
+            await message.client.guilds.cache.get(message.guild.id).members.fetch()
+                .then(mems => mems.filter(m => !m.roles.cache.has('773581026211397682'))
+                .each(u => {
+                    result.push(u.displayName);
+                    u.send(reminder)
+                        .then(msg => console.log('Sent message to ' + msg.channel.recipient.userame))
+                        .catch(console.error);
+                }))
+                .catch(console.error);
+            message.channel.send('Sent a verify-reminder to following users: ' + result.join(', ') + '\n\nTotal: ' + result.length);
+        }
+        if (!args[0]) {
+            message.channel.send("Du Ollum!");
+        }
     }
 }
 

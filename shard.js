@@ -5,6 +5,7 @@ const secret = require('./secret.json');
 const config = require('./configuration/config.json');
 const presence = require('./botData/presence.json');
 const ReactionRolesManager = require('discord-reaction-role');
+const TempChannels = require("discord-temp-channels");
 const { GiveawaysManager } = require('discord-giveaways');
 const ShardGuildManager = require('./shardGuildManager');
 const ArgumentError = require('./errors/ArgumentError');
@@ -48,6 +49,14 @@ const gaManager = new GiveawaysManager(discordClient, {
     }
 });
 discordClient.giveawaysManager = gaManager;
+//INIT tempChannelsManager
+const tempChannels = new TempChannels(discordClient);
+tempChannels.registerChannel("793635620785618944", {
+    childCategory: "793635153779228772",
+    childAutoDeleteIfOwnerLeaves: true,
+    childMaxUsers: 10,
+    childFormat: (member, count) => `#${count} | ${member.user.username}'s lounge`
+});
 
 //SETUP GLOBAL ARGS ---------------------------------------------------------------------------------------
 const defaultPrefix = config.prefix;
