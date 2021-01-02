@@ -13,42 +13,65 @@ module.exports = {
     aliases: ['stest'],
     secret: true,
     async execute(message, args, guildConfig) {
-        if(message.author.id !== "313742410180198431") return;
+        if (message.author.id !== "313742410180198431") return;
         console.log('[DEV] ' + message.author.username + ' called "shard-test" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
         const helper = new Helper();
 
-        if (args[0] == 'flgrules') {
-            flg_rules(message.guild).forEach(rule => {
-                message.channel.send(rule);
-            });
-            return;
-        }
-        if (args[0] == 'at') {
-            console.log(message.author);
-            message.channel.send(new DiscordMessageEmbed()
-                .setAuthor(message.author.tag)
-                .setDescription('User: ' + helper.makeUserAt(message.author))
-            );
-            return;
-        }
-        if (args[0] == 'warn-all') {
-            var result = [];
-            var comm = args.shift();
-            let reminder = args.join(' ');
-            console.log(reminder);
-            await message.client.guilds.cache.get(message.guild.id).members.fetch()
-                .then(mems => mems.filter(m => !m.roles.cache.has('773581026211397682'))
-                .each(u => {
-                    result.push(u.displayName);
-                    u.send(reminder)
-                        .then(msg => console.log('Sent message to ' + msg.channel.recipient.userame))
-                        .catch(console.error);
-                }))
-                .catch(console.error);
-            message.channel.send('Sent a verify-reminder to following users: ' + result.join(', ') + '\n\nTotal: ' + result.length);
-        }
-        if (!args[0]) {
-            message.channel.send("Du Ollum!");
+        switch (args[0]) {
+            case 'flgrules': 
+                flg_rules(message.guild).forEach(rule => {
+                    message.channel.send(rule);
+                });
+                break;
+            case 'at': 
+                console.log(message.author);
+                message.channel.send(new DiscordMessageEmbed()
+                    .setAuthor(message.author.tag)
+                    .setDescription('User: ' + helper.makeUserAt(message.author))
+                );
+                break;
+            case 'warn-all': 
+                var result = [];
+                var comm = args.shift();
+                let reminder = args.join(' ');
+                console.log(reminder);
+                await message.client.guilds.cache.get(message.guild.id).members.fetch()
+                    .then(mems => mems.filter(m => !m.roles.cache.has('773581026211397682'))
+                        .each(u => {
+                            result.push(u.displayName);
+                            var embed = new DiscordMessageEmbed()
+                                .setDescription('Hallo!\nDas ist eine automatische Erinnerung, dass du auf dem Server von FunLovingGames noch nicht verifiziert bist und deshalb noch nicht alle Kanäle sehen kannst.\n\nUm diese Nachricht nicht mehr zu erhalten, bitte verifiziere dich im #⌠📜⌡regeln Kanal.\n\nUm verifiziert zu werden, reicht es auf die Nachricht von @Shard mit <:verified:773277557310488586> zu reagieren (sh. angehängter Screenshot)')
+                                .setThumbnail(message.guild.iconURL())
+                                .setImage('https://raw.githubusercontent.com/lxvongobsthndlE/shard_discord_bot/master/screen_verify.png')
+                                .setAuthor(message.guild.name)
+                                .setFooter(message.client.user.username, message.client.user.displayAvatarURL())
+                                .setColor('#ff9933')
+                                .setTimestamp();
+                            u.send(reminder, { embed })
+                                .then(msg => console.log('Sent message to ' + u.displayName))
+                                .catch(console.error);
+                        }))
+                    .catch(console.error);
+                message.channel.send('Sent a verify-reminder to following users: ' + result.join(', ') + '\n\nTotal: ' + result.length);
+                break;
+            case 'test-pm': 
+                var comm = args.shift();
+                let reminder2 = args.join(' ');
+                var embed = new DiscordMessageEmbed()
+                    .setDescription('Hallo!\nDas ist eine automatische Erinnerung, dass du auf dem Server von FunLovingGames noch nicht verifiziert bist und deshalb noch nicht alle Kanäle sehen kannst.\n\nUm diese Nachricht nicht mehr zu erhalten, bitte verifiziere dich im #⌠📜⌡regeln Kanal.\n\nUm verifiziert zu werden, reicht es auf die Nachricht von @Shard mit <:verified:773277557310488586> zu reagieren (sh. angehängter Screenshot)')
+                    .setThumbnail(message.guild.iconURL())
+                    .setImage('https://raw.githubusercontent.com/lxvongobsthndlE/shard_discord_bot/master/screen_verify.png')
+                    .setAuthor(message.guild.name)
+                    .setFooter(message.client.user.username, message.client.user.displayAvatarURL())
+                    .setColor('#ff9933')
+                    .setTimestamp();
+                message.author.send(reminder2, { embed })
+                    .then(msg => console.log('Sent message to ' + msg.channel.recipient.userame))
+                    .catch(console.error);
+                break;
+            default: 
+                message.channel.send("Du Ollum!");
+                break;
         }
     }
 }

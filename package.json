@@ -11,6 +11,7 @@
   "dependencies": {
     "discord-giveaways": "^4.2.1",
     "discord-reaction-role": "^2.1.0",
+    "discord-temp-channels": "^1.0.5",
     "discord.js": "^12.3.1",
     "emoji-json-list": "^1.0.0",
     "moment": "^2.29.1",
