@@ -28,11 +28,13 @@ module.exports = {
         var role = message.guild.roles.cache.get(args[0]);
         var reaction = (args[1]) ? args[1] : emojiList[getRndInteger(0, emojiList.length)];
         if (role) {
-            return message.channel.send(new DiscordMessageEmbed()
-                .setAuthor(LANG.embedAuthor)
-                .setColor('#33cc33')
-                .setTitle(role.name)
-                .setDescription(LANG.embedDescription, role.name, reaction))
+            return message.channel
+                .send(new DiscordMessageEmbed()
+                    .setAuthor(LANG.embedAuthor)
+                    .setColor('#33cc33')
+                    .setTitle(role.name)
+                    .setDescription(LANG.embedDescription.replace('%s', role.name).replace('%s', reaction))
+                )
                 .then(msg => {
                     if (reaction.startsWith('<')) {
                         reaction = reaction.split(':')[reaction.split(':').length - 1].substring(0, reaction.split(':')[reaction.split(':').length - 1].length - 1);
