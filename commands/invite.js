@@ -3,7 +3,7 @@ const DiscordMessageEmbed = require('discord.js').MessageEmbed;
 /** Command: invite
  *  Get a link to invite this bot to your server
  * 
- *  Use this link to create an invite: https://discordapi.com/permissions.htm
+ *  Use this link to create an invite: https://discordapi.com/permissions.html
  *  Client ID: 759925230017052674
  */
 module.exports = {
