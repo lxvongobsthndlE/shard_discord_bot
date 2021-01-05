@@ -9,7 +9,7 @@ module.exports = {
     name: 'reactionrole',
     description: 'Create a reaction-collector, that gives a specified role to the users reacting.',
     args: true,
-    usage: '<role id> <reaction emoji>',
+    usage: '<role id> [reaction emoji]',
     aliases: ['rr'],
     i18n: {
         en: {
