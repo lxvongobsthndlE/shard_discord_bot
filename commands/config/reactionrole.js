@@ -32,7 +32,7 @@ module.exports = {
                 .setAuthor(LANG.embedAuthor)
                 .setColor('#33cc33')
                 .setTitle(role.name)
-                .setDescription(LANG.embedDescription))
+                .setDescription(LANG.embedDescription, role.name, reaction))
                 .then(msg => {
                     if (reaction.startsWith('<')) {
                         reaction = reaction.split(':')[reaction.split(':').length - 1].substring(0, reaction.split(':')[reaction.split(':').length - 1].length - 1);
