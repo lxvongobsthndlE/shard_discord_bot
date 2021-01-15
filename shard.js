@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const Discord = require('discord.js');
+const ShardTwitch = require('./shardTwitch');
 const fs = require('fs');
 const secret = require('./secret.json');
 const config = require('./configuration/config.json');
@@ -12,10 +13,13 @@ const ArgumentError = require('./errors/ArgumentError');
 const ExecutionError = require('./errors/ExecutionError');
 const CommandDoesNotExistError = require('./errors/CommandDoesNotExistError');
 const Helper = require('./classes/Helper');
+const ShardMinecraft = require('./classes/shardMinecraft');
 
 //SETUP CLIENT --------------------------------------------------------------------------------------------
 //INIT discord.js
 const discordClient = new Discord.Client();
+//INIT Twitch Manager
+discordClient.twitchManager = new ShardTwitch();
 //INIT Guild Configuration Manager
 discordClient.guildManager = new ShardGuildManager();
 //Load all commands
@@ -57,6 +61,9 @@ tempChannels.registerChannel("793635620785618944", {
     childMaxUsers: 10,
     childFormat: (member, count) => `#${count} | ${member.user.username}'s lounge`
 });
+//INIT Minecraft http
+const shardMinecraft = new ShardMinecraft();
+discordClient.minecraftManager = shardMinecraft;
 
 //SETUP GLOBAL ARGS ---------------------------------------------------------------------------------------
 const defaultPrefix = config.prefix;
@@ -152,11 +159,33 @@ discordClient.on('message', async message => {
     //Allmighty Logger. Don't use this. Seriously, don't.
     //console.log('[' + message.guild.name + '][' + message.channel.name + '] ' + message.author.tag + ': ' + message.content);
 
+    if (message.author.bot) return;
+
+    if (message.channel instanceof Discord.DMChannel) {
+        if (discordClient.minecraftManager.isVerified(message.author.id)){
+            message.channel.send("Du bist bereits verifiziert.").catch(err => {
+                console.error(err);
+            });
+            return;
+        }
+        if (discordClient.minecraftManager.verify(message.author, message.content)) {
+            message.channel.send("Erfolgreich verifiziert!").catch(err => {
+                console.error(err);
+            });
+        }
+        else {
+            message.channel.send("Ups, da ist etwas schiefgelaufen...\nVersuche es später nochmal.").catch(err => {
+                console.error(err);
+            });
+        }
+        return;
+    }
+
     //Get guildConfig
     var guildConfig = discordClient.guildManager.getGuildConfigById(message.guild.id);
 
     //Ignore not prefixed and bot messages
-    if (!message.content.startsWith(guildConfig.prefix) || message.author.bot) return;
+    if (!message.content.startsWith(guildConfig.prefix)) return;
     
     //Syntax: <prefix><command> <args[0]> <args[1]> ...
     const args = message.content.slice(guildConfig.prefix.length).trim().split(' ');
