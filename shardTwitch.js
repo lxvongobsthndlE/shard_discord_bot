@@ -12,32 +12,43 @@ module.exports = class ShardTwitch {
     constructor() {
         this.channelListeners = [];
         this.channelStati = [];
+        this.initTwitchLiveListenerForChannel('FunLovingGames');
     }
 
-    async isTwitchStreamLive(channelName) {
-        const user = await twitchClient.helix.users.getUserByName(channelName);
-        if (!user) {
-            return false;
-        }
-        return await user.getStream() !== null;
+    isTwitchStreamLive(channelName) {
+        return (this.isTracked(channelName)) ? this.getTrackedChannelDataByName(channelName).live : twitchClient.helix.users.getUserByName(channelName)
+            .then((user) => {
+                if (!user) {
+                    return false;
+                }
+                return user.getStream().then((stream) => { return stream != null });
+            });
+
     }
 
-    async getTwitchChannel(channelName) {
-        const user = await twitchClient.helix.users.getUserByName(channelName);
-        const channel = await twitchClient.kraken.channels.getChannel(user);
-        return channel;
+    getTwitchChannel(channelName) {
+        return twitchClient.helix.users.getUserByName(channelName)
+            .then((u) => {
+                return twitchClient.kraken.channels.getChannel(u)
+                    .then((ch) => {
+                        return ch;
+                    });
+            });
     }
 
     initTwitchLiveListenerForChannel(channelName) {
-        var listenerIndex = this.channelListeners.length;
-        this.channelListeners.push(setInterval(async () => {
-            this.channelStati[listenerIndex] = {channel: await this.getTwitchChannel(channelName), live: await this.isTwitchStreamLive(channelName), listenerIndex: listenerIndex};
-        }, 
-        10000));  
+        this.getTwitchChannel(channelName).then((channel) => {
+            let listenerIndex = this.channelListeners.length;
+            this.channelListeners.push(setInterval(async () => {
+                this.channelStati[listenerIndex] = { channel: channel, live: await this.isTwitchStreamLive(channelName), listenerIndex: listenerIndex };
+            },
+                10000));
+        });
+        
     }
 
     isTracked(channelName) {
-        for(var i = 0; i < this.channelStati.length; i++) {
+        for (var i = 0; i < this.channelStati.length; i++) {
             if (this.channelStati[i].channel.name === channelName) {
                 return true;
             }
@@ -46,7 +57,7 @@ module.exports = class ShardTwitch {
     }
 
     getTrackedChannelDataByName(channelName) {
-        for(var i = 0; i < this.channelStati.length; i++) {
+        for (var i = 0; i < this.channelStati.length; i++) {
             if (this.channelStati[i].channel.name === channelName) {
                 return this.channelStati[i];
             }
@@ -64,8 +75,9 @@ module.exports = class ShardTwitch {
 
     stopTrackingByName(channelName) {
         var channelData = this.getTrackedChannelDataByName(channelName);
-        if(channelData !== null) {
+        if (channelData !== null) {
             clearInterval(this.channelListeners[channelData.listenerIndex]);
+            ///WARN: Removing listener from list will shift indices and make listenerIndex value of remaining channelListeners incorrect
         }
     }
 
