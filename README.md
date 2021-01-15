@@ -13,6 +13,7 @@ A Discord bot written in Node.js using [discord.js](https://github.com/discordjs
 
 ### Must have
 
+- [ ] Replace all sync operations with async methods! (fs.write/read, fetch, ...?)
 - [ ] config option to add and remove bot admins
 - [ ] Fix Twitch integration
 - [ ] Finish YouTube integration
@@ -24,6 +25,7 @@ A Discord bot written in Node.js using [discord.js](https://github.com/discordjs
 
 ### DONE
 
+- [x] Add FunLovingGames Minecraft server user verification.
 - [x] Add !invite command to get a bot invite link (Thanks @Dezaku for bringing this up)
 - [x] rankings system on a per month basis (give special rank) -> moved to shard_activity bot
 - [x] Fix memberlog
