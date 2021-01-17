@@ -22,19 +22,6 @@ const discordClient = new Discord.Client();
 discordClient.twitchManager = new ShardTwitch();
 //INIT Guild Configuration Manager
 discordClient.guildManager = new ShardGuildManager();
-//Load all commands
-discordClient.commands = new Discord.Collection();
-discordClient.configCommands = new Discord.Collection();
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
-const configCommandFiles = fs.readdirSync('./commands/config').filter(file => file.endsWith('.js'));
-for (const file of commandFiles) {
-    const command = require('./commands/' + file);
-    discordClient.commands.set(command.name, command);
-}
-for (const file of configCommandFiles) {
-    const command = require('./commands/config/' + file);
-    discordClient.configCommands.set(command.name, command);
-}
 //INIT reactionRoleManager
 const rroleManager = new ReactionRolesManager(discordClient, {
     storage: './botData/reaction-roles.json'
@@ -61,9 +48,29 @@ tempChannels.registerChannel("793635620785618944", {
     childMaxUsers: 10,
     childFormat: (member, count) => `#${count} | ${member.user.username}'s lounge`
 });
-//INIT Minecraft http
+//INIT Minecraft manager
 const shardMinecraft = new ShardMinecraft();
 discordClient.minecraftManager = shardMinecraft;
+
+//Load all commands
+discordClient.commands = new Discord.Collection();
+discordClient.configCommands = new Discord.Collection();
+discordClient.minecraftCommands = new Discord.Collection();
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+const configCommandFiles = fs.readdirSync('./commands/config').filter(file => file.endsWith('.js'));
+const minecraftCommandFiles = fs.readdirSync('./commands/minecraft').filter(file => file.endsWith('.js'));
+for (const file of commandFiles) {
+    const command = require('./commands/' + file);
+    discordClient.commands.set(command.name, command);
+}
+for (const file of configCommandFiles) {
+    const command = require('./commands/config/' + file);
+    discordClient.configCommands.set(command.name, command);
+}
+for (const file of minecraftCommandFiles) {
+    const command = require('./commands/minecraft/' + file);
+    discordClient.minecraftCommands.set(command.name, command);
+}
 
 //SETUP GLOBAL ARGS ---------------------------------------------------------------------------------------
 const defaultPrefix = config.prefix;
@@ -74,9 +81,6 @@ const helper = new Helper();
 discordClient.once('ready', async () => {
     console.log('Shard-Client ready!');
     discordClient.user.setPresence({ activity: { name: presence.activity, type: presence.activityType }, status: presence.status });
-    //for(var i = 0; i < twitchTrackedChannels.length; i++) {
-    //    twitchClient.startTrackingByName(twitchTrackedChannels[i]);
-    //}
 });
 
 //Login client
