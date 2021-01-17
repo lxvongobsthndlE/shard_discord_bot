@@ -17,7 +17,7 @@ module.exports = {
             .setColor('#5b9d31')
             .setTimestamp()
             .setTitle('Minecraft Server Status')
-            .setImage('https://raw.githubusercontent.com/lxvongobsthndlE/shard_discord_bot/master/media/server-icon.png')
+            .setThumbnail('https://raw.githubusercontent.com/lxvongobsthndlE/shard_discord_bot/master/media/server-icon.png')
             .addField('Status', (message.client.minecraftManager.isMinecraftServerOnline) ? 'Online :green_circle:' : 'Offline :red_circle:')
             .addField('Server-IP', 'funlovinggames.my.pebble.host'));
     }
