@@ -65,8 +65,9 @@ module.exports = class ShardMinecraft {
                     {flag: 'w'},
                     (err) => {
                         if (err) {
-                            console.log('[ERR] Failed writing minecraft verified users to file!')
+                            console.log('[HTTP][ERR] Failed writing minecraft verified users to file!')
                         }
+                        console.log('[HTTP] Linked discord user ' + vr.discordName + ' with minecraft user ' + vr.minecraftName);
                         return true;
                 });
             }
@@ -77,7 +78,7 @@ module.exports = class ShardMinecraft {
     initListeners() {
         app.get('/', (req, res) => {
             res.send('Whatever you are trying to do, you\'re wrong at this address!');
-            console.log('[WARN][HTTP] Request on / received! Potential spammer.');
+            console.log('[HTTP][WARN] Request on / received! Potential spammer.');
         });
         app.get('/verify/:user', (req, res) => {
             let user = req.params.user;
@@ -99,7 +100,12 @@ module.exports = class ShardMinecraft {
         });
         app.get('/onlinePing', (req, res) => {
             res.send('OK');
-            
+            console.log('[HTTP] Server Ping');
+            this.isMinecraftServerOnline = true;
+            clearTimeout(this.mcServerOnlineListener);
+            this.mcServerOnlineListener = setTimeout(() => {
+                this.isMinecraftServerOnline = false;
+            }, 15000);
         });
     }
 
