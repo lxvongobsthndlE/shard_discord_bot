@@ -1,4 +1,3 @@
-const Helper = require('../../classes/Helper');
 const DiscordMessageEmbed = require('discord.js').MessageEmbed;
 
 /** Command: help
@@ -12,7 +11,6 @@ module.exports = {
 	usage: '',
 	execute(message, args, guildConfig) {
         const { configCommands } = message.client;
-        const helper = new Helper();
         console.log(message.author.username + ' called "config/help" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
 
         var response = new DiscordMessageEmbed()
