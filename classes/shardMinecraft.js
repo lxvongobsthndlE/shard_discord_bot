@@ -100,7 +100,6 @@ module.exports = class ShardMinecraft {
         });
         app.get('/onlinePing', (req, res) => {
             res.send('OK');
-            console.log('[HTTP] Server Ping');
             this.isMinecraftServerOnline = true;
             clearTimeout(this.mcServerOnlineListener);
             this.mcServerOnlineListener = setTimeout(() => {
