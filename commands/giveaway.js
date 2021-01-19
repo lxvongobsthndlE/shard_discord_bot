@@ -10,7 +10,7 @@ module.exports = {
     name: 'giveaway',
     description: 'Manage a giveaway. Use option "help" to learn more.',
     args: true,
-    usage: '<option>',
+    usage: '<option> [parameters]',
     aliases: ['ga'],
     adminOnly: true,
     execute(message, args, guildConfig) {
