@@ -1,10 +1,6 @@
 const DiscordMessageEmbed = require('discord.js').MessageEmbed;
 
 module.exports = class ExecutionError {
-    command;
-    args;
-    errorDescription;
-    author;
     constructor(author, command, args, errorDescription = 'The entered command was recognized, but failed in execution. Check if all your inputs were valid. If this error persists please contact @lxvongobsthndl.') {
         this.author = author;
         this.command = command;

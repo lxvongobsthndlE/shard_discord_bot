@@ -1,10 +1,6 @@
 const DiscordMessageEmbed = require('discord.js').MessageEmbed;
 
 module.exports = class NoSuchChannelError {
-    command;
-    args;
-    errorDescription;
-    author;
     constructor(author, command, args, errorDescription = 'The channel provided does not exist.') {
         this.author = author;
         this.command = command;

@@ -1,10 +1,6 @@
 const DiscordMessageEmbed = require('discord.js').MessageEmbed;
 
 module.exports = class CommandDoesNotExistError {
-    command;
-    args;
-    errorDescription;
-    author;
     constructor(author, command, args, errorDescription = 'The entered command does not exist.') {
         this.author = author;
         this.command = command;

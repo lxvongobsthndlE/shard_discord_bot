@@ -1,10 +1,6 @@
 const DiscordMessageEmbed = require('discord.js').MessageEmbed;
 
 module.exports = class NoSuchLanguageError {
-    command;
-    args;
-    errorDescription;
-    author;
     constructor(author, command, args, errorDescription = 'The language code provided is not supported yet or does not exist.') {
         this.author = author;
         this.command = command;

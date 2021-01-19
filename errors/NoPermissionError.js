@@ -1,10 +1,6 @@
 const DiscordMessageEmbed = require('discord.js').MessageEmbed;
 
 module.exports = class NoPermissionError {
-    command;
-    args;
-    errorDescription;
-    author;
     constructor(author, command, args, errorDescription = 'You do not have permission to use this command. If you think this is a mistake, contact a server admin.') {
         this.author = author;
         this.command = command;

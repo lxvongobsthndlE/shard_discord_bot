@@ -1,11 +1,6 @@
 const DiscordMessageEmbed = require('discord.js').MessageEmbed;
 
 module.exports = class ArgumentError {
-    command;
-    args;
-    errorDescription;
-    author;
-    usage;
     constructor(author, command, args, errorDescription = 'The arguments provided with the command could not be processed!') {
         this.author = author;
         this.command = command;
