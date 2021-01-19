@@ -51,7 +51,19 @@ A Discord bot written in Node.js using [discord.js](https://github.com/discordjs
 | `!twitch-status` | ts, tstatus | `!twitch-status <channel name>` | Checks if a given Twitch channel is currently streaming. |
 | ` ` |  |  |  |
 
+### Minecraft Commands
+
+(These are only active on the Discord server of FunLovingGames, since they are associated with the community Minecraft server.)
+
+| Command | Aliases | Usage | Description |
+| ------- | ------- | ----- | ----------- |
+| `!minecraft` | mc | `!minecraft <option> [parameters]` | Minecraft commands. Use option "help" to learn more. |
+| `!minecraft help` | hilfe | - | Shows available commands in minecraft section. |
+| `!minecraft status` | - | - | Get the online status and IP of the minecraft server. |
+
 ### Admin Commands
+
+#### config
 
 | Command | Aliases | Usage | Description |
 | ------- | ------- | ----- | ----------- |
@@ -65,6 +77,25 @@ A Discord bot written in Node.js using [discord.js](https://github.com/discordjs
 | `!config reactionrole` | rr | `!config reactionrole <role id> [reaction emoji]` | Create a reaction-collector, that gives a specified role to the users reacting. |
 | `!config welcome-channel` | welcome-ch, wch | `!config welcome-channel <channel id>` | Change or set the welcome channel for this server. |
 | ` ` |  |  |  |
+
+#### giveaways
+
+| Command | Aliases | Usage | Description |
+| ------- | ------- | ----- | ----------- |
+| `!giveaway` | ga | `!giveaway <option> [parameters]` | Manage a giveaway. Use option "help" to learn more. |
+| `!giveaway help` | - | - | Shows available commands in giveaway section. |
+| `!giveaway start` | - | `!ga start <duration> <winnerCount> <prize>` | Start a new giveaway with *duration*, *winnerCount* winners and stated *prize* |
+| `!giveaway edit` | - | `!ga edit <msgID> <addTime> <winnerCount> <prize>` | Edit a running giveaway with message id *msgID*, time to add or substract *addTime*, new *winnerCount* and new *prize* description |
+| `!giveaway delete` | - | `!ga delete <msgID>` | Deletes giveaway with message id *msgID* |
+| `!giveaway list-all` | - | - | Lists all currently running giveaways on this server. |
+
+#### other
+
+| Command | Aliases | Usage | Description |
+| ------- | ------- | ----- | ----------- |
+| `!purgemode` | purge, channelmute | - | Enable/disable purge mode in a channel, which deletes all new messages in this channel until purgemode is deactivated. |
+| ` ` |  |  |  |
+
 
 ### Bot Admin Commands
 
