@@ -14,6 +14,7 @@ const ExecutionError = require('./errors/ExecutionError');
 const CommandDoesNotExistError = require('./errors/CommandDoesNotExistError');
 const Helper = require('./classes/Helper');
 const ShardMinecraft = require('./classes/shardMinecraft');
+const ShardChannelpurge = require('./classes/shardChannelpurge');
 
 //SETUP CLIENT --------------------------------------------------------------------------------------------
 //INIT discord.js
@@ -51,6 +52,9 @@ tempChannels.registerChannel("793635620785618944", {
 //INIT Minecraft manager
 const shardMinecraft = new ShardMinecraft();
 discordClient.minecraftManager = shardMinecraft;
+//INIT purged channels 
+const shardChannelpurge = new ShardChannelpurge();
+discordClient.purgeManager = shardChannelpurge;
 
 //Load all commands
 discordClient.commands = new Discord.Collection();
@@ -187,6 +191,14 @@ discordClient.on('message', async message => {
 
     //Get guildConfig
     var guildConfig = discordClient.guildManager.getGuildConfigById(message.guild.id);
+
+    //Delete message if posted in a channel that's currently in purge mode.
+    if (discordClient.purgeManager.isInPurgeMode(message.channel.id)) {
+        message.delete({ reason: 'Channel is in purge mode.'}).catch(err => console.log('[WARN] Failed deleting message in purged channel.'));
+        if (!helper.isAdmin(message.author.id, guildConfig.ADMIN_IDS)) {
+            return;
+        }
+    }
 
     //Ignore not prefixed and bot messages
     if (!message.content.startsWith(guildConfig.prefix)) return;
