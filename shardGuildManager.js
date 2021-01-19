@@ -1,8 +1,6 @@
 const fs = require('fs');
 
 module.exports = class ShardGuildManager {
-    guildConfigs;
-    guildDataPath;
     constructor(guildDataPath = './guildData') {
         this.guildConfigs = [];
         this.guildDataPath = guildDataPath;

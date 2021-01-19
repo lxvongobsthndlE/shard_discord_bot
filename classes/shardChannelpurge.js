@@ -1,9 +1,6 @@
 const fs = require('fs');
 
 module.exports = class ShardChannelpurge {
-    
-    purgedChannels;
-
     constructor(){
         this.purgedChannels = [];
         this.loadSafedPurges();

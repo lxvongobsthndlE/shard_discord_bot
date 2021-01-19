@@ -5,10 +5,6 @@ const port = 25566;
 const app = express();
 
 module.exports = class ShardMinecraft {
-    verificationRequests;
-    verifiedUsers;
-    isMinecraftServerOnline;
-    mcServerOnlineListener;
     constructor() {
         
         this.verificationRequests = [];

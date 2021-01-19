@@ -7,8 +7,6 @@ const twitchAuthProvider = new TwitchAuth.ClientCredentialsAuthProvider(secret.t
 const twitchClient = new Twitch.ApiClient({ authProvider: twitchAuthProvider });
 
 module.exports = class ShardTwitch {
-    channelListeners;
-    channelStati;
     constructor() {
         this.channelListeners = [];
         this.channelStati = [];
@@ -44,7 +42,6 @@ module.exports = class ShardTwitch {
             },
                 10000));
         });
-        
     }
 
     isTracked(channelName) {

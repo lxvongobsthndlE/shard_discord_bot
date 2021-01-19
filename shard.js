@@ -45,7 +45,7 @@ discordClient.giveawaysManager = gaManager;
 const tempChannels = new TempChannels(discordClient);
 tempChannels.registerChannel("793635620785618944", {
     childCategory: "793635153779228772",
-    childAutoDeleteIfOwnerLeaves: true,
+    childAutoDelete: true,
     childMaxUsers: 10,
     childFormat: (member, count) => `#${count} | ${member.user.username}'s lounge`
 });
