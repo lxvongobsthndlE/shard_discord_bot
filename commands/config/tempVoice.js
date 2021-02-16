@@ -7,7 +7,7 @@ module.exports = {
     name: 'tempvoice',
     description: 'Manage temporary voice channels on the Server.',
     args: true,
-    usage: '<add|remove> <registerChannelID> <childCategory> [maxUsersPerChannel]',
+    usage: '<add|remove> <registerChannelID> <childCategoryID> [maxUsersPerChannel]',
     aliases: ['tv'],
     execute(message, args, guildConfig) {
         console.log(message.author.username + ' called "config/tempVoice" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
