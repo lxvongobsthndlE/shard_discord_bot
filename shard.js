@@ -11,6 +11,7 @@ const ShardGuildManager = require('./shardGuildManager');
 const ShardTempVoice = require('./classes/shardTempVoice');
 const ArgumentError = require('./errors/ArgumentError');
 const ExecutionError = require('./errors/ExecutionError');
+const NoPermissionError = require('./errors/NoPermissionError');
 const CommandDoesNotExistError = require('./errors/CommandDoesNotExistError');
 const Helper = require('./classes/Helper');
 const ShardMinecraft = require('./classes/shardMinecraft');
