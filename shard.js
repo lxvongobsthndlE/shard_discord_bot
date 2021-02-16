@@ -6,9 +6,9 @@ const secret = require('./secret.json');
 const config = require('./configuration/config.json');
 const presence = require('./botData/presence.json');
 const ReactionRolesManager = require('discord-reaction-role');
-const TempChannels = require("discord-temp-channels");
 const { GiveawaysManager } = require('discord-giveaways');
 const ShardGuildManager = require('./shardGuildManager');
+const ShardTempVoice = require('./classes/shardTempVoice');
 const ArgumentError = require('./errors/ArgumentError');
 const ExecutionError = require('./errors/ExecutionError');
 const CommandDoesNotExistError = require('./errors/CommandDoesNotExistError');
@@ -42,13 +42,8 @@ const gaManager = new GiveawaysManager(discordClient, {
 });
 discordClient.giveawaysManager = gaManager;
 //INIT tempChannelsManager
-const tempChannels = new TempChannels(discordClient);
-tempChannels.registerChannel("793635620785618944", {
-    childCategory: "793635153779228772",
-    childAutoDelete: true,
-    childMaxUsers: 10,
-    childFormat: (member, count) => `#${count} | ${member.user.username}'s lounge`
-});
+const tempChannels = new ShardTempVoice(discordClient);
+discordClient.tempVoiceChannels = tempChannels;
 //INIT Minecraft manager
 const shardMinecraft = new ShardMinecraft();
 discordClient.minecraftManager = shardMinecraft;
