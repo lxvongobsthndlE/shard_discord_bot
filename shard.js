@@ -212,7 +212,7 @@ discordClient.on('message', async message => {
     }
 
     //Check if user is allowed to run command
-    if (command.admin && !helper.isAdmin(message.author.id, guildConfig.ADMIN_IDS)) {
+    if (command.adminOnly && !helper.isAdmin(message.author.id, guildConfig.ADMIN_IDS)) {
         return message.channel.send(new NoPermissionError(message.author, this.name, args).getEmbed());
     }
 
