@@ -211,6 +211,11 @@ discordClient.on('message', async message => {
         return message.channel.send(new CommandDoesNotExistError(message.author, commandName, args).getEmbed());
     }
 
+    //Check if user is allowed to run command
+    if (command.admin && !helper.isAdmin(message.author.id, guildConfig.ADMIN_IDS)) {
+        return message.channel.send(new NoPermissionError(message.author, this.name, args).getEmbed());
+    }
+
     //Check if command requires arguments and throw error if yes and none provided.
     if(command.args && !args.length) {
         var argsError = new ArgumentError(message.author, command.name, args, 'This command requires arguments, but none were provided!');
