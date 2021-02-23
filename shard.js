@@ -20,17 +20,18 @@ const ShardChannelpurge = require('./classes/shardChannelpurge');
 //SETUP CLIENT --------------------------------------------------------------------------------------------
 //INIT discord.js
 const discordClient = new Discord.Client();
+//INIT Helper
+discordClient.helper = new Helper();
 //INIT Twitch Manager
 discordClient.twitchManager = new ShardTwitch();
 //INIT Guild Configuration Manager
 discordClient.guildManager = new ShardGuildManager();
 //INIT reactionRoleManager
-const rroleManager = new ReactionRolesManager(discordClient, {
+discordClient.roleManager = new ReactionRolesManager(discordClient, {
     storage: './botData/reaction-roles.json'
 });
-discordClient.roleManager = rroleManager;
 //INIT giveawaysManager
-const gaManager = new GiveawaysManager(discordClient, {
+discordClient.giveawaysManager = new GiveawaysManager(discordClient, {
     storage: './botData/giveaways.json',
     updateCountdownEvery: 10000,
     default: {
@@ -41,16 +42,13 @@ const gaManager = new GiveawaysManager(discordClient, {
         reaction: '🎮'
     }
 });
-discordClient.giveawaysManager = gaManager;
 //INIT tempChannelsManager
-const tempChannels = new ShardTempVoice(discordClient);
-discordClient.tempVoiceChannels = tempChannels;
+discordClient.tempVoiceChannels = new ShardTempVoice(discordClient);
 //INIT Minecraft manager
-const shardMinecraft = new ShardMinecraft();
-discordClient.minecraftManager = shardMinecraft;
+discordClient.minecraftManager = new ShardMinecraft();
 //INIT purged channels 
-const shardChannelpurge = new ShardChannelpurge();
-discordClient.purgeManager = shardChannelpurge;
+discordClient.purgeManager = new ShardChannelpurge();
+
 
 //Load all commands
 discordClient.commands = new Discord.Collection();
@@ -74,7 +72,6 @@ for (const file of minecraftCommandFiles) {
 
 //SETUP GLOBAL ARGS ---------------------------------------------------------------------------------------
 const defaultPrefix = config.prefix;
-const helper = new Helper();
 
 //BOT LOGIC -----------------------------------------------------------------------------------------------
 //Start client and set bot presense data
@@ -191,7 +188,7 @@ discordClient.on('message', async message => {
     //Delete message if posted in a channel that's currently in purge mode.
     if (discordClient.purgeManager.isInPurgeMode(message.channel.id)) {
         message.delete({ reason: 'Channel is in purge mode.'}).catch(err => console.log('[WARN] Failed deleting message in purged channel.'));
-        if (!helper.isAdmin(message.author.id, guildConfig.ADMIN_IDS)) {
+        if (!discordClient.helper.isAdmin(message.author.id, guildConfig.ADMIN_IDS)) {
             return;
         }
     }
@@ -213,7 +210,7 @@ discordClient.on('message', async message => {
     }
 
     //Check if user is allowed to run command
-    if (command.adminOnly && !helper.isAdmin(message.author.id, guildConfig.ADMIN_IDS)) {
+    if (command.adminOnly && !discordClient.helper.isAdmin(message.author.id, guildConfig.ADMIN_IDS)) {
         return message.channel.send(new NoPermissionError(message.author, this.name, args).getEmbed());
     }
 
@@ -246,7 +243,7 @@ function member_joined(gMember) {
     return new Discord.MessageEmbed()
     .setColor('#99ff99')
     .setAuthor(gMember.user.tag, gMember.user.displayAvatarURL())
-    .setDescription(helper.makeUserAt(gMember.user) + ' joined the server.')
+    .setDescription(discordClient.helper.makeUserAt(gMember.user) + ' joined the server.')
     .setFooter(gMember.guild.memberCount + ' total users on the server.')
     .setTimestamp();
 } 
@@ -255,7 +252,7 @@ function member_left(gMember) {
     return new Discord.MessageEmbed()
     .setColor('#800000')
     .setAuthor(gMember.user.tag, gMember.user.displayAvatarURL())
-    .setDescription(helper.makeUserAt(gMember.user) + ' left the server.')
+    .setDescription(discordClient.helper.makeUserAt(gMember.user) + ' left the server.')
     .setFooter(gMember.guild.memberCount + ' total users on the server.')
     .setTimestamp();
 }
@@ -264,7 +261,7 @@ function member_kicked(gMember, kickedBy, reason) {
     return new Discord.MessageEmbed()
     .setColor('#ffff00')
     .setAuthor(gMember.user.tag, gMember.user.displayAvatarURL())
-    .setDescription((kickedBy) ? helper.makeUserAt(gMember.user) + ' was kicked from the server by ' + helper.makeUserAt(kickedBy) + '.' : helper.makeUserAt(gMember.user) + ' was kicked from the server.')
+    .setDescription((kickedBy) ? discordClient.helper.makeUserAt(gMember.user) + ' was kicked from the server by ' + discordClient.helper.makeUserAt(kickedBy) + '.' : discordClient.helper.makeUserAt(gMember.user) + ' was kicked from the server.')
     .addField('Reason', (reason) ? reason : 'No reason provided.')
     .setFooter(gMember.guild.memberCount + ' total users on the server.')
     .setTimestamp();
@@ -274,7 +271,7 @@ function member_banned(user, guild, bannedBy, reason) {
     return new Discord.MessageEmbed()
     .setColor('#ff6600')
     .setAuthor(user.tag, user.displayAvatarURL())
-    .setDescription((bannedBy) ? helper.makeUserAt(user) + ' was banned from the server by ' + helper.makeUserAt(bannedBy) + '.' : helper.makeUserAt(user) + ' was banned from the server.')
+    .setDescription((bannedBy) ? discordClient.helper.makeUserAt(user) + ' was banned from the server by ' + discordClient.helper.makeUserAt(bannedBy) + '.' : discordClient.helper.makeUserAt(user) + ' was banned from the server.')
     .addField('Reason', (reason) ? reason : 'No reason provided.')
     .setFooter(guild.memberCount + ' total users on the server.')
     .setTimestamp();
