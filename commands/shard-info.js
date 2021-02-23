@@ -18,13 +18,18 @@ module.exports = {
         console.log(message.author.username + ' called "shard-info" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
         switch(option) {
             case 'guilds':
-                var desc = 'This bot is currently on the following Servers: \n';
-                message.client.guilds.cache.each(guild => desc += guild.name + '\n');
-                return message.channel.send(new DiscordMessageEmbed()
+                var desc = new DiscordMessageEmbed()
                     .setColor('#0099ff')
                     .setAuthor(message.client.user.tag, message.client.user.displayAvatarURL())
-                    .setDescription(desc)
-                    .setTimestamp());
+                    .setDescription('This bot is currently on the following Servers:')
+                    .setTimestamp();
+                message.client.guilds.cache.each(guild => {
+                    if(guild.available) 
+                        desc.addField(guild.name,
+                            'Members: ' + guild.memberCount + 
+                            '\nCreated: ' + guild.createdAt);
+                });
+                return message.channel.send(desc);
             default:
                 return message.channel.send(new ArgumentError(message.author, this.name, args, 'The argument provided does not match any known option.').getEmbed());
         }
