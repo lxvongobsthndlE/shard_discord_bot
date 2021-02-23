@@ -94,6 +94,14 @@ discordClient.on('guildMemberRemove', async member => {
     });
     const kickLog = fetchedLogs.entries.first();
 
+    if (!kickLog) {
+        console.log(member.user.tag + ' has left the server: ' + member.guild.name);
+        if(memberLog) {
+            memberLog.send(member_left(member));
+        }
+        return;
+    }
+
     const { executor, target } = kickLog;
     if (target.id === member.id) { //Member kicked
         console.log(member.user.tag + ' was kicked from server ' + member.guild.name + ' by ' + executor.tag);
@@ -101,9 +109,9 @@ discordClient.on('guildMemberRemove', async member => {
             memberLog.send(member_kicked(member, executor, kickLog.reason));
         }
 	} else { //Member left
-		console.log(member.user.tag + ' has left the server: ' + member.guild.name);
+		console.log(member.user.tag + ' was kicked from server ' + member.guild.name + '. Audit Log was inconclusive.');
         if(memberLog) {
-            memberLog.send(member_left(member));
+            memberLog.send(member_kicked(member, null, null));
         }
 	}
 });
@@ -135,6 +143,9 @@ discordClient.on('guildBanAdd', async (guild, user) => {
         }
 	} else {
 		console.log(user.tag + ' got hit by the ban hammer on server ' + guild.name + ', audit log fetch was inconclusive.');
+        if(memberLog) {
+            memberLog.send(member_banned(user, guild, null, null));
+        }
 	}
 });
 
