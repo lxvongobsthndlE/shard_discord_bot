@@ -77,11 +77,11 @@ module.exports = class ShardTempVoice {
         this.tempChannel.unregisterChannel(registerChannelID);
     }
 
-    isTempVoiceChannel(registerChannelID) {
+    async isTempVoiceChannel(registerChannelID) {
         return this.tempVoiceChannels.find(el => el.registerChannelID == registerChannelID);
     }
     
-    setNaming(registerChannelID, naming) {
+    async setNaming(registerChannelID, naming) {
         this.tempChannel.channels.find(ch => ch.channelID == registerChannelID).options.childFormat = (member, count) => {
             naming = naming.replace(phMember, member.user.username);
             naming = naming.replace(phCount, count);
@@ -91,7 +91,7 @@ module.exports = class ShardTempVoice {
         this.saveTempVoices();
     }
 
-    getTempVoiceChannelCount(guildID=null) {
+    async getTempVoiceChannelCount(guildID=null) {
         if (!guildID) {
             return this.tempChannel.channels.length;
         }

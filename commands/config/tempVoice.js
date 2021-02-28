@@ -105,7 +105,8 @@ module.exports = {
         }
         //count
         else if (args[0] == 'count') {
-            return message.channel.send(retMessage.setDescription('This Server has a total of **' + tvManager.getTempVoiceChannelCount(message.guild.id) + '** tempvoice channels.'));
+            let channelCount = await tvManager.getTempVoiceChannelCount(message.guild.id);
+            return message.channel.send(retMessage.setDescription('This Server has a total of **' + channelCount + '** tempvoice channels.'));
         }
         else {
             return message.channel.send(new ArgumentError(message.author, this.name, args, 'Could not parse option `' + args[0] + '`. \nValid options are: `help`, `add`, `remove`, `naming`, `placeholders`, `count`.').getEmbed());
