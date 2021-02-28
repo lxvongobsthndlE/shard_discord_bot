@@ -43,7 +43,7 @@ module.exports = class Helper {
     }
 
     //If guildID is provided it will check if channel exists AND is in said guild, else just if channel exists
-    async checkChannelIdValid(channelId, guildId=null) {
+    checkChannelIdValid(channelId, guildId=null) {
         //check channel.type on successfull return to diff between: text, voice, category, news, store
         let guildChannelTypes = ['text', 'voice', 'category', 'news', 'store'];
         return this.client.channels.fetch(channelId)
@@ -54,7 +54,7 @@ module.exports = class Helper {
                 if (guildChannelTypes.includes(channel.type) && channel.guild.id == guildId) {
                     return channel;
                 }
-                else return false;
+                return false;
             })
             .catch(() => {return false});
     }

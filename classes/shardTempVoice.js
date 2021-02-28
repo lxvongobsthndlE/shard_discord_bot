@@ -81,7 +81,7 @@ module.exports = class ShardTempVoice {
         return this.tempVoiceChannels.find(el => el.registerChannelID == registerChannelID);
     }
     
-    async setNaming(registerChannelID, naming) {
+    setNaming(registerChannelID, naming) {
         this.tempChannel.channels.find(ch => ch.channelID == registerChannelID).options.childFormat = (member, count) => {
             naming = naming.replace(phMember, member.user.username);
             naming = naming.replace(phCount, count);
