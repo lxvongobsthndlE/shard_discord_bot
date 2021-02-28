@@ -97,7 +97,7 @@ module.exports = class ShardTempVoice {
         }
         let guildTempChannels = await this.tempChannel.channels.filter(async el => {
             let channelValid = await this.client.helper.checkChannelIdValid(el.channelID, guildID);
-            return !channelValid ? flase : channelValid.type == 'voice';
+            return !channelValid ? false : channelValid.type == 'voice';
         });
         return guildTempChannels.length;
     }
