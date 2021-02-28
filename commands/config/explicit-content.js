@@ -4,13 +4,13 @@ const DiscordMessageEmbed = require('discord.js').MessageEmbed;
  *  Change or set the welcome channel for this server.
  */
 module.exports = {
-    name: 'explict-content',
+    name: 'explicit-content',
     description: 'Change the explict-content setting for this server.',
     args: true,
     usage: '<yes|true|ja|no|false|nein>',
-    aliases: ['explict', 'ec'],
+    aliases: ['explicit', 'ec'],
     execute(message, args, guildConfig) {
-        console.log(message.author.username + ' called "config/explict-content" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
+        console.log(message.author.username + ' called "config/explicit-content" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
         explictContent = args[0].toLowerCase();
         if (explictContent === 'yes' || explictContent === 'true' || explictContent === 'ja') {
             explictContent = true;
@@ -24,7 +24,7 @@ module.exports = {
             .setAuthor(message.author.tag, message.author.displayAvatarURL())
             .setColor('#33cc33')
             .setTimestamp()
-            .setTitle('Updated explict content settings')
-            .setDescription('Explict content is ' + (explictContent ? '**enabled**' : '**disabled**') + ' for this server.'));
+            .setTitle('Updated explicit content settings')
+            .setDescription('Explicit content is ' + (explictContent ? '**enabled**' : '**disabled**') + ' for this server.'));
     }
 }

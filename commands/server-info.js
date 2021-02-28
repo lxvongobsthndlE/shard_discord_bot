@@ -18,7 +18,7 @@ module.exports = {
             .addField('Owner', guild.owner.displayName, false)
             .addField('Region', guild.region, true)
             .addField('Members', guild.memberCount, true)
-            .addField('Explict content', (guildConfig.explictFilter) ? "Disabled" : 'Enabled', true)
+            .addField('Explicit content', (guildConfig.explictFilter) ? "Disabled" : 'Enabled', true)
             .addField('Created at', guild.createdAt, false)
             .setFooter('Shard by @lxvongobsthndl')
             .setTimestamp());
