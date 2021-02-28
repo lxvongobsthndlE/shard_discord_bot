@@ -50,8 +50,9 @@ module.exports = {
         //add <registerChannelID> <childCategoryID> [maxUsersPerChannel]
         if (args[0] == 'add') {
             let check1 = await helper.checkChannelIdValid(args[1], message.guild.id);
+            let check1_1 = await !tvManager.isTempVoiceChannel(args[1]);
             let check2 = await helper.checkChannelIdValid(args[2], message.guild.id);
-            if (check1.type == 'voice' && !tvManager.isTempVoiceChannel(args[1])) {
+            if (check1.type == 'voice' && check1_1) {
                 if (check2.type == 'category') {
                     let channelSize = defaultChannelSize;
                     if (args[3] && isFinite(args[3]) && args[3] >= 0.5) {

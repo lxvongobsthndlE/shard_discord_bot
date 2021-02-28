@@ -43,7 +43,7 @@ module.exports = class ShardTempVoice {
         });
     }
 
-    addNewTempVoiceChannel(registerChannelID, childCategoryID, maxUsersPerChannel, init = false, naming = null) {
+    async addNewTempVoiceChannel(registerChannelID, childCategoryID, maxUsersPerChannel, init = false, naming = null) {
         this.tempChannel.registerChannel(registerChannelID, {
             childCategory: childCategoryID,
             childAutoDelete: true,
@@ -69,7 +69,7 @@ module.exports = class ShardTempVoice {
         }
     }
     
-    removeTempVoiceChannel(registerChannelID) {
+    async removeTempVoiceChannel(registerChannelID) {
         this.tempVoiceChannels = this.tempVoiceChannels.filter(el => {
             return el.registerChannelID !== registerChannelID;
         });
@@ -81,7 +81,7 @@ module.exports = class ShardTempVoice {
         return this.tempVoiceChannels.find(el => el.registerChannelID == registerChannelID);
     }
     
-    setNaming(registerChannelID, naming) {
+    async setNaming(registerChannelID, naming) {
         this.tempChannel.channels.find(ch => ch.channelID == registerChannelID).options.childFormat = (member, count) => {
             naming = naming.replace(phMember, member.user.username);
             naming = naming.replace(phCount, count);
