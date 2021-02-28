@@ -1,5 +1,3 @@
-const ShardTwitch = require('../shardTwitch');
-
 const DiscordMessageEmbed = require('discord.js').MessageEmbed;
 
 /** Command: twitch-status
@@ -14,9 +12,7 @@ module.exports = {
     async execute(message, args, guildConfig) {
         console.log(message.author.username + ' called "twitch-status" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
 
-        const twitchClient = new ShardTwitch();
-
-        var streamStatus = (await twitchClient.isTwitchStreamLive(args[0])) ? ':video_game: LIVE!' : ':x: OFFLINE';
+        var streamStatus = (await message.client.twitchClient.isTwitchStreamLive(args[0])) ? ':video_game: LIVE!' : ':x: OFFLINE';
 
         message.channel.send(new DiscordMessageEmbed()
             .setColor('#0099ff')
