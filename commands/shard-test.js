@@ -27,7 +27,7 @@ module.exports = {
                 console.log(message.author);
                 message.channel.send(new DiscordMessageEmbed()
                     .setAuthor(message.author.tag)
-                    .setDescription('User: ' + helper.makeUserAt(message.author))
+                    .setDescription('User: ' + helper.makeUserAt(message.author.id))
                 );
                 break;
             case 'warn-all': 
