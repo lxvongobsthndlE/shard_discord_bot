@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 const Discord = require('discord.js');
-const ShardTwitch = require('./shardTwitch');
 const fs = require('fs');
 const secret = require('./secret.json');
 const config = require('./configuration/config.json');
 const presence = require('./botData/presence.json');
 const ReactionRolesManager = require('discord-reaction-role');
 const { GiveawaysManager } = require('discord-giveaways');
-const ShardGuildManager = require('./shardGuildManager');
+const ShardGuildManager = require('./classes/shardGuildManager');
+const ShardTwitch = require('./classes/shardTwitch');
 const ShardTempVoice = require('./classes/shardTempVoice');
 const ArgumentError = require('./errors/ArgumentError');
 const ExecutionError = require('./errors/ExecutionError');
@@ -20,8 +20,13 @@ const ShardChannelpurge = require('./classes/shardChannelpurge');
 //SETUP CLIENT --------------------------------------------------------------------------------------------
 //INIT discord.js
 const discordClient = new Discord.Client();
+
+//PLAYGROUND
+
+//----------
+
 //INIT Helper
-discordClient.helper = new Helper();
+discordClient.helper = new Helper(discordClient);
 //INIT Twitch Manager
 discordClient.twitchManager = new ShardTwitch();
 //INIT Guild Configuration Manager
@@ -82,6 +87,13 @@ discordClient.once('ready', async () => {
 
 //Login client
 discordClient.login(secret.discordToken);
+
+//EVENT on unhandled Rejection Error
+process.on('unhandledRejection', (error, p) => {
+    discordClient.users.fetch('313742410180198431').then((user) => {
+        user.send('```' + error.stack + '```').catch(error => console.error(error));
+    });
+});
 
 //EVENT on removal/leaving of a member
 discordClient.on('guildMemberRemove', async member => {
@@ -253,8 +265,12 @@ function fill_welcome_msg(gMember, welcomeMsg) {
 function member_joined(gMember) {
     return new Discord.MessageEmbed()
     .setColor('#99ff99')
-    .setAuthor(gMember.user.tag, gMember.user.displayAvatarURL())
-    .setDescription(discordClient.helper.makeUserAt(gMember.user) + ' joined the server.')
+    .setImage(gMember.user.displayAvatarURL())
+    .setAuthor('**' + gMember.user.tag + '** joined the server')
+    .setDescription('User Tag: ' + discordClient.helper.makeUserAt(gMember.user.id) + '\n' +
+        'User ID: ' + gMember.user.id + '\n' +
+        'Account created: ' + gMember.user.createdAt + '\n' + 
+        ((gMember.user.presence) ? 'Prescence atm: ' + gMember.user.presence : ''))
     .setFooter(gMember.guild.memberCount + ' total users on the server.')
     .setTimestamp();
 } 
@@ -263,7 +279,7 @@ function member_left(gMember) {
     return new Discord.MessageEmbed()
     .setColor('#800000')
     .setAuthor(gMember.user.tag, gMember.user.displayAvatarURL())
-    .setDescription(discordClient.helper.makeUserAt(gMember.user) + ' left the server.')
+    .setDescription(discordClient.helper.makeUserAt(gMember.user.id) + ' left the server.')
     .setFooter(gMember.guild.memberCount + ' total users on the server.')
     .setTimestamp();
 }
@@ -272,7 +288,7 @@ function member_kicked(gMember, kickedBy, reason) {
     return new Discord.MessageEmbed()
     .setColor('#ffff00')
     .setAuthor(gMember.user.tag, gMember.user.displayAvatarURL())
-    .setDescription((kickedBy) ? discordClient.helper.makeUserAt(gMember.user) + ' was kicked from the server by ' + discordClient.helper.makeUserAt(kickedBy) + '.' : discordClient.helper.makeUserAt(gMember.user) + ' was kicked from the server.')
+    .setDescription((kickedBy) ? discordClient.helper.makeUserAt(gMember.user.id) + ' was kicked from the server by ' + discordClient.helper.makeUserAt(kickedBy.id) + '.' : discordClient.helper.makeUserAt(gMember.user.id) + ' was kicked from the server.')
     .addField('Reason', (reason) ? reason : 'No reason provided.')
     .setFooter(gMember.guild.memberCount + ' total users on the server.')
     .setTimestamp();
@@ -282,7 +298,7 @@ function member_banned(user, guild, bannedBy, reason) {
     return new Discord.MessageEmbed()
     .setColor('#ff6600')
     .setAuthor(user.tag, user.displayAvatarURL())
-    .setDescription((bannedBy) ? discordClient.helper.makeUserAt(user) + ' was banned from the server by ' + discordClient.helper.makeUserAt(bannedBy) + '.' : discordClient.helper.makeUserAt(user) + ' was banned from the server.')
+    .setDescription((bannedBy) ? discordClient.helper.makeUserAt(user.id) + ' was banned from the server by ' + discordClient.helper.makeUserAt(bannedBy.id) + '.' : discordClient.helper.makeUserAt(user.id) + ' was banned from the server.')
     .addField('Reason', (reason) ? reason : 'No reason provided.')
     .setFooter(guild.memberCount + ' total users on the server.')
     .setTimestamp();

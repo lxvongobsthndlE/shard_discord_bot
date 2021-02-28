@@ -1,10 +1,12 @@
 const Twitch = require('twitch');
 const TwitchAuth = require('twitch-auth');
-const secret = require('./secret.json');
+const secret = require('../secret.json');
 
 //INIT twitch.js
 const twitchAuthProvider = new TwitchAuth.ClientCredentialsAuthProvider(secret.twitchClientId, secret.twitchClientSecret);
 const twitchClient = new Twitch.ApiClient({ authProvider: twitchAuthProvider });
+
+const updateIntervalSeconds = 30;
 
 module.exports = class ShardTwitch {
     constructor() {
@@ -40,7 +42,7 @@ module.exports = class ShardTwitch {
             this.channelListeners.push(setInterval(async () => {
                 this.channelStati[listenerIndex] = { channel: channel, live: await this.isTwitchStreamLive(channelName), listenerIndex: listenerIndex };
             },
-                10000));
+                updateIntervalSeconds * 1000));
         });
     }
 

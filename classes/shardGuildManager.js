@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 module.exports = class ShardGuildManager {
-    constructor(guildDataPath = './guildData') {
+    constructor(guildDataPath = __dirname + '/../guildData') {
         this.guildConfigs = [];
         this.guildDataPath = guildDataPath;
         var files = fs.readdirSync(guildDataPath).filter(file => file.endsWith('.json'));
