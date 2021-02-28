@@ -1,10 +1,15 @@
 const fs = require('fs');
 const TempChannels = require("discord-temp-channels");
 
+//placeholders
+const phMember = '%member%';
+const phCount = '%count%'
+
 module.exports = class ShardTempVoice {
     constructor(discordClient){
         this.tempVoiceChannels = [];
-        this.tempChannel = new TempChannels(discordClient);
+        this.client = discordClient;
+        this.tempChannel = new TempChannels(this.client);
 
         this.loadTempVoices();
     }
@@ -34,23 +39,31 @@ module.exports = class ShardTempVoice {
 
     initChannels() {
         this.tempVoiceChannels.forEach(el => {
-            this.addNewTempVoiceChannel(el.registerChannelID, el.childCategoryID, el.childMaxUsers, true);
+            this.addNewTempVoiceChannel(el.registerChannelID, el.childCategoryID, el.childMaxUsers, true, el.naming);
         });
     }
 
-    addNewTempVoiceChannel(registerChannelID, childCategoryID, maxUsersPerChannel, init = false) {
+    addNewTempVoiceChannel(registerChannelID, childCategoryID, maxUsersPerChannel, init = false, naming = null) {
         this.tempChannel.registerChannel(registerChannelID, {
             childCategory: childCategoryID,
             childAutoDelete: true,
             childMaxUsers: maxUsersPerChannel,
-            childFormat: (member, count) => `#${count} | ${member.user.username}'s lounge`
+            childFormat: (member, count) => {
+                if (!naming){
+                    return `#${count} | ${member.user.username}'s lounge`;
+                }
+                naming = naming.replace(phMember, member.user.username);
+                naming = naming.replace(phCount, count);
+                return naming;
+            }
         });
 
         if(!init){
             this.tempVoiceChannels.push({
                 registerChannelID: registerChannelID,
                 childCategoryID: childCategoryID,
-                childMaxUsers: maxUsersPerChannel
+                childMaxUsers: maxUsersPerChannel,
+                naming: naming
             })
             this.saveTempVoices();
         }
@@ -63,6 +76,27 @@ module.exports = class ShardTempVoice {
         this.saveTempVoices();
         this.tempChannel.unregisterChannel(registerChannelID);
     }
+
+    isTempVoiceChannel(registerChannelID) {
+        return this.tempVoiceChannels.find(el => el.registerChannelID == registerChannelID);
+    }
     
+    setNaming(registerChannelID, naming) {
+        this.tempChannel.channels.find(ch => ch.channelID == registerChannelID).options.childFormat = (member, count) => {
+            naming = naming.replace(phMember, member.user.username);
+            naming = naming.replace(phCount, count);
+            return naming;
+        };
+        this.tempVoiceChannels.find(ch => ch.registerChannelID == registerChannelID).naming = naming;
+        this.saveTempVoices();
+    }
+
+    getTempVoiceChannelCount(guildID=null) {
+        if (!guildID) {
+            return this.tempChannel.channels.length;
+        }
+        let guildTempChannels = this.tempChannel.channels.filter(el => client.helper.checkChannelIdValid(el.channelID, guildID).type == 'voice');
+        return guildTempChannels.length;
+    }
 
 }
