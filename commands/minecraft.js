@@ -12,6 +12,7 @@ module.exports = {
     args: true,
     usage: '<option> [params]',
     aliases: ['mc'],
+    flg: true,
     execute(message, args, guildConfig) {
         //disable command for all guilds but FunLovingGames
         if (message.guild.id != '743221608113766453') {
