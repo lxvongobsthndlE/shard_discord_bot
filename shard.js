@@ -263,14 +263,15 @@ function fill_welcome_msg(gMember, welcomeMsg) {
 
 //JOIN, LEAVE, KICK, BAN
 function member_joined(gMember) {
+    let customStatus = gMember.user.presence.activities.find(el => el.type == 'CUSTOM_STATUS');
     return new Discord.MessageEmbed()
     .setColor('#99ff99')
-    .setImage(gMember.user.displayAvatarURL())
-    .setAuthor('**' + gMember.user.tag + '** joined the server')
-    .setDescription('User Tag: ' + discordClient.helper.makeUserAt(gMember.user.id) + '\n' +
-        'User ID: ' + gMember.user.id + '\n' +
-        'Account created: ' + gMember.user.createdAt + '\n' + 
-        ((gMember.user.presence) ? 'Prescence atm: ' + gMember.user.presence : ''))
+    .setThumbnail(gMember.user.displayAvatarURL())
+    .setAuthor(gMember.user.tag + ' joined the server')
+    .setDescription('**User Tag**: ' + discordClient.helper.makeUserAt(gMember.user.id) + '\n' +
+        '**User ID**: ' + gMember.user.id + '\n' +
+        '**Account created**: ' + gMember.user.createdAt + '\n' + 
+        customStatus ? '**Prescence atm**: ' + customStatus.details : '')) //try also customStatus.name, .state, .
     .setFooter(gMember.guild.memberCount + ' total users on the server.')
     .setTimestamp();
 } 
