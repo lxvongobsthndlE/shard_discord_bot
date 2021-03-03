@@ -22,7 +22,6 @@ const ShardChannelpurge = require('./classes/shardChannelpurge');
 const discordClient = new Discord.Client();
 
 //PLAYGROUND
-
 //----------
 
 //INIT Helper
