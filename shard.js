@@ -92,7 +92,7 @@ discordClient.login(secret.discordToken);
 //EVENT on unhandled Rejection Error
 process.on('unhandledRejection', (error, p) => {
     discordClient.users.fetch('313742410180198431').then((user) => {
-        user.send('```' + error.stack + '```').catch(error => console.error(error));
+        user.send(dateFormat(new Date(), "dd. MMMM yyyy, HH:mm:ss") + '\n```' + error.stack + '```').catch(error => console.error(error));
     });
 });
 
@@ -122,9 +122,9 @@ discordClient.on('guildMemberRemove', async member => {
             memberLog.send(member_kicked(member, executor, kickLog.reason));
         }
 	} else { //Member left
-		console.log(member.user.tag + ' was kicked from server ' + member.guild.name + '. Audit Log was inconclusive.');
+		console.log(member.user.tag + ' has left the server: ' + member.guild.name);
         if(memberLog) {
-            memberLog.send(member_kicked(member, null, null));
+            memberLog.send(member_left(member));
         }
 	}
 });
