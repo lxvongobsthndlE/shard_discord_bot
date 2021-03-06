@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 const Discord = require('discord.js');
 const fs = require('fs');
+const dateFormat = require('date-fns/format');
+const dateFormatDistance = require('date-fns/formatDistance');
 const secret = require('./secret.json');
 const config = require('./configuration/config.json');
 const presence = require('./botData/presence.json');
@@ -269,7 +271,7 @@ function member_joined(gMember) {
     .setAuthor(gMember.user.tag + ' joined the server')
     .setDescription('**User Tag**: ' + discordClient.helper.makeUserAt(gMember.user.id) + '\n' +
         '**User ID**: ' + gMember.user.id + '\n' +
-        '**Account created**: ' + gMember.user.createdAt +  
+        '**Account created**: ' + dateFormat(gMember.user.createdAt, "dd. MMMM yyyy, HH:mm:ss (O)") + ' (*' + dateFormatDistance(gMember.user.createdAt, new Date(), {addSuffix: true}) + '*)' +
         ((!customStatus) ?  '' : '\n**Current presence**: ' + customStatus.state))
     .setFooter(gMember.guild.memberCount + ' total users on the server.')
     .setTimestamp();

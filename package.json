@@ -9,6 +9,7 @@
   "author": "lxvongobsthndl",
   "license": "ISC",
   "dependencies": {
+    "date-fns": "^2.19.0",
     "discord-giveaways": "^4.2.1",
     "discord-reaction-role": "^2.1.0",
     "discord-temp-channels": "^1.0.5",
