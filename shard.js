@@ -82,8 +82,14 @@ const defaultPrefix = config.prefix;
 //BOT LOGIC -----------------------------------------------------------------------------------------------
 //Start client and set bot presense data
 discordClient.once('ready', async () => {
-    console.log('Shard-Client ready!');
+    //Set presence
     discordClient.user.setPresence({ activity: { name: presence.activity, type: presence.activityType }, status: presence.status });
+    setInterval(() => {
+        discordClient.user.setPresence({ activity: { name: presence.activity, type: presence.activityType }, status: presence.status });
+    }, 60000);
+    
+    //READY
+    console.log('Shard-Client ready!');
 });
 
 //Login client
