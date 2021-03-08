@@ -3,9 +3,6 @@ const DiscordMessageEmbed = require('discord.js').MessageEmbed;
 /** Command: purgemode
  *  enable purge mode in a channel, which deletes all messages in this
  *  channel until purgemode is deactivated.
- * 
- *  Use this link to create an invite: https://discordapi.com/permissions.html
- *  Client ID: 759925230017052674
  */
 module.exports = {
     name: 'purgemode',
