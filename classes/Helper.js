@@ -3,6 +3,24 @@ module.exports = class Helper {
         this.client = client;
     }
 
+    /**
+     * Parse a String expression, replacing all placeholders within it with values from valueObj.
+     * 
+     * For an expression like "Hello my name is {{name}}" and a valueObj like {name: "Tom"} 
+     * the function will return: "Hello my name is Tom"
+     * @param {String} expression 
+     * @param {Object} valueObj 
+     * @returns The expression with inserted values
+     */
+    stringTemplateParser(expression, valueObj) {
+        const templateMatcher = /{{\s?([^{}\s]*)\s?}}/g;
+        let text = expression.replace(templateMatcher, (substring, value, index) => {
+          value = valueObj[value];
+          return value;
+        });
+        return text
+      }
+
     getRandomInteger(minimum, maximum) {
         return Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
     }
