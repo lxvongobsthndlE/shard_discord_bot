@@ -45,7 +45,7 @@ discordClient.giveawaysManager = new GiveawaysManager(discordClient, {
         //exemptPermissions: [ "MANAGE_MESSAGES", "ADMINISTRATOR" ],
         embedColor: '#FF9900',
         embedColorEnd: '#808080',
-        reaction: '🎮'
+        reaction: '🎉'
     }
 });
 //INIT tempChannelsManager
@@ -83,9 +83,10 @@ const defaultPrefix = config.prefix;
 //Start client and set bot presense data
 discordClient.once('ready', async () => {
     //Set presence
-    discordClient.user.setPresence({ activity: { name: presence.activity, type: presence.activityType }, status: presence.status });
+    //let serverCount = discordClient.guilds.cache.size;
+    discordClient.user.setPresence({ activity: { name: discordClient.helper.stringTemplateParser(presence.activity, {serverCount: discordClient.guilds.cache.size}), type: presence.activityType }, status: presence.status });
     setInterval(() => {
-        discordClient.user.setPresence({ activity: { name: presence.activity, type: presence.activityType }, status: presence.status });
+        discordClient.user.setPresence({ activity: { name: discordClient.helper.stringTemplateParser(presence.activity, {serverCount: discordClient.guilds.cache.size}), type: presence.activityType }, status: presence.status });
     }, 60000);
     
     //READY
