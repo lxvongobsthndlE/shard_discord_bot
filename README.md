@@ -4,26 +4,34 @@
 
 A Discord bot written in Node.js using [discord.js](https://github.com/discordjs/discord.js).
 
-**This bot is still under active development!**
+**This bot is still under active development! Bugs and unexpected behaviour can occur. Some features may not fully work yet!**
 
-> If you are still interested in adding it to your server use to following link: [Shard Invite](https://discord.com/oauth2/authorize?client_id=759925230017052674&scope=bot&permissions=1577057495 "Invite Shard Bot to your Discord Server")
+> If you are interested in adding it to your server anyway, use to following link: [Shard Invite](https://discord.com/oauth2/authorize?client_id=759925230017052674&scope=bot&permissions=1577057495 "Invite Shard Bot to your Discord Server")
 >> (Since there currently is no way of adding admins to the bot, you'll have to contact me @lxvongobsthndl#0420 on Discord to do it manually for you.)
+> Since Shard is in active development I will take feature requests!
 
 ## TODO's
 
-### Must have
-
 - [ ] Replace all sync operations with async methods! (fs.write/read, fetch, ...?)
 - [ ] config option to add and remove bot admins
+- [ ] config option to add and remove bot mods (maybe by role?)
 - [ ] Fix Twitch integration
 - [ ] Finish YouTube integration
-
-### Nice to have
-
 - [ ] survey function
 - [ ] Add localizations
+- [ ] play music (distube)
+- [ ] some additional bot owner commands
+- [ ] blacklist users (blacklisted users may not add bot to their server)
+- [ ] split member-log into mod-log (bans, kicks, warns, mutes) and member-log (join, leave)
+- [ ] add mod options: ban, kick, warn, mute
 
-### DONE
+## Known issues
+
+- [ ] TempVoice creation does not work reliably. (debug)
+- [ ] Reaction Roles lib seems to have some stability problems (maybe rewrite it myself?)
+- [ ] failed requests to twitch might crash the bot occasionally (add proper fallbacks)
+
+## DONE
 
 - [x] Add channel purge mode
 - [x] Add FunLovingGames Minecraft server user verification.
@@ -35,6 +43,8 @@ A Discord bot written in Node.js using [discord.js](https://github.com/discordjs
 - [x] Add dynamic help message generation
 
 ## Features
+
+This section is not actively maintained.
 
 ### Common Commands
 
