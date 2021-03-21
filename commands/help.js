@@ -7,7 +7,7 @@ const DiscordMessageEmbed = require('discord.js').MessageEmbed;
 module.exports = {
 	name: 'help',
 	description: 'List all available commands and their descriptions.',
-    aliases: ['commands', 'befehle', 'hilfe'],
+    aliases: ['commands', 'befehle', 'hilfe', '?'],
     args: false,
 	usage: '',
 	execute(message, args, guildConfig) {

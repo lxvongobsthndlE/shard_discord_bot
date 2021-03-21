@@ -6,7 +6,7 @@ const DiscordMessageEmbed = require('discord.js').MessageEmbed;
 module.exports = {
 	name: 'help',
 	description: 'Shows available commands in config section.',
-    aliases: ['hilfe'],
+    aliases: ['hilfe', '?'],
     args: false,
 	usage: '',
 	execute(message, args, guildConfig) {
