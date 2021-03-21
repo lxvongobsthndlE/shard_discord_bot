@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const Discord = require('discord.js');
+const DisTube = require("distube");
 const fs = require('fs');
 const dateFormat = require('date-fns/format');
 const dateFormatDistance = require('date-fns/formatDistance');
@@ -22,10 +23,14 @@ const ShardChannelpurge = require('./classes/shardChannelpurge');
 //SETUP CLIENT --------------------------------------------------------------------------------------------
 //INIT discord.js
 const discordClient = new Discord.Client();
-
-//PLAYGROUND
-//----------
-
+//INIT DisTube
+discordClient.distubeEmoji = config.emoji;
+discordClient.distube = new DisTube(discordClient, { 
+                                                        searchSongs: true, 
+                                                        emitNewSongOnly: true, 
+                                                        leaveOnFinish: true 
+                                                    });
+                                                    
 //INIT Helper
 discordClient.helper = new Helper(discordClient);
 //INIT Twitch Manager
@@ -60,9 +65,11 @@ discordClient.purgeManager = new ShardChannelpurge();
 discordClient.commands = new Discord.Collection();
 discordClient.configCommands = new Discord.Collection();
 discordClient.minecraftCommands = new Discord.Collection();
+discordClient.musicCommands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 const configCommandFiles = fs.readdirSync('./commands/config').filter(file => file.endsWith('.js'));
 const minecraftCommandFiles = fs.readdirSync('./commands/minecraft').filter(file => file.endsWith('.js'));
+const musicCommandFiles = fs.readdirSync('./commands/music').filter(file => file.endsWith('.js'));
 for (const file of commandFiles) {
     const command = require('./commands/' + file);
     discordClient.commands.set(command.name, command);
@@ -75,6 +82,11 @@ for (const file of minecraftCommandFiles) {
     const command = require('./commands/minecraft/' + file);
     discordClient.minecraftCommands.set(command.name, command);
 }
+for(const file of musicCommandFiles) {
+    const command = require('./commands/music/' + file);
+    discordClient.musicCommands.set(command.name, command);
+}
+
 
 //SETUP GLOBAL ARGS ---------------------------------------------------------------------------------------
 const defaultPrefix = config.prefix;
@@ -260,6 +272,32 @@ discordClient.on('message', async message => {
         return message.channel.send(new ExecutionError(message.author, command.name, args).getEmbed());
     }
 });
+
+discordClient.distube
+    .on("playSong", (message, queue, song) => message.channel.send(
+        `${discordClient.distubeEmoji.play} | Playing \`${song.name}\` - \`${song.formattedDuration}\`\nRequested by: ${song.user}\n${status(queue)}`
+    ))
+    .on("addSong", (message, queue, song) => message.channel.send(
+        `${discordClient.distubeEmoji.success} | Added ${song.name} - \`${song.formattedDuration}\` to the queue by ${song.user}`
+    ))
+    .on("playList", (message, queue, playlist, song) => message.channel.send(
+        `${discordClient.distubeEmoji.play} | Play \`${playlist.title}\` playlist (${playlist.total_items} songs).\nRequested by: ${song.user}\nNow playing \`${song.name}\` - \`${song.formattedDuration}\`\n${status(queue)}`
+    ))
+    .on("addList", (message, queue, playlist) => message.channel.send(
+        `${discordClient.distubeEmoji.success} | Added \`${playlist.title}\` playlist (${playlist.total_items} songs) to queue\n${status(queue)}`
+    ))
+    // DisTubeOptions.searchSongs = true
+    .on("searchResult", (message, result) => {
+        let i = 0
+        message.channel.send(`**Choose an option from below**\n${result.map(song => `**${++i}**. ${song.name} - \`${song.formattedDuration}\``).join("\n")}\n*Enter anything else or wait 60 seconds to cancel*`)
+    })
+    // DisTubeOptions.searchSongs = true
+    .on("searchCancel", message => message.channel.send(`${discordClient.distubeEmoji.error} | Searching canceled`))
+    .on("error", (message, err) => message.channel.send(`${discordClient.distubeEmoji.error} | An error encountered: ${err}`));
+
+
+//function used by distube listeners
+const status = queue => `Volume: \`${queue.volume}%\` | Filter: \`${queue.filter || "Off"}\` | Loop: \`${queue.repeatMode ? queue.repeatMode === 2 ? "All Queue" : "This Song" : "Off"}\` | Autoplay: \`${queue.autoplay ? "On" : "Off"}\``;
 
 //Completes welcome message, appending the footer
 function fill_welcome_msg(gMember, welcomeMsg) {
