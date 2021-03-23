@@ -66,10 +66,12 @@ discordClient.commands = new Discord.Collection();
 discordClient.configCommands = new Discord.Collection();
 discordClient.minecraftCommands = new Discord.Collection();
 discordClient.musicCommands = new Discord.Collection();
+discordClient.moderationCommands = new Discord.Collection();
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 const configCommandFiles = fs.readdirSync('./commands/config').filter(file => file.endsWith('.js'));
 const minecraftCommandFiles = fs.readdirSync('./commands/minecraft').filter(file => file.endsWith('.js'));
 const musicCommandFiles = fs.readdirSync('./commands/music').filter(file => file.endsWith('.js'));
+const moderationCommandFiles = fs.readdirSync('./commands/moderation').filter(file => file.endsWith('.js'));
 for (const file of commandFiles) {
     const command = require('./commands/' + file);
     discordClient.commands.set(command.name, command);
@@ -85,6 +87,10 @@ for (const file of minecraftCommandFiles) {
 for(const file of musicCommandFiles) {
     const command = require('./commands/music/' + file);
     discordClient.musicCommands.set(command.name, command);
+}
+for(const file of moderationCommandFiles) {
+    const command = require('./commands/moderation/' + file);
+    discordClient.moderationCommands.set(command.name, command);
 }
 
 
