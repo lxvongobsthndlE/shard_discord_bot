@@ -22,7 +22,7 @@ module.exports = {
         moderationCommands.forEach(command => {
             var aliases = (command.aliases && command.aliases.length > 0) ? '*Aliases*: ' + command.aliases.join(', ') + '\n' : '';
             var usage = (command.usage && command.usage != '') ? ' ' + command.usage : '';
-            response.addField(guildConfig.prefix + 'config ' + command.name + usage, aliases + command.description);
+            response.addField(guildConfig.prefix + 'moderation ' + command.name + usage, aliases + command.description);
         });
 		message.channel.send(response);
 	},
