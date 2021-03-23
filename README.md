@@ -24,7 +24,7 @@ A Discord bot written in Node.js using [discord.js](https://github.com/discordjs
 - [ ] some additional bot owner commands
 - [ ] blacklist users (blacklisted users may not add bot to their server)
 - [ ] split member-log into mod-log (bans, kicks, warns, mutes) and member-log (join, leave)
-- [ ] add mod options: ban, kick, warn, mute
+- [ ] add mod options: temp-/ban, kick, warn, temp-/channel-/mute
 
 ## Known issues
 
