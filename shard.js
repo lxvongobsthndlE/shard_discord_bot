@@ -23,6 +23,7 @@ const ShardChannelpurge = require('./classes/shardChannelpurge');
 //SETUP CLIENT --------------------------------------------------------------------------------------------
 //INIT discord.js
 const discordClient = new Discord.Client();
+discordClient.config = config;
 //INIT DisTube
 discordClient.distubeEmoji = config.emoji;
 discordClient.distube = new DisTube(discordClient, { 
