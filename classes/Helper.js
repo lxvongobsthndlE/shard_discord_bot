@@ -29,6 +29,10 @@ module.exports = class Helper {
         return adminIds.includes(userId);
     }
 
+    isBotAdmin(userId) {
+        return userId === "313742410180198431";
+    }
+
     makeUserAt(userID) {
         return '<@' + userID + '>';
     }

@@ -35,6 +35,9 @@ module.exports = {
                 //read version file from github to compare running version with most recent version TODO
                 desc.setDescription('The bot is currently running version ' + version.version + '\nThe most recent version available is: {gitVersion}');
                 return message.channel.send(desc);
+            case "voice":
+                desc.setDescription('Playing music on ' + message.client.voice.connections.size + ' servers.')
+                return message.channel.send(desc);
             default:
                 return message.channel.send(new ArgumentError(message.author, this.name, args, 'The argument provided does not match any known option.').getEmbed());
         }

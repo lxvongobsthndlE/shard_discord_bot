@@ -20,7 +20,6 @@ A Discord bot written in Node.js using [discord.js](https://github.com/discordjs
 - [ ] Finish YouTube integration
 - [ ] survey function
 - [ ] Add localizations
-- [ ] play music (distube)
 - [ ] some additional bot owner commands
 - [ ] blacklist users (blacklisted users may not add bot to their server)
 - [ ] split member-log into mod-log (bans, kicks, warns, mutes) and member-log (join, leave)
@@ -34,6 +33,7 @@ A Discord bot written in Node.js using [discord.js](https://github.com/discordjs
 
 ## DONE
 
+- [x] play music (distube)
 - [x] Add channel purge mode
 - [x] Add FunLovingGames Minecraft server user verification.
 - [x] Add !invite command to get a bot invite link (Thanks @Dezaku for bringing this up)
