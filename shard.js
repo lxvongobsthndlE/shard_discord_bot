@@ -6,7 +6,6 @@ const dateFormat = require('date-fns/format');
 const dateFormatDistance = require('date-fns/formatDistance');
 const secret = require('./secret.json');
 const config = require('./configuration/config.json');
-const presence = require('./botData/presence.json');
 const ReactionRolesManager = require('discord-reaction-role');
 const { GiveawaysManager } = require('discord-giveaways');
 const ShardGuildManager = require('./classes/shardGuildManager');
@@ -31,7 +30,7 @@ discordClient.distube = new DisTube(discordClient, {
                                                         emitNewSongOnly: true, 
                                                         leaveOnFinish: true 
                                                     });
-                                                    
+                      
 //INIT Helper
 discordClient.helper = new Helper(discordClient);
 //INIT Twitch Manager
@@ -94,23 +93,13 @@ for(const file of moderationCommandFiles) {
     discordClient.moderationCommands.set(command.name, command);
 }
 
+//INIT EventLoader
+require('./classes/util/ClientEventLoader')(discordClient);
 
 //SETUP GLOBAL ARGS ---------------------------------------------------------------------------------------
 const defaultPrefix = config.prefix;
 
 //BOT LOGIC -----------------------------------------------------------------------------------------------
-//Start client and set bot presense data
-discordClient.once('ready', async () => {
-    //Set presence
-    //let serverCount = discordClient.guilds.cache.size;
-    discordClient.user.setPresence({ activity: { name: discordClient.helper.stringTemplateParser(presence.activity, {serverCount: discordClient.guilds.cache.size}), type: presence.activityType }, status: presence.status });
-    setInterval(() => {
-        discordClient.user.setPresence({ activity: { name: discordClient.helper.stringTemplateParser(presence.activity, {serverCount: discordClient.guilds.cache.size}), type: presence.activityType }, status: presence.status });
-    }, 60000);
-    
-    //READY
-    console.log('Shard-Client ready!');
-});
 
 //Login client
 discordClient.login(secret.discordToken);
