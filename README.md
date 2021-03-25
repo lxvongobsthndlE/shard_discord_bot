@@ -13,6 +13,7 @@ A Discord bot written in Node.js using [discord.js](https://github.com/discordjs
 
 ## TODO's
 
+- [ ] Rewrite discordClient event handling (add dis-/connect and guildCreate events!)
 - [ ] Replace all sync operations with async methods! (fs.write/read, fetch, ...?)
 - [ ] config option to add and remove bot admins
 - [ ] config option to add and remove bot mods (maybe by role?)
