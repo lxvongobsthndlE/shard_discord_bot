@@ -6,3 +6,4 @@ node_modules/
 
 #Confidential or not required files
 secret.json
+package-lock.json
