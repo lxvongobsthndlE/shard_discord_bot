@@ -1,29 +1,20 @@
 module.exports = guild => {
   let client = guild.client
-  let channelID;
-  let channels = guild.cache.channels;
-  channelLoop:
-  for (let c of channels) {
-      let channelType = c[1].type;
-      if (channelType === "text") {
-          channelID = c[0];
-          break channelLoop;
-      }
-  }
-  
-
+  let aTextChannel = guild.channels.cache.find(ch => ch.type === 'text');
   let owner = guild.ownerID
-  if(owner !== settings.ownerid){
-    let channel = client.channels.cache.get(guild.systemChannelID || channelID);
-    channel.send(`Thanks for inviting me into this server! Please do /info and /help for the informations you need in order for the bot to work properly. Do /suggest or /bug if there's any suggestions or bug you found. THANKS`);
-    
-    let blacklist = JSON.parse(fs.readFileSync("./blacklist.json", "utf8"));
-    client.guilds.forEach((guild) => {
-      if (!blacklist[guild.ownerID]) return
-      if(blacklist[guild.ownerID].state === true) {
-        channel.send("But UNFORTUNATELY, the owner of this server has been blacklisted before so I'm LEAVING! Bye!")
-        guild.leave(guild.id)
+  console.log('>>> Joined new guild: ' + guild.name);
+
+  if (owner !== client.config.ownerId || owner === client.config.ownerId) { //remove OR... after testing!!
+    let channel = client.channels.cache.get(guild.systemChannelID || aTextChannel.id);
+    channel.send('Thanks for inviting me into this server!\nPlease use `' + client.config.prefix + 'info` and `' + client.config.prefix + 'help` for the information you need in order to set up and use the bot.\n\nHave any suggestions or noticed any bugs? Use `' + client.config.prefix + 'suggest` or `' + client.config.prefix + 'bug` to report them to my developer. \nThank you and have fun using the bot!');
+
+    let blacklist = JSON.parse(fs.readFileSync('../../botData/blacklist.json', 'utf8'));
+    client.guilds.cache.each((guild) => {
+      if (!blacklist[guild.ownerID]) return;
+      if (blacklist[guild.ownerID].state) {
+        channel.send("But UNFORTUNATELY, the owner of this server has been blacklisted by my developer, so I'm going to have to leave! Bye!");
+        guild.leave(guild.id);
       }
-    })
+    });
   }
 }
