@@ -4,6 +4,7 @@
   "description": "A discord bot made by lxvongobsthndl",
   "main": "shard.js",
   "scripts": {
+    "run": "node shard.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "lxvongobsthndl",
