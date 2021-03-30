@@ -1,6 +1,6 @@
 {
     "guildId": "default",
-    "prefix": "!",
+    "prefix": "s!",
     "explictFilter": false,
     "welcomeChannelId": "",
     "welcomeMessage": {
