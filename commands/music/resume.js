@@ -15,14 +15,14 @@ module.exports = {
             return message.channel.send(new DiscordMessageEmbed()
                 .setAuthor(message.author.tag, message.author.displayAvatarURL())
                 .setColor('red')
-                .setDescription(message.client.distubeEmoji.error + ' | There is nothing in the queue right now!'));
+                .setDescription(message.client.config.emoji.error + ' | There is nothing in the queue right now!'));
         }
 
         message.client.distube.resume(message);
         message.channel.send(new DiscordMessageEmbed()
             .setAuthor(message.author.tag, message.author.displayAvatarURL())
             .setColor('#33cc33')
-            .setDescription(message.client.distubeEmoji.pause + ' | Resumed the song for you :)'));
+            .setDescription(message.client.config.emoji.pause + ' | Resumed the song for you :)'));
 
     }
 }

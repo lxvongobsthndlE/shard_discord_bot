@@ -15,7 +15,7 @@ module.exports = {
             return message.channel.send(new DiscordMessageEmbed()
                 .setAuthor(message.author.tag, message.author.displayAvatarURL())
                 .setColor('red')
-                .setDescription(message.client.distubeEmoji.error + ' | There is nothing in the queue right now!'));
+                .setDescription(message.client.config.emoji.error + ' | There is nothing in the queue right now!'));
         }
 
         try {
@@ -23,12 +23,12 @@ module.exports = {
             message.channel.send(new DiscordMessageEmbed()
                 .setAuthor(message.author.tag, message.author.displayAvatarURL())
                 .setColor('#33cc33')
-                .setDescription(message.client.distubeEmoji.success + ' | Skipped! Now playing:\n`' + queue.songs[0].name + '`'));
+                .setDescription(message.client.config.emoji.success + ' | Skipped! Now playing:\n`' + queue.songs[0].name + '`'));
         } catch (e) {
             message.channel.send(new DiscordMessageEmbed()
                 .setAuthor(message.author.tag, message.author.displayAvatarURL())
                 .setColor('red')
-                .setDescription(message.client.distubeEmoji.error + ' | ' + e));
+                .setDescription(message.client.config.emoji.error + ' | ' + e));
         }
 
     }

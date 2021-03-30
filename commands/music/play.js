@@ -24,7 +24,7 @@ module.exports = {
             return message.channel.send(new DiscordMessageEmbed()
                 .setAuthor(message.author.tag, message.author.displayAvatarURL())
                 .setColor('#33cc33')
-                .setDescription(message.client.distubeEmoji.error + '| Error: `' + e + '`'));
+                .setDescription(message.client.config.emoji.error + '| Error: `' + e + '`'));
         }
 
     }

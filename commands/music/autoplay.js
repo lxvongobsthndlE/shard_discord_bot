@@ -14,6 +14,6 @@ module.exports = {
         message.channel.send(new DiscordMessageEmbed()
             .setAuthor(message.author.tag, message.author.displayAvatarURL())
             .setColor('#33cc33')
-            .setDescription(message.client.distubeEmoji.arrow + ' | Set autoplay mode to `' + (mode ? 'On' : 'Off') + '`'));
+            .setDescription(message.client.config.emoji.arrow + ' | Set autoplay mode to `' + (mode ? 'On' : 'Off') + '`'));
     }
 }

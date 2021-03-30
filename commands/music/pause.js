@@ -15,7 +15,7 @@ module.exports = {
             return message.channel.send(new DiscordMessageEmbed()
                 .setAuthor(message.author.tag, message.author.displayAvatarURL())
                 .setColor('red')
-                .setDescription(message.client.distubeEmoji.error + ' | There is nothing in the queue right now!'));
+                .setDescription(message.client.config.emoji.error + ' | There is nothing in the queue right now!'));
         }
 
         if (queue.pause) {

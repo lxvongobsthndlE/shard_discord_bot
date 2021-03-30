@@ -17,7 +17,7 @@ module.exports = {
             return message.channel.send(new DiscordMessageEmbed()
                 .setAuthor(message.author.tag, message.author.displayAvatarURL())
                 .setColor('red')
-                .setDescription(message.client.distubeEmoji.error + ' | There is nothing playing right now!'));
+                .setDescription(message.client.config.emoji.error + ' | There is nothing playing right now!'));
         }
 
         let mode = (args[0] == 'off') ? 0 : (args[0] == 'song') ? 1 : (args[0] == 'queue') ? 2 : null;
@@ -26,6 +26,6 @@ module.exports = {
         message.channel.send(new DiscordMessageEmbed()
             .setAuthor(message.author.tag, message.author.displayAvatarURL())
             .setColor('#33cc33')
-            .setDescription(message.client.distubeEmoji.repeat + ' | Set repeat mode to `' + mode + '`'));
+            .setDescription(message.client.config.emoji.repeat + ' | Set repeat mode to `' + mode + '`'));
     }
 }

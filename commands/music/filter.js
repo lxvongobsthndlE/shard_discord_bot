@@ -17,7 +17,7 @@ module.exports = {
             return message.channel.send(new DiscordMessageEmbed()
                 .setAuthor(message.author.tag, message.author.displayAvatarURL())
                 .setColor('red')
-                .setDescription(message.client.distubeEmoji.error + ' | There is nothing in the queue right now!'));
+                .setDescription(message.client.config.emoji.error + ' | There is nothing in the queue right now!'));
         }
 
         if (args[0] == 'off' && queue.filter) {
@@ -28,13 +28,13 @@ module.exports = {
             return message.channel.send(new DiscordMessageEmbed()
                 .setAuthor(message.author.tag, message.author.displayAvatarURL())
                 .setColor('red')
-                .setDescription(message.client.distubeEmoji.error + ' | Not a valid filter!'));
+                .setDescription(message.client.config.emoji.error + ' | Not a valid filter!'));
         }
 
         message.channel.send(new DiscordMessageEmbed()
             .setAuthor(message.author.tag, message.author.displayAvatarURL())
             .setColor('#33cc33')
-            .setDescription(message.client.distubeEmoji.arrow + ' | Current Queue Filter: `' + queue.filter || 'Off' + '`'));
+            .setDescription(message.client.config.emoji.arrow + ' | Current Queue Filter: `' + queue.filter || 'Off' + '`'));
 
     }
 }

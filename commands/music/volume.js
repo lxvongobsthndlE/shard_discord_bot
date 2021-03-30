@@ -17,7 +17,7 @@ module.exports = {
             return message.channel.send(new DiscordMessageEmbed()
                 .setAuthor(message.author.tag, message.author.displayAvatarURL())
                 .setColor('red')
-                .setDescription(message.client.distubeEmoji.error + ' | There is nothing in the queue right now!'));
+                .setDescription(message.client.config.emoji.error + ' | There is nothing in the queue right now!'));
         }
 
         let volume = parseInt(args[0]);
@@ -26,14 +26,14 @@ module.exports = {
             return message.channel.send(new DiscordMessageEmbed()
                 .setAuthor(message.author.tag, message.author.displayAvatarURL())
                 .setColor('red')
-                .setDescription(message.client.distubeEmoji.error + ' | Please enter a valid number!'));
+                .setDescription(message.client.config.emoji.error + ' | Please enter a valid number!'));
         }
 
         message.client.distube.setVolume(message, volume);
         message.channel.send(new DiscordMessageEmbed()
             .setAuthor(message.author.tag, message.author.displayAvatarURL())
             .setColor('#33cc33')
-            .setDescription(message.client.distubeEmoji.success + ' | Volume set to `' + volume + '`'));
+            .setDescription(message.client.config.emoji.success + ' | Volume set to `' + volume + '`'));
 
     }
 }
