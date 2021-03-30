@@ -1,3 +1,4 @@
+const fs = require('fs');
 module.exports = guild => {
   let client = guild.client
   let aTextChannel = guild.channels.cache.find(ch => ch.type === 'text');
