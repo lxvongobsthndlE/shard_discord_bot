@@ -4,7 +4,7 @@ const requireDistubeEvent = (event) => require('../events/distube/' + event);
 module.exports = client => {
     //Discord
     client.on('ready', () => requireEvent('ready')(client));
-    //client.on('message', requireEvent('message'));
+    client.on('guildDelete', requireEvent('guildDelete'));
     client.on('guildCreate', requireEvent('guildCreate'));
     client.on('guildMemberRemove', member => requireEvent('guildMemberRemove')(member, client));
     client.on('guildBanAdd', (guild, user) => requireEvent('guildBanAdd')(guild, user, client));
