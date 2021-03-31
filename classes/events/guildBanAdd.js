@@ -1,6 +1,6 @@
 const member_banned = require('./functions/member_banned');
 
-module.exports = (guild, user, discordClient) => {
+module.exports = async (guild, user, discordClient) => {
     const guildConfig = discordClient.guildManager.getGuildConfigById(guild.id);
     const memberLog = guild.channels.cache.get(guildConfig.memberLogChannelId);
 

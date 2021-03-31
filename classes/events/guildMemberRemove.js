@@ -1,7 +1,7 @@
 const member_left = require('./functions/member_left');
 const member_kicked = require('./functions/member_kicked');
 
-module.exports = (member, discordClient) => {
+module.exports = async (member, discordClient) => {
     const guildConfig = discordClient.guildManager.getGuildConfigById(member.guild.id);
     const memberLog = member.guild.channels.cache.get(guildConfig.memberLogChannelId);
 

@@ -6,10 +6,10 @@ module.exports = client => {
     client.on('ready', () => requireEvent('ready')(client));
     //client.on('message', requireEvent('message'));
     client.on('guildCreate', requireEvent('guildCreate'));
-    client.on('guildMemberRemove', async member => requireEvent('guildMemberRemove')(member, client));
-    client.on('guildBanAdd', async (guild, user) => requireEvent('guildBanAdd')(guild, user, client));
+    client.on('guildMemberRemove', member => requireEvent('guildMemberRemove')(member, client));
+    client.on('guildBanAdd', (guild, user) => requireEvent('guildBanAdd')(guild, user, client));
     client.on('guildMemberAdd', member => requireEvent('guildMemberAdd')(member, client));
-    client.on('message', async message => requireEvent('message')(message, client));
+    client.on('message', message => requireEvent('message')(message, client));
 
     //Distube
     client.distube.on("playSong",

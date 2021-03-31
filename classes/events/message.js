@@ -4,7 +4,7 @@ const ExecutionError = require('../../errors/ExecutionError');
 const NoPermissionError = require('../../errors/NoPermissionError');
 const CommandDoesNotExistError = require('../../errors/CommandDoesNotExistError');
 
-module.exports = (message, discordClient) => {
+module.exports = async (message, discordClient) => {
     //Allmighty Logger. Don't use this. Seriously, don't.
     //console.log('[' + message.guild.name + '][' + message.channel.name + '] ' + message.author.tag + ': ' + message.content);
 
