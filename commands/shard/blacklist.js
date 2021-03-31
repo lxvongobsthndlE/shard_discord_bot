@@ -14,7 +14,7 @@ module.exports = {
         if(message.author.id !== message.client.config.ownerId) return;
         console.log(message.author.username + ' called "shard/blacklist" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
 
-        let blacklist = JSON.parse(fs.readFileSync('../../botData/blacklist.json', 'utf-8'));
+        let blacklist = JSON.parse(fs.readFileSync('./botData/blacklist.json', 'utf-8'));
         
         let user = args[1];
         if (!user) {
@@ -37,7 +37,7 @@ module.exports = {
                         state: true
                     }
                     message.reply(message.client.helper.makeUserAt(user) + ' is now blacklisted.');
-                    fs.writeFile('../../botData/blacklist.json', JSON.stringify(blacklist, null, 2), err => {
+                    fs.writeFile('./botData/blacklist.json', JSON.stringify(blacklist, null, 2), err => {
                         if (err) {
                             message.reply('Something went wrong saving the blacklist entry. You might have to try again.');
                         }
@@ -67,7 +67,7 @@ module.exports = {
                     state: false
                 }
                 message.reply('The user ' + message.client.helper.makeUserAt(user) + ' has been removed from the blacklist.');
-                fs.writeFile('../../botData/blacklist.json', JSON.stringify(blacklist, null, 2), err => {
+                fs.writeFile('./botData/blacklist.json', JSON.stringify(blacklist, null, 2), err => {
                     if (err) {
                         message.reply('Something went wrong saving the blacklist entry. You might have to try again.');
                     }
