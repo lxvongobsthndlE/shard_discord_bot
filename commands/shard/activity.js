@@ -1,20 +1,19 @@
-const ArgumentError = require("../errors/ArgumentError");
+const ArgumentError = require("../../errors/ArgumentError");
 const fs = require('fs');
 
-/** Command: shard-activity <activity> [type]
- *  Reloads a specified command, so you won't need to restart the bot if changes were made.
+/** Command: activity <activity> [type]
+ *  Change the bots activity. Available types: PLAYING, STREAMING, LISTENING, WATCHING, COMPETING.
  */
 module.exports = {
-	name: 'shard-activity',
+	name: 'activity',
     description: 'Change the bots activity. Available types: PLAYING, STREAMING, LISTENING, WATCHING, COMPETING.',
     args: true,
     secret: true,
     aliases: [],
-    explict: false,
     usage: '<type> <activity>',
     execute(message, args, guildConfig) {
-        if(message.author.id !== "313742410180198431") return;
-        console.log(message.author.username + ' called "shard-activity" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
+        if(message.author.id !== message.client.config.ownerId) return;
+        console.log('[DEV] ' + message.author.username + ' called "shard/activity" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
 
         const types = ['PLAYING', 'STREAMING', 'LISTENING', 'WATCHING', 'COMPETING'];
 

@@ -13,7 +13,7 @@ module.exports = {
     usage: '<command>',
     async execute(message, args, guildConfig) {
         if(message.author.id !== message.client.config.ownerId) return;
-        console.log(message.author.username + ' called "shard/exec" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
+        console.log('[DEV] ' + message.author.username + ' called "shard/exec" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
 
         const command = args.join(' ');
         exec(command, (err, stdout, stderr) => {

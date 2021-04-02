@@ -1,20 +1,19 @@
-const ArgumentError = require("../errors/ArgumentError");
+const ArgumentError = require("../../errors/ArgumentError");
 const fs = require('fs');
 
-/** Command: shard-status <status>
- *  Changes the status of the bot.
+/** Command: status <status>
+ *  Changes the status of the bot. Available status: online, idle, dnd, invisible.
  */
 module.exports = {
-	name: 'shard-status',
-    description: 'Change the bots status. Available status: online, idle, dnd, invisible.',
+	name: 'status',
+    description: 'Changes the status of the bot. Available status: online, idle, dnd, invisible.',
     args: true,
     secret: true,
     aliases: [],
-    explict: false,
     usage: '<status>',
     execute(message, args, guildConfig) {
-        if(message.author.id !== "313742410180198431") return;
-        console.log(message.author.username + ' called "shard-status" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
+        if(message.author.id !== message.client.config.ownerId) return;
+        console.log('[DEV] ' + message.author.username + ' called "shard/status" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
 
         const stati = ['online', 'idle', 'dnd', 'invisible'];
 

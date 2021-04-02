@@ -1,21 +1,18 @@
 const DiscordMessageEmbed = require('discord.js').MessageEmbed;
-const DiscordCollection = require('discord.js').Collection;
-const Helper = require('../classes/Helper');
 
-/** Command: shard-test
+/** Command: test
  *  Command for testing various stuffs.
  */
 module.exports = {
-    name: 'shard-test',
+    name: 'test',
     description: 'Test command.',
     args: false,
-    usage: '',
-    aliases: ['stest'],
+    usage: '<option>',
+    aliases: [],
     secret: true,
     async execute(message, args, guildConfig) {
-        if (message.author.id !== "313742410180198431") return;
-        console.log('[DEV] ' + message.author.username + ' called "shard-test" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
-        const helper = new Helper();
+        if (message.author.id !== message.client.config.ownerId) return;
+        console.log('[DEV] ' + message.author.username + ' called "shard/test" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
 
         switch (args[0]) {
             case 'flgrules': 
@@ -27,7 +24,7 @@ module.exports = {
                 console.log(message.author);
                 message.channel.send(new DiscordMessageEmbed()
                     .setAuthor(message.author.tag)
-                    .setDescription('User: ' + helper.makeUserAt(message.author.id))
+                    .setDescription('User: ' + message.client.helper.makeUserAt(message.author.id))
                 );
                 break;
             case 'warn-all': 
@@ -70,7 +67,7 @@ module.exports = {
                     .catch(console.error);
                 break;
             default: 
-                message.channel.send("Du Ollum!");
+                message.channel.send("No test specified! You sould know better!");
                 break;
         }
     }

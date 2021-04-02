@@ -12,7 +12,7 @@ module.exports = {
     usage: '<add|remove> <userID>',
     async execute(message, args, guildConfig) {
         if(message.author.id !== message.client.config.ownerId) return;
-        console.log(message.author.username + ' called "shard/blacklist" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
+        console.log('[DEV] ' + message.author.username + ' called "shard/blacklist" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
 
         let blacklist = JSON.parse(fs.readFileSync('./botData/blacklist.json', 'utf-8'));
         

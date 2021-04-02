@@ -1,42 +1,45 @@
 //const ShellError = require("../errors/ShellError");
 const os = require('os');
 const ms = require('ms');
-const { exec } = require('child_process');
+const version = require('../../configuration/bot-version.json');
 const DiscordMessageEmbed = require('discord.js').MessageEmbed;
 /** Command: info
  *  Get some info about the bot and its environment.
  */
 module.exports = {
-	name: 'info',
+    name: 'info',
     description: 'Get some info about the bot and its environment.',
     secret: true,
     aliases: [],
     usage: '',
     async execute(message, args, guildConfig) {
-        if(message.author.id !== message.client.config.ownerId) return;
-        console.log(message.author.username + ' called "shard/info" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
+        if (message.author.id !== message.client.config.ownerId) return;
+        console.log('[DEV] ' + message.author.username + ' called "shard/info" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
 
         message.channel.send('Loading data...')
-        .then(async msg => {
-            msg.delete();
-            let infoMsgEmbed = new DiscordMessageEmbed()
-            .setTitle('Shard Bot Info')
-            .setColor('#a03774')
-            .setTimestamp()
-            .setFooter('Shard by @lxvongobsthndl')
-            .setDescription(`**Creator**: ${message.client.helper.makeUserAt(message.client.config.ownerId)}
-                            **Latency**: ${msg.createdTimestamp - message.createdTimestamp}ms (API: ${Math.round(message.client.ws.ping)}ms)
-                            **Uptime**: tbd
-                            **Servers**: ${message.client.guilds.cache.size}
-                            **Users**: ${message.client.users.cache.size}\n
-                            **Memory**: ${this.bytesToSize(os.freemem())} (${Math.round((os.freemem() / os.totalmem()) * 100)}%)
-                            **Load Avg.**: ${os.loadavg()[0]}, ${os.loadavg()[1]}, ${os.loadavg()[2]} (1m,5m,15m)
-                            **Cores**: ${os.cpus().length}
-                            **Platform**: ${os.type()} (${os.release()} \`${os.platform()}\`)
-                            **Uptime**: ${ms(ms(os.uptime() + 's'))}`
-                            );
-            message.channel.send(infoMsgEmbed);
-        })
+            .then(async msg => {
+                msg.delete();
+                let infoMsgEmbed = new DiscordMessageEmbed()
+                    .setTitle('Shard Bot Info')
+                    .setColor('#a03774')
+                    .setTimestamp()
+                    .setFooter('Shard by @lxvongobsthndl')
+                    .setDescription(
+                        `**Creator**: ${message.client.helper.makeUserAt(message.client.config.ownerId)}
+                        **Bot Version**: ${version.version}
+                        **Latency**: ${msg.createdTimestamp - message.createdTimestamp}ms (API: ${Math.round(message.client.ws.ping)}ms)
+                        **Uptime**: tbd
+                        **Servers**: ${message.client.guilds.cache.size}
+                        **Users**: ${message.client.users.cache.size}
+                        **Playing music** on ${message.client.voice.connections.size} servers\n
+                        **Memory**: ${this.bytesToSize(os.freemem())} (${Math.round((os.freemem() / os.totalmem()) * 100)}%)
+                        **Load Avg.**: ${os.loadavg()[0]}, ${os.loadavg()[1]}, ${os.loadavg()[2]} (1m,5m,15m)
+                        **Cores**: ${os.cpus().length}
+                        **Platform**: ${os.type()} (${os.release()} \`${os.platform()}\`)
+                        **Uptime**: ${ms(ms(os.uptime() + 's'))}`
+                    );
+                message.channel.send(infoMsgEmbed);
+            })
 
 
         /*
@@ -53,5 +56,5 @@ module.exports = {
         const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)), 10)
         if (i === 0) return `${bytes} ${sizes[i]})`
         return `${(bytes / (1024 ** i)).toFixed(1)} ${sizes[i]}`
-      }
+    }
 };

@@ -13,7 +13,7 @@ module.exports = {
 	execute(message, args, guildConfig) {
         if(message.author.id !== message.client.config.ownerId) return;
         const { shardCommands } = message.client;
-        console.log(message.author.username + ' called "shard/help" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
+        console.log('[DEV] ' + message.author.username + ' called "shard/help" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
 
         var response = new DiscordMessageEmbed()
         .setColor('#0099ff')
