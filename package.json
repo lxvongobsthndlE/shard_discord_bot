@@ -1,6 +1,6 @@
 {
   "name": "shard",
-  "version": "1.0.0",
+  "version": "0.2.2",
   "description": "A discord bot made by lxvongobsthndl",
   "main": "shard.js",
   "scripts": {
