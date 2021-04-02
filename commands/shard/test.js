@@ -66,6 +66,12 @@ module.exports = {
                     .then(msg => console.log('Sent message to ' + msg.channel.recipient.userame))
                     .catch(console.error);
                 break;
+            case 'userinfo':
+                let uid = (args[1]) ? args[1] : message.author.id;
+                message.client.users.fetch(uid).then( user => {
+                    message.channel.send('```json\n' + JSON.stringify(user, null, 2) + '```');
+                });
+                break;
             default: 
                 message.channel.send("No test specified! You sould know better!");
                 break;
