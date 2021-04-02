@@ -28,7 +28,7 @@ module.exports = {
                         `**Creator**: ${message.client.helper.makeUserAt(message.client.config.ownerId)}
                         **Bot Version**: ${packageInfo.version}
                         **Latency**: ${msg.createdTimestamp - message.createdTimestamp}ms (API: ${Math.round(message.client.ws.ping)}ms)
-                        **Uptime**: ${ms(ms(process.uptime() + 's'))}
+                        **Uptime**: ${ms(ms(process.uptime() + 's'), {long: true})}
                         **Servers**: ${message.client.guilds.cache.size}
                         **Users**: ${message.client.users.cache.size}
                         **Playing music** on ${message.client.voice.connections.size} servers\n
@@ -36,7 +36,7 @@ module.exports = {
                         **Load Avg.**: ${os.loadavg()[0]}, ${os.loadavg()[1]}, ${os.loadavg()[2]} (1m,5m,15m)
                         **Cores**: ${os.cpus().length}
                         **Platform**: ${os.type()} (${os.release()} \`${os.platform()}\`)
-                        **Uptime**: ${ms(ms(os.uptime() + 's'))}\n
+                        **Uptime**: ${ms(ms(os.uptime() + 's'), {long: true})}\n
                         **Library**: discord.js ${packageInfo.dependencies['discord.js']}`
                     );
                 message.channel.send(infoMsgEmbed);
