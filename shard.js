@@ -19,11 +19,11 @@ const ShardChannelpurge = require('./classes/shardChannelpurge');
 const discordClient = new Discord.Client();
 discordClient.config = config;
 //INIT DisTube
-discordClient.distube = new DisTube(discordClient, { 
-                                                        searchSongs: true, 
-                                                        emitNewSongOnly: true, 
-                                                        leaveOnFinish: true 
-                                                    });
+discordClient.distube = new DisTube(discordClient, {
+    searchSongs: true,
+    emitNewSongOnly: true,
+    leaveOnFinish: true
+});
                       
 //INIT Helper
 discordClient.helper = new Helper(discordClient);
