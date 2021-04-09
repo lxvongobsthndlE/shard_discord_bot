@@ -1,5 +1,5 @@
 module.exports = class Helper {
-    constructor(client){
+    constructor(client) {
         this.client = client;
     }
 
@@ -15,11 +15,11 @@ module.exports = class Helper {
     stringTemplateParser(expression, valueObj) {
         const templateMatcher = /{{\s?([^{}\s]*)\s?}}/g;
         let text = expression.replace(templateMatcher, (substring, value, index) => {
-          value = valueObj[value];
-          return value;
+            value = valueObj[value];
+            return value;
         });
         return text
-      }
+    }
 
     getRandomInteger(minimum, maximum) {
         return Math.floor(Math.random() * (maximum - minimum + 1)) + minimum;
@@ -46,7 +46,7 @@ module.exports = class Helper {
     }
 
     //If guildID is provided it will check if user exists AND is in said guild, else just if user exists
-    checkUserIdValid(userId, guildId=null) {
+    checkUserIdValid(userId, guildId = null) {
         return this.client.users.fetch(userId)
             .then(user => {
                 if (!guildId) {
@@ -55,39 +55,47 @@ module.exports = class Helper {
                 return this.client.guilds.fetch(guildId)
                     .then(guild => {
                         return guild.members.fetch(userId)
-                            .then(member => {return member})
-                            .catch(() => {return false});
+                            .then(member => { return member })
+                            .catch(() => { return false });
                     })
-                    .catch(() => {return false});
-                
+                    .catch(() => { return false });
+
             })
-            .catch(() => {return false});
+            .catch(() => { return false });
     }
 
     //If guildID is provided it will check if channel exists AND is in said guild, else just if channel exists
-    async checkChannelIdValid(channelId, guildId=null) {
-        //check channel.type on successfull return to diff between: text, voice, category, news, store
-        let guildChannelTypes = ['text', 'voice', 'category', 'news', 'store'];
+    checkChannelIdValid(channelId, guildId = null) {
         return this.client.channels.fetch(channelId)
             .then(channel => {
                 if (!guildId) {
                     return channel;
                 }
-                if (guildChannelTypes.includes(channel.type) && channel.guild.id == guildId) {
-                    return channel;
-                }
-                return false;
+                return this.client.guilds.fetch(guildId)
+                    .then(guild => {
+                        if (!guild) {
+                            return false;
+                        }
+                        return guild.channels.cache.has(channelId) ? channel : false;
+                    })
+                    .catch((err) => {
+                        console.log('ERR client guilds cache get\n' + err)
+                        return false
+                    });
             })
-            .catch(() => {return false});
+            .catch((err) => {
+                console.log('ERR client channel fetch\n' + err)
+                return false
+            });
     }
 
     checkRoleIdValid(roleId, guildId) {
         return this.client.guilds.fetch(guildId)
             .then(guild => {
                 return guild.roles.fetch(roleId)
-                    .then(role => {return role.guild.id === guildId})
-                    .catch(() => {return false})
+                    .then(role => { return role.guild.id === guildId })
+                    .catch(() => { return false })
             })
-            .catch(() => {return false});
+            .catch(() => { return false });
     }
 }
