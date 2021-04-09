@@ -39,11 +39,11 @@ module.exports = class ShardTempVoice {
 
     initChannels() {
         this.tempVoiceChannels.forEach(el => {
-            this.addNewTempVoiceChannel(el.registerChannelID, el.childCategoryID, el.childMaxUsers, true, el.naming);
+            this.addNewTempVoiceChannel(el.registerChannelID, el.childCategoryID, el.childMaxUsers, el.guildId, true, el.naming);
         });
     }
 
-    async addNewTempVoiceChannel(registerChannelID, childCategoryID, maxUsersPerChannel, init = false, naming = null) {
+    async addNewTempVoiceChannel(registerChannelID, childCategoryID, maxUsersPerChannel, guildId, init = false, naming = null) {
         this.tempChannel.registerChannel(registerChannelID, {
             childCategory: childCategoryID,
             childAutoDelete: true,
@@ -63,7 +63,8 @@ module.exports = class ShardTempVoice {
                 registerChannelID: registerChannelID,
                 childCategoryID: childCategoryID,
                 childMaxUsers: maxUsersPerChannel,
-                naming: naming
+                naming: naming,
+                guildId: guildId
             })
             this.saveTempVoices();
         }
@@ -77,8 +78,8 @@ module.exports = class ShardTempVoice {
         this.tempChannel.unregisterChannel(registerChannelID);
     }
 
-    async isTempVoiceChannel(registerChannelID) {
-        return this.tempVoiceChannels.find(el => el.registerChannelID == registerChannelID);
+    isTempVoiceChannel(registerChannelID) {
+        return this.tempVoiceChannels.find(el => el.registerChannelID === registerChannelID);
     }
     
     async setNaming(registerChannelID, naming) {
@@ -91,15 +92,11 @@ module.exports = class ShardTempVoice {
         this.saveTempVoices();
     }
 
-    async getTempVoiceChannelCount(guildID=null) {
+    getTempVoiceChannelCount(guildID=null) {
         if (!guildID) {
             return this.tempChannel.channels.length;
         }
-        let guildTempChannels = await this.tempChannel.channels.filter(async el => {
-            let channelValid = await this.client.helper.checkChannelIdValid(el.channelID, guildID);
-            return !channelValid ? false : channelValid.type == 'voice';
-        });
-        return guildTempChannels.length;
+        return this.tempVoiceChannels.filter(ch => ch.guildId == guildID).length;
     }
 
 }

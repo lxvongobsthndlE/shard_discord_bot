@@ -8,11 +8,11 @@ const defaultChannelSize = 10;
  */
 module.exports = {
     name: 'tempvoice',
-    description: 'Manage temporary voice channels on the Server.\nOptions include: help, add, remove, naming, placeholders, count',
+    description: 'Manage temporary voice channels on the server.\nOptions include: help, add, remove, naming, placeholders, count',
     args: true,
     usage: '<option>',
     aliases: ['tv'],
-    async execute (message, args, guildConfig) {
+    async execute(message, args, guildConfig) {
         console.log(message.author.username + ' called "config/tempVoice" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
 
         let helper = message.client.helper;
@@ -27,12 +27,12 @@ module.exports = {
         if (args[0] == 'help') {
             return message.channel.send(
                 retMessage.setDescription('Available **tempvoice** commands:')
-                    .addField(guildConfig.prefix + 'config tempvoice add <registerChannelID> <childCategoryID> [maxUsersPerChannel]', 
+                    .addField(guildConfig.prefix + 'config tempvoice add <registerChannelID> <childCategoryID> [maxUsersPerChannel]',
                         'Create a new tempvoice channel with:\n'
                         + '*<registerChannelID>*: The ID of the channel that will create tempvoice channels.\n'
                         + '*<childCategoryID>*: The ID of the category in which all tempvoice channels will be created.\n'
                         + '*[maxUsersPerChannel]*: The maximum amount of users allowed in a tempvoice channel (*default: ' + defaultChannelSize + '*)')
-                    .addField(guildConfig.prefix + 'config tempvoice remove <registerChannelID>', 
+                    .addField(guildConfig.prefix + 'config tempvoice remove <registerChannelID>',
                         'Remove a tempvoice channel from your server with:\n'
                         + '*<registerChannelID>*: The ID of the tempvoice channel to remove.')
                     .addField(guildConfig.prefix + 'config tempvoice naming <registerChannelID> <text>',
@@ -49,26 +49,24 @@ module.exports = {
         }
         //add <registerChannelID> <childCategoryID> [maxUsersPerChannel]
         if (args[0] == 'add') {
-            let check1 = await helper.checkChannelIdValid(args[1], message.guild.id);
-            let check1_1 = await !tvManager.isTempVoiceChannel(args[1]);
-            let check2 = await helper.checkChannelIdValid(args[2], message.guild.id);
-            if (check1.type == 'voice' && check1_1) {
-                if (check2.type == 'category') {
-                    let channelSize = defaultChannelSize;
-                    if (args[3] && isFinite(args[3]) && args[3] >= 0.5) {
-                        channelSize = Math.round(args[3]);
+            return helper.checkChannelIdValid(args[1], message.guild.id)
+                .then(channel => {
+                    if (!channel || channel.type !== 'voice' || tvManager.isTempVoiceChannel(args[1])) {
+                        return message.channel.send(new ArgumentError(message.author, this.name, args, 'The registerChannelID `' + args[1] + '` is either not a valid voice channel, or is already a tempvoice channel.').getEmbed());
                     }
-                    tvManager.addNewTempVoiceChannel(args[1], args[2], channelSize);
-                    return message.channel.send(retMessage.setDescription('Success!\nAdded new tempvoice channel with entry: ' + helper.makeChannelAt(args[1])));
-                }
-                else {
-                    return message.channel.send(new ArgumentError(message.author, this.name, args, 'The childCategoryID `' + args[2] + '` is not a valid category.').getEmbed());
-                }
-            }
-            else {
-                return message.channel.send(new ArgumentError(message.author, this.name, args, 'The registerChannelID `' + args[1] + '` is either not a valid voice channel, or is already a tempvoice channel.').getEmbed());
-            }
-            
+                    return helper.checkChannelIdValid(args[2], message.guild.id).then(cat => {
+                        if (!cat || cat.type !== 'category') {
+                            return message.channel.send(new ArgumentError(message.author, this.name, args, 'The childCategoryID `' + args[2] + '` is not a valid category.').getEmbed());
+                        }
+                        let channelSize = defaultChannelSize;
+                        if (args[3] && isFinite(args[3]) && args[3] >= 1) {
+                            channelSize = Math.round(args[3]);
+                        }
+                        tvManager.addNewTempVoiceChannel(args[1], args[2], channelSize, message.guild.id);
+                        return message.channel.send(retMessage.setDescription('Success!\nAdded new tempvoice channel with entry: ' + helper.makeChannelAt(args[1])));
+                    });
+                })
+                .catch(err => console.log);
         }
         //remove <registerChannelID>
         else if (args[0] == 'remove') {
