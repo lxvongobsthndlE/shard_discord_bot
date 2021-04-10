@@ -1,6 +1,6 @@
 # shard_discord_bot
 
-<img src="https://raw.githubusercontent.com/lxvongobsthndlE/shard_discord_bot/master/Crystal_Shard.png" alt="Shard Dicord Bot Logo" width="200"/>
+<img src="https://raw.githubusercontent.com/lxvongobsthndlE/shard_discord_bot/master/Crystal_Shard.png" alt="Shard Dicord Bot Logo" width="200" align="center"/>
 
 A Discord bot written in Node.js using [discord.js](https://github.com/discordjs/discord.js).
 
@@ -13,27 +13,27 @@ A Discord bot written in Node.js using [discord.js](https://github.com/discordjs
 
 ## TODO's
 
-- [ ] Rewrite discordClient event handling (add dis-/connect and guildCreate events!)
-- [ ] Replace all sync operations with async methods! (fs.write/read, fetch, ...?)
 - [ ] config option to add and remove bot admins
 - [ ] config option to add and remove bot mods (maybe by role?)
 - [ ] Fix Twitch integration
 - [ ] Finish YouTube integration
 - [ ] survey function
 - [ ] Add localizations
-- [ ] some additional bot owner commands
-- [ ] blacklist users (blacklisted users may not add bot to their server)
 - [ ] split member-log into mod-log (bans, kicks, warns, mutes) and member-log (join, leave)
 - [ ] add mod options: temp-/ban, kick, warn, temp-/channel-/mute
 
 ## Known issues
 
-- [ ] TempVoice creation does not work reliably. (debug)
 - [ ] Reaction Roles lib seems to have some stability problems (maybe rewrite it myself?)
 - [ ] failed requests to twitch might crash the bot occasionally (add proper fallbacks)
 
 ## DONE
 
+- [x] Replace all sync operations with async methods! (fs.write/read, fetch, ...?) - should all be resolved
+- [x] some additional bot owner commands - Added info, exec, leave and a few test commands
+- [x] blacklist users (blacklisted users may not add bot to their server)
+- [x] TempVoice creation does not work reliably. (debug) - FIXED
+- [x] Rewrite discordClient event handling (add dis-/connect and guildCreate events!)
 - [x] play music (distube)
 - [x] Add channel purge mode
 - [x] Add FunLovingGames Minecraft server user verification.
