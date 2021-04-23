@@ -12,7 +12,7 @@ module.exports = class ShardTwitch {
     constructor() {
         this.channelListeners = [];
         this.channelStati = [];
-        this.initTwitchLiveListenerForChannel('FunLovingGames');
+        //this.initTwitchLiveListenerForChannel('FunLovingGames');
     }
 
     isTwitchStreamLive(channelName) {
