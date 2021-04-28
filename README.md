@@ -1,3 +1,5 @@
+[![forthebadge](https://forthebadge.com/images/badges/contains-tasty-spaghetti-code.svg)](https://forthebadge.com) [![forthebadge](https://forthebadge.com/images/badges/made-with-javascript.svg)](https://forthebadge.com) [![forthebadge](https://forthebadge.com/images/badges/open-source.svg)](https://forthebadge.com) [![forthebadge](https://forthebadge.com/images/badges/powered-by-black-magic.svg)](https://forthebadge.com)
+
 # shard_discord_bot
 
 <img src="https://raw.githubusercontent.com/lxvongobsthndlE/shard_discord_bot/master/Crystal_Shard.png" alt="Shard Dicord Bot Logo" width="200" align="center"/>
