@@ -1,3 +1,5 @@
+const checkEmoji = require('contains-emoji');
+
 module.exports = class Helper {
     constructor(client) {
         this.client = client;
@@ -19,6 +21,10 @@ module.exports = class Helper {
             return value;
         });
         return text
+    }
+
+    containsEmoji(string) {
+        return checkEmoji(string);
     }
 
     getRandomInteger(minimum, maximum) {
