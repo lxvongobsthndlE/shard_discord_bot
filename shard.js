@@ -5,7 +5,6 @@ const fs = require('fs');
 const dateFormat = require('date-fns/format');
 const secret = require('./secret.json');
 const config = require('./configuration/config.json');
-const ReactionRolesManager = require('discord-reaction-role');
 const { GiveawaysManager } = require('discord-giveaways');
 const ShardGuildManager = require('./classes/shardGuildManager');
 const ShardTwitch = require('./classes/shardTwitch');
@@ -13,6 +12,7 @@ const ShardTempVoice = require('./classes/shardTempVoice');
 const Helper = require('./classes/Helper');
 const ShardMinecraft = require('./classes/shardMinecraft');
 const ShardChannelpurge = require('./classes/shardChannelpurge');
+const ShardReactionRoleManager = require('./classes/shardReactionRoleManager');
 
 //SETUP CLIENT --------------------------------------------------------------------------------------------
 //INIT discord.js
@@ -32,9 +32,7 @@ discordClient.twitchManager = new ShardTwitch();
 //INIT Guild Configuration Manager
 discordClient.guildManager = new ShardGuildManager();
 //INIT reactionRoleManager
-discordClient.roleManager = new ReactionRolesManager(discordClient, {
-    storage: './botData/reaction-roles.json'
-});
+discordClient.reactionRoleManager = new ShardReactionRoleManager(discordClient);
 //INIT giveawaysManager
 discordClient.giveawaysManager = new GiveawaysManager(discordClient, {
     storage: './botData/giveaways.json',
@@ -95,4 +93,5 @@ function loadAllCommands() {
     discordClient.musicCommands =createCommandCollection('./commands/music');
     discordClient.moderationCommands = createCommandCollection('./commands/moderation');
     discordClient.shardCommands = createCommandCollection('./commands/shard');
+    discordClient.reactionroleCommands = createCommandCollection('./commands/reactionrole');
 }
