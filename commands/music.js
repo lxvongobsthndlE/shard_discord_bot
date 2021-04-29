@@ -1,8 +1,6 @@
-const Helper = require('../classes/Helper');
 const ArgumentError = require('../errors/ArgumentError');
 const CommandDoesNotExistError = require('../errors/CommandDoesNotExistError');
 const ExecutionError = require('../errors/ExecutionError');
-const NoPermissionError = require('../errors/NoPermissionError');
 const VoiceError = require('../errors/VoiceError');
 
 /** Command: music <option> [params]

@@ -1,4 +1,3 @@
-const Helper = require('../classes/Helper');
 const ArgumentError = require('../errors/ArgumentError');
 const CommandDoesNotExistError = require('../errors/CommandDoesNotExistError');
 const ExecutionError = require('../errors/ExecutionError');
@@ -9,15 +8,14 @@ const NoPermissionError = require('../errors/NoPermissionError');
  */
 module.exports = {
     name: 'moderation',
-    description: 'Use moderation commands. Use option "help" to learn more',
+    description: 'Use moderation commands. Use option "help" to learn more.',
     args: true,
     usage: '<option> [params]',
     aliases: ['mod', '!'],
     modOnly: true,
     adminOnly: true,
     execute(message, args, guildConfig) {
-        const helper = new Helper();
-        if (!helper.isAdmin(message.author.id, guildConfig.ADMIN_IDS)) {
+        if (!message.client.helper.isAdmin(message.author.id, guildConfig.ADMIN_IDS)) {
             return message.channel.send(new NoPermissionError(message.author, this.name, args).getEmbed());
         }
 
