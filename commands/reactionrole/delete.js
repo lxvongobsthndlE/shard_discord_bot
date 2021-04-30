@@ -11,10 +11,12 @@ module.exports = {
     aliases: ['remove', 'del'],
     i18n: {
         en: {
-            done: "Successfully removed reaction-collector."
+            done: "Successfully removed reaction-collector.",
+            errMsgDelete: "Could not delete the collector-message though!"
         },
         de: {
-            done: "Reaction-Collector erfolgreich entfernt."
+            done: "Reaction-Collector erfolgreich entfernt.",
+            errMsgDelete: "Die mit dem Collector verbunden Nachricht konnte allerdings nicht gelöscht werden!"
         }
     },
     execute(message, args, guildConfig) {
@@ -26,6 +28,13 @@ module.exports = {
         }
         let rr = message.client.reactionRoleManager.get(args[0]);
         message.client.reactionRoleManager.delete(rr.messageID, rr.reaction);
+        message.client.channels.cache.get(rr.channelID).messages.fetch(rr.messageID)
+            .then(msg => {
+                msg.delete()
+                    .catch(err => {
+                        message.channel.send(LANG.errMsgDelete);
+                    });
+            });
         return message.channel.send(LANG.done);
     },
     determineLanguage(configLanguage) {
