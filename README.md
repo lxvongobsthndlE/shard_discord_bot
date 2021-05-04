@@ -9,7 +9,7 @@ A Discord bot written in Node.js using [discord.js](https://github.com/discordjs
 **This bot is still under active development! Bugs and unexpected behaviour can occur. Some features may not fully work yet!**
 
 > If you are interested in adding it to your server anyway, use to following link: [Shard Invite](https://discord.com/oauth2/authorize?client_id=759925230017052674&scope=bot&permissions=1577057495 "Invite Shard Bot to your Discord Server")
->> (Since there currently is no way of adding admins to the bot, you'll have to contact me @lxvongobsthndl#0420 on Discord to do it manually for you.)
+>> (Since there currently is no way of adding admins to the bot, you'll have to contact me @lxvongobsthndl#0420 on Discord to do it manually for you. Join my private Discord Server to get in touch: [lxvongobsthndl's server](https://discord.gg/K4nHrhj))
 
 > Since Shard is in active development I will take feature requests!
 
