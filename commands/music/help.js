@@ -16,6 +16,7 @@ module.exports = {
         var response = new DiscordMessageEmbed()
         .setColor('#0099ff')
         .setTitle('Shard Music Help')
+        .setDescription('Note: You have to be connected to a voice channel for any of the below commands to work.')
         .setThumbnail(message.client.user.displayAvatarURL())
         .setFooter('Shard by @lxvongobsthndl')
         .setTimestamp();
