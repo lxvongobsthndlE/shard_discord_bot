@@ -15,7 +15,7 @@ A Discord bot written in Node.js using [discord.js](https://github.com/discordjs
 
 ## TODO's
 
-- [ ] Add config option removeEveryonePings, which removes all messages containing raw @everyone's (except if person has permission to use it). This will also notify users using @everyone unrightfully and tell them why it's bad to do so (to even try).
+- [ ] config option to give a role on join.
 - [ ] config option to add and remove bot admins
 - [ ] config option to add and remove bot mods (maybe by role?)
 - [ ] Rewrite Twitch integration
