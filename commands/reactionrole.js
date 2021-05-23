@@ -3,16 +3,15 @@ const CommandDoesNotExistError = require('../errors/CommandDoesNotExistError');
 const ExecutionError = require('../errors/ExecutionError');
 const NoPermissionError = require('../errors/NoPermissionError');
 
-/** Command: moderation <option> [<params>]
- *  Use moderation commands. Use option "help" to learn more
+/** Command: reactionrole <option> [<params>]
+ *  Manage ReactionRoles on this server. Use option "help" to learn more.
  */
 module.exports = {
-    name: 'moderation',
-    description: 'Use moderation commands. Use option "help" to learn more.',
+    name: 'reactionrole',
+    description: 'Manage ReactionRoles on this server. Use option "help" to learn more.',
     args: true,
     usage: '<option> [params]',
-    aliases: ['mod', '!'],
-    modOnly: true,
+    aliases: ['rr'],
     adminOnly: true,
     execute(message, args, guildConfig) {
         if (!message.client.helper.isAdmin(message.author.id, guildConfig.ADMIN_IDS)) {
@@ -21,8 +20,8 @@ module.exports = {
 
         var commandName = args.shift().toLowerCase();
 
-        const command = message.client.moderationCommands.get(commandName)
-            || message.client.moderationCommands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
+        const command = message.client.reactionroleCommands.get(commandName)
+            || message.client.reactionroleCommands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
 
         //Check if command exists.
         if (!command) {
