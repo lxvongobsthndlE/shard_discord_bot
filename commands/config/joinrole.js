@@ -21,6 +21,6 @@ module.exports = {
             .setColor('#33cc33')
             .setTimestamp()
             .setTitle('Updated join role')
-            .setDescription('The new join role for this server is: #' + message.guild.roles.cache.get(args[0]).name));
+            .setDescription('The new join role for this server is: ' + message.guild.roles.cache.get(args[0]).name));
     }
 }
