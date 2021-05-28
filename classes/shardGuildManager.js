@@ -39,6 +39,39 @@ module.exports = class ShardGuildManager {
         }
     }
 
+    async addGuildConfigListElementById(guildId, key, value) {
+        var filePath = this.guildDataPath + '/' + guildId + '.json';
+        for(var i = 0; i < this.guildConfigs.length; i++) {
+            if(this.guildConfigs[i].guildId === guildId) {
+                if (!this.guildConfigs[i][key]) {
+                    this.guildConfigs[i][key] = [];
+                }
+                this.guildConfigs[i][key].push(value);
+                if(fs.access(filePath, err => err ? true : false)) return; //Should throw error
+                await fs.writeFile(filePath, JSON.stringify(this.guildConfigs[i], null, 2), (err) => {
+                    if(err) throw err;
+                    console.log('Added "' + value + '" to element "' + key + '" for guildId ' + guildId);
+                });
+                return;
+            }
+        }
+    }
+
+    async removeGuildConfigListElementById(guildId, key, value) {
+        var filePath = this.guildDataPath + '/' + guildId + '.json';
+        for(var i = 0; i < this.guildConfigs.length; i++) {
+            if(this.guildConfigs[i].guildId === guildId) {
+                this.guildConfigs[i][key] = this.guildConfigs[i][key].filter(el => el != value);
+                if(fs.access(filePath, err => err ? true : false)) return; //Should throw error
+                await fs.writeFile(filePath, JSON.stringify(this.guildConfigs[i], null, 2), (err) => {
+                    if(err) throw err;
+                    console.log('Removed "' + value + '" from element "' + key + '" for guildId ' + guildId);
+                });
+                return;
+            }
+        }
+    }
+
     newGuildConfig(guildId) {
         var filePath = this.guildDataPath + '/' + guildId + '.json';
         var defaultConfig = fs.readFileSync(this.guildDataPath + '/default.json');

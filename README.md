@@ -15,9 +15,7 @@ A Discord bot written in Node.js using [discord.js](https://github.com/discordjs
 
 ## TODO's
 
-- [ ] config option to give a role on join.
-- [ ] config option to add and remove bot admins
-- [ ] config option to add and remove bot mods (maybe by role?)
+- [ ] get tempvoice out of config category!
 - [ ] Rewrite Twitch integration
 - [ ] Finish YouTube integration
 - [ ] survey function
@@ -32,6 +30,9 @@ A Discord bot written in Node.js using [discord.js](https://github.com/discordjs
 
 ## DONE
 
+- [x] config option to add and remove bot admins
+- [x] config option to add and remove bot mods
+- [x] config option to give a role on join.
 - [x] Replace all sync operations with async methods! (fs.write/read, fetch, ...?) - should all be resolved
 - [x] some additional bot owner commands - Added info, exec, leave and a few test commands
 - [x] blacklist users (blacklisted users may not add bot to their server)

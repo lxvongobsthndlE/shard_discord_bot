@@ -1,7 +1,7 @@
 const DiscordMessageEmbed = require('discord.js').MessageEmbed;
 const fetch = require('node-fetch');
 
-/** Command: cryptocurrency <>
+/** Command: cryptocurrency <coin>
  *  Show some live info about a specified cryptocurrency.
  */
 module.exports = {
