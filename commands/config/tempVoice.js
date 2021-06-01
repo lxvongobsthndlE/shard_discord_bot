@@ -3,17 +3,20 @@ const ArgumentError = require('../../errors/ArgumentError');
 
 const defaultChannelSize = 10;
 
-/** Command: temp-voice
+/** -> DEPRECATED
+ *  Command: temp-voice
  *  Manage tempVoice Channels on the Server.
  */
 module.exports = {
     name: 'tempvoice',
-    description: 'Manage temporary voice channels on the server.\nOptions include: help, add, remove, naming, placeholders, count',
+    description: '(DEPRECATED) Manage temporary voice channels on the server.\nOptions include: help, add, remove, naming, placeholders, count',
     args: true,
     usage: '<option>',
     aliases: ['tv'],
     async execute(message, args, guildConfig) {
         console.log(message.author.username + ' called "config/tempVoice" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
+
+        return message.channel.send('This command has been deprecated! Please use `' + guildConfig.prefix + 'tempvoice` instead.');
 
         let helper = message.client.helper;
         let tvManager = message.client.tempVoiceChannels;

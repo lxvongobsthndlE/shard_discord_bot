@@ -3,6 +3,7 @@ node_modules/
 
 #IDE specific
 /.vscode
+/.idea
 
 #Confidential or not required files
 secret.json

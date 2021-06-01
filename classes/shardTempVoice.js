@@ -83,12 +83,12 @@ module.exports = class ShardTempVoice {
     }
     
     async setNaming(registerChannelID, naming) {
-        this.tempChannel.channels.find(ch => ch.channelID == registerChannelID).options.childFormat = (member, count) => {
+        this.tempChannel.channels.find(ch => ch.channelID === registerChannelID).options.childFormat = (member, count) => {
             naming = naming.replace(phMember, member.user.username);
             naming = naming.replace(phCount, count);
             return naming;
         };
-        this.tempVoiceChannels.find(ch => ch.registerChannelID == registerChannelID).naming = naming;
+        this.tempVoiceChannels.find(ch => ch.registerChannelID === registerChannelID).naming = naming;
         this.saveTempVoices();
     }
 
@@ -96,7 +96,7 @@ module.exports = class ShardTempVoice {
         if (!guildID) {
             return this.tempChannel.channels.length;
         }
-        return this.tempVoiceChannels.filter(ch => ch.guildId == guildID).length;
+        return this.tempVoiceChannels.filter(ch => ch.guildId === guildID).length;
     }
 
 }

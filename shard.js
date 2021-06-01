@@ -94,4 +94,5 @@ function loadAllCommands() {
     discordClient.moderationCommands = createCommandCollection('./commands/moderation');
     discordClient.shardCommands = createCommandCollection('./commands/shard');
     discordClient.reactionroleCommands = createCommandCollection('./commands/reactionrole');
+    discordClient.tempvoiceCommands = createCommandCollection('./commands/tempvoice');
 }

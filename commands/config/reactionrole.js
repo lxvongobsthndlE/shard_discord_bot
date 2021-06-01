@@ -2,12 +2,13 @@ const emojiList = require('../../configuration/data-ordered-emoji.js');
 const DiscordMessageEmbed = require('discord.js').MessageEmbed;
 const NoSuchRoleError = require('../../errors/NoSuchRoleError');
 
-/** Command: reactionrole
+/** -> DEPRECATED
+ *  Command: reactionrole
  *  Create a reactionCollector, that gives a specified role to the users reacting.
  */
 module.exports = {
     name: 'reactionrole',
-    description: 'Create a reaction-collector, that gives a specified role to the users reacting.',
+    description: '(DEPRECATED) Create a reaction-collector, that gives a specified role to the users reacting.',
     args: true,
     usage: '<role id> [reaction emoji]',
     aliases: ['rr'],
@@ -23,6 +24,8 @@ module.exports = {
     },
     execute(message, args, guildConfig) {
         console.log(message.author.username + ' called "config/reactionrole" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
+
+        return message.channel.send('This command has been deprecated! Please use `' + guildConfig.prefix + 'reactionrole` instead.');
 
         let LANG = this.determineLanguage(guildConfig.language);
         var role = message.guild.roles.cache.get(args[0]);
