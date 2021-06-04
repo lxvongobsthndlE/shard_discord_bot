@@ -89,8 +89,8 @@ module.exports = {
                     .setTimestamp()
                     .setTitle(LANG.rolesUpdatedFor + member.user.username)
                     .setDescription(LANG.newRoleAdded + message.client.helper.makeRoleAt(role.id))))
-            .catch(message.channel.send(
-                new ExecutionError(message.author, this.name, args, LANG.addingRoleFailed).getEmbed()));
+            .catch(err => message.channel.send(
+                new ExecutionError(message.author, this.name, args, LANG.addingRoleFailed + '\n```' + err + '```').getEmbed()));
 
     },
     determineLanguage(configLanguage) {
