@@ -15,7 +15,8 @@ module.exports = {
     modOnly: true,
     adminOnly: true,
     execute(message, args, guildConfig) {
-        if (!message.client.helper.isAdmin(message.author.id, guildConfig.ADMIN_IDS)) {
+        if (!message.client.helper.isAdmin(message.author.id, guildConfig.ADMIN_IDS) &&
+            !message.client.helper.isModerator(message.author.id, guildConfig.mods)) {
             return message.channel.send(new NoPermissionError(message.author, this.name, args).getEmbed());
         }
 

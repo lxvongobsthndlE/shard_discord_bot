@@ -51,6 +51,16 @@ module.exports = class Helper {
     isAdmin(userId, adminIds) {
         return adminIds.includes(userId);
     }
+    
+    /**
+     * Determines if a userID is in a list of moderator userIDs.
+     * @param {String} userId The ID of the user
+     * @param {[String]} moderatorIds List of userIDs with moderator permissions
+     * @returns {Boolean} true, if userId is in moderatorIds. Else false.
+     */
+    isModerator(userId, moderatorIds) {
+        return moderatorIds.includes(userId);
+    }
 
     /** 
      * Checks if a user is the admin of this bot.
