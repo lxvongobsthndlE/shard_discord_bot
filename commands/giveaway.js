@@ -3,8 +3,8 @@ const ms = require('ms');
 const moment = require('moment');
 const ArgumentError = require('../errors/ArgumentError');
 
-/** Command: reactionrole
- *  Create a reactionCollector, that gives a specified role to the users reacting.
+/** Command: giveaway
+ *  Manage a giveaway. Use option "help" to learn more.
  */
 module.exports = {
     name: 'giveaway',
