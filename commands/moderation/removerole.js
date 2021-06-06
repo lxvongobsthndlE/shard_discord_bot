@@ -39,7 +39,7 @@ module.exports = {
         }
     },
     async execute(message, args, guildConfig) {
-        console.log(message.author.username + ' called "removerole" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
+        console.log(message.author.username + ' called "moderation/removerole" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
 
         let LANG = this.determineLanguage(guildConfig.language);
         let member = null;
