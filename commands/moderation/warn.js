@@ -31,9 +31,7 @@ module.exports = {
             embedFieldWarnedBy: "Warned by:",
             embedFieldNumOfWarnings: "Number of warnings:",
             embedFieldReason: "Reason:",
-
-            rolesUpdatedFor: "Updated roles for ",
-            newRoleAdded: "The following role was added: ",
+            embedDescriptionPM: "You are receiving this message, because you just got a warning on following server: "
 
         },
         de: {
@@ -52,9 +50,7 @@ module.exports = {
             embedFieldWarnedBy: "Gewarnt von:",
             embedFieldNumOfWarnings: "Anzahl von Warnungen:",
             embedFieldReason: "Begründung:",
-
-            rolesUpdatedFor: "Rollen wurden aktualisiert für: ",
-            newRoleAdded: "Folgende Rolle wurde hinzugefügt: ",
+            embedDescriptionPM: "Du erhältst diese Nachricht, weil du soeben gewarnt wurdest auf folgendem Server: "
 
         }
     },
@@ -123,8 +119,8 @@ module.exports = {
             .setTimestamp()
             .setAuthor(member.user.tag, member.user.displayAvatarURL())
             .addField(LANG.embedFieldAction, LANG.embedFieldActionName)
-            .addField(LANG.embedFieldUser, `${member.user.username}#${member.user.discriminator} (${member.id})`)
-            .addField(LANG.embedFieldWarnedBy, `${message.author.username}#${message.author.discriminator}`)
+            .addField(LANG.embedFieldUser, `${message.client.helper.makeUserAt(member.id)} (${member.id})`)
+            .addField(LANG.embedFieldWarnedBy, `${message.client.helper.makeUserAt(message.author.id)} (${message.author.id})`)
             .addField(LANG.embedFieldNumOfWarnings, warns[`${member.id}, ${message.guild.id}`].warns)
             .addField(LANG.embedFieldReason, reason)
             .setFooter('Shard by @lxvongobsthndl');
@@ -137,6 +133,7 @@ module.exports = {
             message.channel.send(embed);
         }
         if (member.bot) return;
+        embed.setDescription(LANG.embedDescriptionPM + message.guild.name);
         member.send(embed).catch(e => {
             if (e) return;
         });
