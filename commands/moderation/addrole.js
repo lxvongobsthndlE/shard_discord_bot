@@ -60,12 +60,15 @@ module.exports = {
         else {
             member = await message.guild.member(message.mentions.members.first());
         }
+        if (!member) {
+            return message.channel.send(new ArgumentError(message.author, this.name, args, LANG.noUserSupplied).getEmbed());
+        }
 
         if (message.client.helper.checkRoleIdValid(args[1], message.guild.id)) {
             role = await message.guild.roles.fetch(args[1]);
         }
         else {
-            role = await message.guild.roles.cache.find(val => val.name === rname);
+            role = await message.guild.roles.cache.find(val => val.name === args[1]);
         }
         if (!role) {
             return message.channel.send(new NoSuchRoleError(message.author, this.name, args, LANG.notValidRole).getEmbed());
