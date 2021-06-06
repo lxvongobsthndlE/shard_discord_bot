@@ -77,6 +77,9 @@ module.exports = {
         else {
             member = await message.guild.member(message.mentions.members.first());
         }
+        if (!member) {
+            return message.channel.send(new ArgumentError(message.author, this.name, args, LANG.noUserSupplied).getEmbed());
+        }
 
         if (!args[1]) {
             return message.channel.send(new ArgumentError(message.author, this.name, args, LANG.noReasonSupplied).getEmbed());
