@@ -1,3 +1,4 @@
+const NoPermissionError = require("../errors/NoPermissionError");
 const DiscordMessageEmbed = require('discord.js').MessageEmbed;
 
 /** Command: purgemode
@@ -22,6 +23,10 @@ module.exports = {
     },
     adminOnly: true,
     async execute(message, args, guildConfig) {
+        if (!message.client.helper.isAdmin(message.author.id, guildConfig.ADMIN_IDS)) {
+            return message.channel.send(new NoPermissionError(message.author, this.name, args).getEmbed());
+        }
+
         console.log(message.author.username + ' called "purgemode" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
 
         let LANG = this.determineLanguage(guildConfig.language);

@@ -2,6 +2,7 @@ const DiscordMessageEmbed = require('discord.js').MessageEmbed;
 const ms = require('ms');
 const moment = require('moment');
 const ArgumentError = require('../errors/ArgumentError');
+const NoPermissionError = require("../errors/NoPermissionError");
 
 /** Command: giveaway
  *  Manage a giveaway. Use option "help" to learn more.
@@ -14,6 +15,10 @@ module.exports = {
     aliases: ['ga'],
     adminOnly: true,
     execute(message, args, guildConfig) {
+        if (!message.client.helper.isAdmin(message.author.id, guildConfig.ADMIN_IDS)) {
+            return message.channel.send(new NoPermissionError(message.author, this.name, args).getEmbed());
+        }
+
         console.log(message.author.username + ' called "giveaway" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
 
         var option = args.shift().toLowerCase();
