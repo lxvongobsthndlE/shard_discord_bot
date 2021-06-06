@@ -4,58 +4,64 @@ const ExecutionError = require('../../errors/ExecutionError');
 const fs = require('fs');
 const NoPermissionError = require('../../errors/NoPermissionError');
 
-/** Command: warn
- *  Warn a user. You may `@` the user.
+/** Command: kick
+ *  Kick a user. You may `@` the user.
  */
 module.exports = {
-    name: 'warn',
-    description: 'Warn a user. You may `@` the user.',
+    name: 'kick',
+    description: 'Kick a user. You may `@` the user.',
     args: true,
     usage: '<@user|userId> <reason>',
-    aliases: [],
+    aliases: ['yeet'],
     modOnly: true,
     i18n: {
         en: {
             noUserSupplied: "First argument was not a `@`user or userId!",
             noReasonSupplied: "No reason supplied!",
             missingKickMembersPermission: "I am missing the required permission to do that!\nPlease grant me the `kick members` permission, to use this command.",
-            botPermissionToLow: "Failed to warn the user because my highest role is lower than the highest role of the user.",
-            userPermissionToLow: "Failed to warn the user because your highest role is lower than the highest role of the user.",
-            warningUserFailed: "An unexpected error occured while warning the user.",
-            canNotWarnYourself: "I can't let you do that! You can not warn yourself.",
-            canNotWarnDeveloper: "I can't let you do that! You can not warn my developer.",
-            errorSavingToFile: "An error occured saving the warning to file. You may have to try again.",
+            botPermissionToLow: "Failed to kick the user because my highest role is lower than the highest role of the user.",
+            userPermissionToLow: "Failed to kick the user because your highest role is lower than the highest role of the user.",
+            kickingUserFailed: "An unexpected error occured while kicking the user.",
+            canNotKickYourself: "I can't let you do that! You can not kick yourself.",
+            canNotKickDeveloper: "I can't let you do that! You can not kick my developer.",
+            canNotKickBot: "How dare you! You can not use me to kick myself you PogChamp.",
+            canNotKickUserProtected: "This user is magically protected by this server or Discord and can not be kicked.",
+            canNotKickBotsThisWay: "I can't kick other bots.",
+            errorSavingToFile: "An error occured saving the kick to file. You may have to try again.",
             embedFieldAction: "Action:",
-            embedFieldActionName: "Warning",
+            embedFieldActionName: "Kick",
             embedFieldUser: "User:",
-            embedFieldWarnedBy: "Warned by:",
-            embedFieldNumOfWarnings: "Number of warnings:",
+            embedFieldKickedBy: "Kicked by:",
+            embedFieldNumOfKicks: "Number of kicks:",
             embedFieldReason: "Reason:",
-            embedDescriptionPM: "You are receiving this message, because you just got a warning on following server: "
+            embedDescriptionPM: "You are receiving this message, because you just got kicked from following server: "
 
         },
         de: {
             noUserSupplied: "Erstes Argument war kein `@`user oder userId!",
             noReasonSupplied: "Kein Begründung angegeben!",
             missingKickMembersPermission: "Ich habe nicht die nötigen Berechtigungen um das zu tun!\nBitte gebe mir die `Mitglieder kicken` Berechtigung, um diesen Befehl nutzen zu können.",
-            botPermissionToLow: "Kann das Mitglied nicht warnen, weil meine höchste Rolle niedriger ist als die höchste Rolle des Mitglieds.",
-            userPermissionToLow: "Kann das Mitglied nicht warnen, weil deine höchste Rolle niedriger ist als die höchste Rolle des Mitglieds.",
-            warningUserFailed: "Ein unerwarteter Fehler ist beim warnen des Mitglieds aufgetreten.",
-            canNotWarnYourself: "Ich kann dich das nicht tun lassen! Du kannst dich nicht selbst warnen.",
-            canNotWarnDeveloper: "Ich kann dich das nicht tun lassen! Du kannst meinen Entwickler nicht warnen.",
-            errorSavingToFile: "Ein Fehler ist beim Speichern der Warnung aufgetreten. Versuche es erneut.",
+            botPermissionToLow: "Kann das Mitglied nicht kicken, weil meine höchste Rolle niedriger ist als die höchste Rolle des Mitglieds.",
+            userPermissionToLow: "Kann das Mitglied nicht kicken, weil deine höchste Rolle niedriger ist als die höchste Rolle des Mitglieds.",
+            kickingUserFailed: "Ein unerwarteter Fehler ist beim kicken des Mitglieds aufgetreten.",
+            canNotKickYourself: "Ich kann dich das nicht tun lassen! Du kannst dich nicht selbst kicken.",
+            canNotKickDeveloper: "Ich kann dich das nicht tun lassen! Du kannst meinen Entwickler nicht kicken.",
+            canNotKickBot: "Wie kannst du es wagen! Du kannst mich nicht benutzen um mich selbst zu kicken du PogChamp.",
+            canNotKickUserProtected: "Dieser Nutzer ist magisch geschützt durch den Server oder Discord und kann nicht gekickt werden.",
+            canNotKickBotsThisWay: "Ich kann nicht andere Bots kicken.",
+            errorSavingToFile: "Ein Fehler ist beim Speichern des Kicks aufgetreten. Versuche es erneut.",
             embedFieldAction: "Aktion:",
-            embedFieldActionName: "Warnung",
+            embedFieldActionName: "Kick",
             embedFieldUser: "User:",
-            embedFieldWarnedBy: "Gewarnt von:",
-            embedFieldNumOfWarnings: "Anzahl von Warnungen:",
+            embedFieldKickedBy: "Gekickt von:",
+            embedFieldNumOfKicks: "Anzahl der Kicks:",
             embedFieldReason: "Begründung:",
-            embedDescriptionPM: "Du erhältst diese Nachricht, weil du soeben gewarnt wurdest auf folgendem Server: "
+            embedDescriptionPM: "Du erhältst diese Nachricht, weil du soeben gekickt wurdest auf folgendem Server: "
 
         }
     },
     async execute(message, args, guildConfig) {
-        console.log(message.author.username + ' called "warn" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
+        console.log(message.author.username + ' called "kick" command' + ((args.length > 0) ? ' with args: ' + args : '.'));
 
         let LANG = this.determineLanguage(guildConfig.language);
         let member = null;
@@ -97,17 +103,28 @@ module.exports = {
         }
 
         if (member.id === message.author.id) {
-            return message.channel.send(new ExecutionError(message.author, this.name, args, LANG.canNotWarnYourself).getEmbed());
+            return message.channel.send(new ExecutionError(message.author, this.name, args, LANG.canNotKickYourself).getEmbed());
         }
         if (member.id === message.client.config.ownerId) {
-            return message.channel.send(new ExecutionError(message.author, this.name, args, LANG.canNotWarnDeveloper).getEmbed());
+            return message.channel.send(new ExecutionError(message.author, this.name, args, LANG.canNotKickDeveloper).getEmbed());
         }
+        if (member.id === message.client.user.id) {
+            return message.channel.send(new ExecutionError(message.author, this.name, args, LANG.canNotKickBot).getEmbed());
+        }
+        if (member.bot) {
+            return message.channel.send(new ExecutionError(message.author, this.name, args, LANG.canNotKickBotsThisWay).getEmbed());
+        }
+        if (!member.kickable) {
+            return message.channel.send(new ExecutionError(message.author, this.name, args, LANG.canNotKickUserProtected).getEmbed());
+        }
+
+        member.kick(reason);
 
         let warns = JSON.parse(fs.readFileSync('./botData/warnlist.json', 'utf-8'));
 
         if (!warns[`${member.id}, ${message.guild.id}`]) warns[`${member.id}, ${message.guild.id}`] = message.client.helper.getWarnlist();
 
-        warns[`${member.id}, ${message.guild.id}`].warns++;
+        warns[`${member.id}, ${message.guild.id}`].kicks++;
 
         fs.writeFile('./botData/warnlist.json', JSON.stringify(warns, null, 2), err => {
             if (err) {
@@ -121,8 +138,8 @@ module.exports = {
             .setAuthor(member.user.tag, member.user.displayAvatarURL())
             .addField(LANG.embedFieldAction, LANG.embedFieldActionName)
             .addField(LANG.embedFieldUser, `${message.client.helper.makeUserAt(member.id)} (${member.id})`)
-            .addField(LANG.embedFieldWarnedBy, `${message.client.helper.makeUserAt(message.author.id)} (${message.author.id})`)
-            .addField(LANG.embedFieldNumOfWarnings, warns[`${member.id}, ${message.guild.id}`].warns)
+            .addField(LANG.embedFieldKickedBy, `${message.client.helper.makeUserAt(message.author.id)} (${message.author.id})`)
+            .addField(LANG.embedFieldNumOfKicks, warns[`${member.id}, ${message.guild.id}`].warns)
             .addField(LANG.embedFieldReason, reason)
             .setFooter('Shard by @lxvongobsthndl');
 
@@ -138,31 +155,6 @@ module.exports = {
         member.send(embed).catch(e => {
             if (e) return;
         });
-
-/*
-        if(warns[`${user.id}, ${message.guild.id}`].warns == 2){
-            let muteRole = message.guild.roles.find('name', 'Muted')
-        
-            let mutetime = "60s";
-            message.guild.members.get(user.id).addRole(muteRole.id);
-            message.reply(`${user.tag} has been temporarily muted`);
-        
-            setTimeout(function(){
-              message.guild.members.get(user.id).removeRole(muteRole.id)
-            }, ms(mutetime))
-          }
-        
-          if(warns[`${user.id}, ${message.guild.id}`].warns == 3){
-            message.guild.member(user).kick(reason);
-            message.reply('That Dumb Boi have been kicked :facepalm:')
-          }
-        
-          if(warns[`${user.id}, ${message.guild.id}`].warns == 5){
-            message.guild.member(user).ban(reason);
-            message.reply('You won\' have to worry about that shit-head any longer, I have Banned them!');
-          }
-
-*/
 
     },
     determineLanguage(configLanguage) {

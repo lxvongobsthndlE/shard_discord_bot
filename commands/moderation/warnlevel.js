@@ -54,9 +54,7 @@ module.exports = {
 
         let warns = JSON.parse(fs.readFileSync('./botData/warnlist.json', 'utf-8'));
 
-        if (!warns[`${member.id}, ${message.guild.id}`]) warns[`${member.id}, ${message.guild.id}`] = {
-            warns: 0
-        }
+        if (!warns[`${member.id}, ${message.guild.id}`]) warns[`${member.id}, ${message.guild.id}`] = message.client.helper.getWarnlist();
 
         let embed = new DiscordMessageEmbed()
             .setColor(0xFFFF00)
