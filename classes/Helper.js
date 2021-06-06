@@ -172,4 +172,16 @@ module.exports = class Helper {
             })
             .catch(() => { return false });
     }
+
+    /**
+     * Get an empty/new warnlist as an object. All properties are initialized as 0, null or ""
+     * @returns {Object} object with all properties of a warnlist
+     */
+    getWarnlist() {
+        return {
+            warns: 0,
+            kicks: 0,
+            bans: 0
+        }
+    }
 }
