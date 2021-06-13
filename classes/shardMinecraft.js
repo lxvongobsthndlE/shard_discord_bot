@@ -14,7 +14,7 @@ module.exports = class ShardMinecraft {
 
         fs.readFile('./botData/minecraftVerifications.json', (err, data) => {
             if (err) {
-                console.log('[ERR] Failed reading minecraft verified users file!')
+                console.log('[Minecraft][ERR] Failed reading minecraft verified users file!')
             }
             this.verifiedUsers = JSON.parse(data);
         });

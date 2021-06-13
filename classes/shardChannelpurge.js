@@ -9,7 +9,7 @@ module.exports = class ShardChannelpurge {
     loadSafedPurges() {
         fs.readFile('./botData/purgedChannels.json', (err, data) => {
             if (err) {
-                console.log('[ERR] Failed reading purged channels from file!');
+                console.log('[ChannelPurge][ERR] Failed reading purged channels from file!');
             }
             this.purgedChannels = JSON.parse(data);
         });
@@ -21,7 +21,7 @@ module.exports = class ShardChannelpurge {
             { flag: 'w' },
             (err) => {
                 if (err) {
-                    console.log('[ERR] Failed writing purged channels to file!')
+                    console.log('[ChannelPurge][ERR] Failed writing purged channels to file!')
                 }
             });
     }

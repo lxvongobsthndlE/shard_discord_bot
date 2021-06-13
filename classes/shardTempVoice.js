@@ -17,7 +17,7 @@ module.exports = class ShardTempVoice {
     loadTempVoices() {
         fs.readFile('./botData/tempVoiceChannels.json', (err, data) => {
             if (err) {
-                console.log('[ERR] Failed reading temp voice channels from file!');
+                console.log('[TempVoice][ERR] Failed reading temp voice channels from file!');
             }
             else{
                 this.tempVoiceChannels = JSON.parse(data);
@@ -32,7 +32,7 @@ module.exports = class ShardTempVoice {
             { flag: 'w' },
             (err) => {
                 if (err) {
-                    console.log('[ERR] Failed writing temp voice channels to file!')
+                    console.log('[TempVoice][ERR] Failed writing temp voice channels to file!')
                 }
             });
     }

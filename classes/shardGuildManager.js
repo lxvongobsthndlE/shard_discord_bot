@@ -32,7 +32,7 @@ module.exports = class ShardGuildManager {
                 if(fs.access(filePath, err => err ? true : false)) return; //Should throw error
                 await fs.writeFile(filePath, JSON.stringify(this.guildConfigs[i], null, 2), (err) => {
                     if(err) throw err;
-                    console.log('Updated "' + key + '" with value "' + value + '" for guildId ' + guildId);
+                    console.log('[GuildManager] Updated "' + key + '" with value "' + value + '" for guildId ' + guildId);
                 });
                 return;
             }
@@ -50,7 +50,7 @@ module.exports = class ShardGuildManager {
                 if(fs.access(filePath, err => err ? true : false)) return; //Should throw error
                 await fs.writeFile(filePath, JSON.stringify(this.guildConfigs[i], null, 2), (err) => {
                     if(err) throw err;
-                    console.log('Added "' + value + '" to element "' + key + '" for guildId ' + guildId);
+                    console.log('[GuildManager] Added "' + value + '" to element "' + key + '" for guildId ' + guildId);
                 });
                 return;
             }
@@ -65,7 +65,7 @@ module.exports = class ShardGuildManager {
                 if(fs.access(filePath, err => err ? true : false)) return; //Should throw error
                 await fs.writeFile(filePath, JSON.stringify(this.guildConfigs[i], null, 2), (err) => {
                     if(err) throw err;
-                    console.log('Removed "' + value + '" from element "' + key + '" for guildId ' + guildId);
+                    console.log('[GuildManager] Removed "' + value + '" from element "' + key + '" for guildId ' + guildId);
                 });
                 return;
             }
