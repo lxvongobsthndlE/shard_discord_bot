@@ -57,7 +57,7 @@ module.exports = {
                 var embed = new DiscordMessageEmbed()
                     .setDescription('Hallo!\nDas ist eine automatische Erinnerung, dass du auf dem Server von FunLovingGames noch nicht verifiziert bist und deshalb noch nicht alle Kanäle sehen kannst.\n\nUm diese Nachricht nicht mehr zu erhalten, bitte verifiziere dich im #⌠📜⌡regeln Kanal.\n\nUm verifiziert zu werden, reicht es auf die Nachricht von @Shard mit <:verified:773277557310488586> zu reagieren (sh. angehängter Screenshot)')
                     .setThumbnail(message.guild.iconURL())
-                    .setImage('https://raw.githubusercontent.com/lxvongobsthndlE/shard_discord_bot/master/screen_verify.png')
+                    .setImage('https://raw.githubusercontent.com/lxvongobsthndlE/shard_discord_bot/master/media/verify-screen.png')
                     .setAuthor(message.guild.name)
                     .setFooter(message.client.user.username, message.client.user.displayAvatarURL())
                     .setColor('#ff9933')
