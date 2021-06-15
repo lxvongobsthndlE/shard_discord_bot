@@ -1,7 +1,6 @@
 const Discord = require('discord.js');
 const ArgumentError = require('../../errors/ArgumentError');
 const ExecutionError = require('../../errors/ExecutionError');
-const NoPermissionError = require('../../errors/NoPermissionError');
 const CommandDoesNotExistError = require('../../errors/CommandDoesNotExistError');
 
 module.exports = async (message, discordClient) => {

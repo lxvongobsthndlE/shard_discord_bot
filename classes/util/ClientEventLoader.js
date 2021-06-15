@@ -10,6 +10,7 @@ module.exports = client => {
     client.on('guildBanAdd', (guild, user) => requireEvent('guildBanAdd')(guild, user, client));
     client.on('guildMemberAdd', member => requireEvent('guildMemberAdd')(member, client));
     client.on('message', message => requireEvent('message')(message, client));
+    client.on('messageDelete', message => requireEvent('messageDelete')(message));
 
     //Distube
     client.distube.on("playSong",
