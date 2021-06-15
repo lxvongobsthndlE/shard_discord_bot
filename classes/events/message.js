@@ -11,27 +11,27 @@ module.exports = async (message, discordClient) => {
     if (message.author.bot) return;
 
     if (message.channel instanceof Discord.DMChannel) {
-        if (discordClient.minecraftManager.isVerified(message.author.id)){
-            message.channel.send("Du bist bereits verifiziert.").catch(err => {
-                console.error(err);
-            });
-            return;
-        }
-        if (discordClient.minecraftManager.verify(message.author, message.content)) {
-            message.channel.send("Erfolgreich verifiziert!").catch(err => {
-                console.error(err);
-            });
-        }
-        else {
-            message.channel.send("Ups, da ist etwas schiefgelaufen...\nVersuche es später nochmal.").catch(err => {
-                console.error(err);
-            });
-        }
-        return;
+        return message.channel.send("Sorry, but I can only respond to commands on servers!")
     }
 
     //Get guildConfig
     var guildConfig = discordClient.guildManager.getGuildConfigById(message.guild.id);
+
+    //FLG specific stuff
+    if (guildConfig.guildId === '743221608113766453') {
+        //If message in server-hilfe channel and user does not have role Verified, send info how to verify
+        if (message.channel.id === '778316374656417812') {
+            if (!message.member.roles.cache.some(role => role.id === '773581026211397682')) {
+                return message.reply(new Discord.MessageEmbed()
+                    .setDescription('Hey!\nEs scheint als ob du noch nicht verifiziert bist und deshalb noch nicht alle Kanäle sehen kannst.\n\nBitte verifiziere dich im <#743225754770472980> Kanal.\n\nUm verifiziert zu werden, reicht es auf die Nachricht von @Shard mit <:verified:773277557310488586> zu reagieren (sh. angehängter Screenshot)')
+                    .setThumbnail(message.guild.iconURL())
+                    .setImage('https://raw.githubusercontent.com/lxvongobsthndlE/shard_discord_bot/master/media/verify-screen.png')
+                    .setAuthor(message.author.username)
+                    .setColor('#ff9933')
+                    .setTimestamp());
+            }
+        }
+    }
 
     //Delete message if posted in a channel that's currently in purge mode.
     if (discordClient.purgeManager.isInPurgeMode(message.channel.id)) {
