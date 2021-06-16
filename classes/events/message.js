@@ -22,7 +22,7 @@ module.exports = async (message, discordClient) => {
         if (message.channel.id === '778316374656417812') {
             if (!message.member.roles.cache.some(role => role.id === '773581026211397682')) {
                 return message.reply(new Discord.MessageEmbed()
-                    .setDescription('Hey!\nEs scheint als ob du noch nicht verifiziert bist und deshalb noch nicht alle Kanäle sehen kannst.\n\nBitte verifiziere dich im <#743225754770472980> Kanal.\n\nUm verifiziert zu werden, reicht es auf die Nachricht von @Shard mit <:verified:773277557310488586> zu reagieren (sh. angehängter Screenshot)')
+                    .setDescription('Hey <@' + message.author.id + '>!\nEs scheint als ob du noch nicht verifiziert bist und deshalb noch nicht alle Kanäle sehen kannst.\n\nBitte verifiziere dich im <#743225754770472980> Kanal.\n\nUm verifiziert zu werden, reicht es auf die Nachricht von @Shard mit <:verified:773277557310488586> zu reagieren (sh. angehängter Screenshot)')
                     .setThumbnail(message.guild.iconURL())
                     .setImage('https://raw.githubusercontent.com/lxvongobsthndlE/shard_discord_bot/master/media/verify-screen.png')
                     .setAuthor(message.author.username)
