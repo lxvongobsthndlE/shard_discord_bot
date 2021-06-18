@@ -7,6 +7,11 @@ module.exports = async (message, discordClient) => {
     //Allmighty Logger. Don't use this. Seriously, don't.
     //console.log('[' + message.guild.name + '][' + message.channel.name + '] ' + message.author.tag + ': ' + message.content);
 
+    //DEV MODE ------------------------------------------------------//
+    //MUST be commented out in prod!! -------------------------------//
+    //if (message.author.id !== discordClient.config.ownerId) return;//
+    //---------------------------------------------------------------//
+
     if (message.author.bot) return;
 
     if (message.channel instanceof Discord.DMChannel) {
@@ -21,7 +26,9 @@ module.exports = async (message, discordClient) => {
         //If message in server-hilfe channel and user does not have role Verified, send info how to verify
         if (message.channel.id === '778316374656417812') {
             if (!message.member.roles.cache.some(role => role.id === '773581026211397682')) {
-                return message.reply(new Discord.MessageEmbed()
+                return message.channel.send(message.client.helper.makeUserAt(
+                    message.author.id),
+                    new Discord.MessageEmbed()
                     .setDescription('Hey <@' + message.author.id + '>!\nEs scheint als ob du noch nicht verifiziert bist und deshalb noch nicht alle Kanäle sehen kannst.\n\nBitte verifiziere dich im <#743225754770472980> Kanal.\n\nUm verifiziert zu werden, reicht es auf die Nachricht von @Shard mit <:verified:773277557310488586> zu reagieren (sh. angehängter Screenshot)')
                     .setThumbnail(message.guild.iconURL())
                     .setImage('https://raw.githubusercontent.com/lxvongobsthndlE/shard_discord_bot/master/media/verify-screen.png')
