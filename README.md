@@ -1,6 +1,12 @@
-[![forthebadge](https://forthebadge.com/images/badges/contains-tasty-spaghetti-code.svg)](https://forthebadge.com) [![forthebadge](https://forthebadge.com/images/badges/made-with-javascript.svg)](https://forthebadge.com) [![forthebadge](https://forthebadge.com/images/badges/open-source.svg)](https://forthebadge.com) [![forthebadge](https://forthebadge.com/images/badges/powered-by-black-magic.svg)](https://forthebadge.com)
+[![forthebadge](https://forthebadge.com/images/badges/open-source.svg)](https://forthebadge.com) 
 
-# shard_discord_bot
+[![forthebadge](https://forthebadge.com/images/badges/made-with-javascript.svg)](https://forthebadge.com) 
+
+[![forthebadge](https://forthebadge.com/images/badges/contains-tasty-spaghetti-code.svg)](https://forthebadge.com) 
+
+[![forthebadge](https://forthebadge.com/images/badges/powered-by-black-magic.svg)](https://forthebadge.com)
+
+# Shard Bot
 
 <img src="https://raw.githubusercontent.com/lxvongobsthndlE/shard_discord_bot/master/Crystal_Shard.png" alt="Shard Dicord Bot Logo" width="200" align="center"/>
 
@@ -8,20 +14,26 @@ A Discord bot written in Node.js using [discord.js](https://github.com/discordjs
 
 **This bot is still under active development! Bugs and unexpected behaviour can occur. Some features may not fully work yet!**
 
-> If you are interested in adding it to your server anyway, use to following link: [Shard Invite](https://discord.com/oauth2/authorize?client_id=759925230017052674&scope=bot&permissions=1577057495 "Invite Shard Bot to your Discord Server")
->> (Since there currently is no way of adding admins to the bot, you'll have to contact me @lxvongobsthndl#0420 on Discord to do it manually for you. Join my private Discord Server to get in touch: [lxvongobsthndl's server](https://discord.gg/K4nHrhj))
+> If you are interested in adding it to your server anyway, use to following link: [Shard Invite](https://discord.com/oauth2/authorize?client_id=759925230017052674&scope=bot&permissions=1577057495 "Invite Shard Bot to your Discord Server").<br>
+> For support join my private Discord Server"[lxvongobsthndl's server](https://discord.gg/K4nHrhj)" or use the `s!bug`/`s!suggest` commands the bot offers.
 
 > Since Shard is in active development I will take feature requests!
 
 ## TODO's
 
-- [ ] get tempvoice out of config category!
 - [ ] Rewrite Twitch integration
 - [ ] Finish YouTube integration
 - [ ] survey function
 - [ ] Add localizations
 - [ ] split member-log into mod-log (bans, kicks, warns, mutes) and member-log (join, leave)
-- [ ] add mod options: temp-/ban, kick, warn, temp-/channel-/mute
+- [ ] add mod options: 
+  - [ ] ban/unban
+  - [ ] tempban
+  - [x] kick
+  - [x] warn
+  - [x] warnlist
+  - [ ] mute
+  - [ ] channelmute (channel purge rework)
 
 ## Known issues
 
@@ -30,6 +42,7 @@ A Discord bot written in Node.js using [discord.js](https://github.com/discordjs
 
 ## DONE
 
+- [x] get tempvoice out of config category!
 - [x] config option to add and remove bot admins
 - [x] config option to add and remove bot mods
 - [x] config option to give a role on join.
