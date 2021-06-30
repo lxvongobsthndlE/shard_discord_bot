@@ -10,7 +10,6 @@ const ShardGuildManager = require('./classes/shardGuildManager');
 const ShardTwitch = require('./classes/shardTwitch');
 const ShardTempVoice = require('./classes/shardTempVoice');
 const Helper = require('./classes/Helper');
-const ShardMinecraft = require('./classes/shardMinecraft');
 const ShardChannelpurge = require('./classes/shardChannelpurge');
 const ShardReactionRoleManager = require('./classes/shardReactionRoleManager');
 
@@ -47,8 +46,6 @@ discordClient.giveawaysManager = new GiveawaysManager(discordClient, {
 });
 //INIT tempChannelsManager
 discordClient.tempVoiceChannels = new ShardTempVoice(discordClient);
-//INIT Minecraft manager
-discordClient.minecraftManager = new ShardMinecraft();
 //INIT purged channels 
 discordClient.purgeManager = new ShardChannelpurge();
 
@@ -89,7 +86,6 @@ function createCommandCollection(commandFolderPath) {
 function loadAllCommands() {
     discordClient.commands = createCommandCollection('./commands');
     discordClient.configCommands = createCommandCollection('./commands/config');
-    discordClient.minecraftCommands = createCommandCollection('./commands/minecraft');
     discordClient.musicCommands =createCommandCollection('./commands/music');
     discordClient.moderationCommands = createCommandCollection('./commands/moderation');
     discordClient.shardCommands = createCommandCollection('./commands/shard');
