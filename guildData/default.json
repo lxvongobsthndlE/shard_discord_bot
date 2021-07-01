@@ -10,6 +10,7 @@
     },
     "memberLogChannelId": "",
     "modLogChannelId": "",
+    "modLogSendMessageDelete": false,
     "ADMIN_IDS": [],
     "mods": [],
     "memeChannelId": "",
